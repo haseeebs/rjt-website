@@ -1,210 +1,96 @@
-import React, { useState } from 'react';
-import { Check, X, Users, Building, MapPin, Info } from 'lucide-react';
-import packages from '../data/packages.js';
+import { BadgePercent, MessageSquare, Shield, Users } from 'lucide-react';
+import CTA from '../components/CTA';
+import PackagesTable from '../components/PackagesTable';
 
-const UmrahPackages = () => {
-  const [activeTooltip, setActiveTooltip] = useState(null);
+const UmrahPackage = () => {
+  const features = [
+    {
+      icon: <Shield className="h-6 w-6 text-green-600" />,
+      title: "10+ Years Experience",
+      description: "Trusted by 1000+ pilgrims since 2014"
+    },
+    {
+      icon: <Users className="h-6 w-6 text-green-600" />,
+      title: "Expert Religious Guide",
+      description: "Led by an experienced Aalim fluent in Arabic & English"
+    },
+    {
+      icon: <MessageSquare className="h-6 w-6 text-green-600" />,
+      title: "WhatsApp Support",
+      description: "Quick responses to all your queries on WhatsApp"
+    }
+  ];
 
   return (
-    // <div className="w-full max-w-6xl mx-auto p-4">
-    <div className="w-full px-4 sm:px-6 lg:px-8">
-      <div className="bg-white rounded-lg ">
-        <div className="overflow-x-auto relative">
-          <table className="w-full border-collapse">
-            <thead className="bg-white sticky top-0 z-10 shadow-sm">
-              <tr>
-                <th className="p-4 border border-gray-200 bg-gray-50">
-                  <div className="font-bold text-lg text-gray-700">Package Features</div>
-                </th>
-                {packages.map((pkg) => (
-                  <th key={pkg.type} className="p-4 border border-gray-200 bg-white">
-                    <div className="space-y-4 group transition-all duration-300">
-                      <div className="flex items-center justify-center gap-2">
-                        <div className={`p-2 rounded-full bg-${pkg.color}-100 group-hover:bg-${pkg.color}-200 transition-colors`}>
-                          {pkg.icon}
-                        </div>
-                        <h3 className="text-xl font-bold">{pkg.type}</h3>
-                      </div>
-                      <div className={`text-3xl font-bold text-${pkg.color}-600 group-hover:text-${pkg.color}-700`}>
-                        ₹{pkg.price}
-                        {/* <span className="text-sm font-normal text-gray-500">/person</span> */}
-                      </div>
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {/* Hotels Section */}
-              <tr className="bg-gray-50">
-                <td colSpan={4} className="p-4 border border-gray-200 sticky left-0">
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <Building className="w-5 h-5" />
-                    <span className="font-bold text-lg">Hotels</span>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td className="p-4 border border-gray-200 bg-white sticky left-0">
-                  <div className="font-medium">Makkah Hotel</div>
-                </td>
-                {packages.map((pkg) => (
-                  <td
-                    key={pkg.type}
-                    className="p-4 border border-gray-200 transition-all duration-300 hover:bg-gray-50 relative cursor-default"
-                    onMouseEnter={() => setActiveTooltip(`makkah-${pkg.type}`)}
-                    onMouseLeave={() => setActiveTooltip(null)}
-                  >
-                    <div className="space-y-2">
-                      <div className="font-medium text-gray-800 flex items-center gap-2">
-                        {pkg.makkahHotel}
-                        <Info className="w-4 h-4 text-gray-400" />
-                      </div>
-                      <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                        <MapPin className="w-3 h-3" />
-                        {pkg.makkahDistance} from Haram
-                      </span>
-                    </div>
-                    {activeTooltip === `makkah-${pkg.type}` && (
-                      <div className="absolute z-20 bg-black text-white text-sm rounded-md py-1 px-2 -top-8 left-1/2 transform -translate-x-1/2">
-                        Or Similar
-                      </div>
-                    )}
-                  </td>
-                ))}
-              </tr>
-
-              {/* Madinah Hotel Section */}
-              <tr>
-                <td className="p-4 border border-gray-200 bg-white sticky left-0">
-                  <div className="font-medium">Madinah Hotel</div>
-                </td>
-                {packages.map((pkg) => (
-                  <td
-                    key={pkg.type}
-                    className="p-4 border border-gray-200 transition-all duration-300 hover:bg-gray-50 relative cursor-default"
-                    onMouseEnter={() => setActiveTooltip(`madinah-${pkg.type}`)}
-                    onMouseLeave={() => setActiveTooltip(null)}
-                  >
-                    <div className="space-y-2">
-                      <div className="font-medium text-gray-800 flex items-center gap-2">
-                        {pkg.madinahHotel}
-                        <Info className="w-4 h-4 text-gray-400" />
-                      </div>
-                      <span className="inline-flex items-center gap-1 rounded-full bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-                        <MapPin className="w-3 h-3" />
-                        {pkg.madinahDistance} from Masjid al-Nabawi
-                      </span>
-                    </div>
-                    {activeTooltip === `madinah-${pkg.type}` && (
-                      <div className="absolute z-20 bg-black text-white text-sm rounded-md py-1 px-2 -top-8 left-1/2 transform -translate-x-1/2">
-                        Or Similar
-                      </div>
-                    )}
-                  </td>
-                ))}
-              </tr>
-
-
-              {/* Pricing Section */}
-              <tr className="bg-gray-50">
-                <td colSpan={4} className="p-4 border border-gray-200 sticky left-0">
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <Users className="w-5 h-5" />
-                    <span className="font-bold text-lg">Room Pricing</span>
-                  </div>
-                </td>
-              </tr>
-              {['quad', 'triple', 'double'].map((roomType) => (
-                <tr key={roomType} className="hover:bg-gray-50 transition-colors">
-                  <td className="p-4 border border-gray-200 bg-white sticky left-0">
-                    <div className="font-medium capitalize">{roomType} Sharing</div>
-                  </td>
-                  {packages.map((pkg) => (
-                    <td key={pkg.type} className="p-4 border border-gray-200">
-                      <div className={`text-${pkg.color}-600 font-bold text-lg`}>
-                        ₹{pkg.sharedRoomPrices[roomType]}
-                        <span className="text-xs text-gray-500 ml-1">/person</span>
-                      </div>
-                    </td>
-                  ))}
-                </tr>
-              ))}
-
-              {/* Inclusions Section */}
-              <tr className="bg-gray-50">
-                <td colSpan={4} className="p-4 border border-gray-200 sticky left-0">
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <Check className="w-5 h-5 text-green-500" />
-                    <span className="font-bold text-lg">Package Inclusions</span>
-                  </div>
-                </td>
-              </tr>
-              {Array.from(new Set(packages.flatMap(pkg => pkg.inclusions))).map((inclusion) => (
-                <tr key={inclusion} className="hover:bg-gray-50 transition-colors">
-                  <td className="p-4 border border-gray-200 bg-white sticky left-0">
-                    <div className="font-medium">{inclusion}</div>
-                  </td>
-                  {packages.map((pkg) => (
-                    <td key={pkg.type} className="p-4 border border-gray-200 text-center">
-                      {pkg.inclusions.includes(inclusion) ? (
-                        <div className="flex items-center justify-center">
-                          <div className="p-1 rounded-full bg-green-100">
-                            <Check className="text-green-600" size={16} />
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center">
-                          <div className="p-1 rounded-full bg-red-100">
-                            <X className="text-red-600" size={16} />
-                          </div>
-                        </div>
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-
-              {/* Exclusions Section */}
-              <tr className="bg-gray-50">
-                <td colSpan={4} className="p-4 border border-gray-200 sticky left-0">
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <X className="w-5 h-5 text-red-500" />
-                    <span className="font-bold text-lg">Package Exclusions</span>
-                  </div>
-                </td>
-              </tr>
-              {Array.from(new Set(packages.flatMap(pkg => pkg.exclusions))).map((exclusion) => (
-                <tr key={exclusion} className="hover:bg-gray-50 transition-colors">
-                  <td className="p-4 border border-gray-200 bg-white sticky left-0">
-                    <div className="font-medium">{exclusion}</div>
-                  </td>
-                  {packages.map((pkg) => (
-                    <td key={pkg.type} className="p-4 border border-gray-200 text-center">
-                      {pkg.exclusions.includes(exclusion) ? (
-                        <div className="flex items-center justify-center">
-                          <div className="p-1 rounded-full bg-red-100">
-                            <X className="text-red-600" size={16} />
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center">
-                          <div className="p-1 rounded-full bg-green-100">
-                            <Check className="text-green-600" size={16} />
-                          </div>
-                        </div>
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-
-            </tbody>
-          </table>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <div className="bg-white">
+        <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-gray-900 sm:text-6xl">
+              Book Your Umrah Package Today
+            </h1>
+            <p className="mt-6 text-lg leading-8 text-gray-600">
+              Simple and affordable packages with complete support from start to finish
+            </p>
+          </div>
         </div>
       </div>
+
+      {/* Trust Indicators */}
+      <div className="mx-auto max-w-7xl px-6 py-12">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((feature, index) => (
+            <div key={index} className="border-green-100">
+              <div className="p-6">
+                <div className="flex items-center gap-4">
+                  {feature.icon}
+                  <div>
+                    <h3 className="font-semibold text-gray-900">{feature.title}</h3>
+                    <p className="text-sm text-gray-600">{feature.description}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Current Offers Alert */}
+      <div className="mx-auto max-w-7xl px-6 py-4">
+        <div className="flex justify-center">
+          <span className="rounded-full ring-2 ring-inset ring-lime-500">
+            <div className='inline-flex items-center gap-x-1.5 px-6 py-4'>
+              <BadgePercent color='#65a30d' className='flex-shrink-0' />
+              <div className="text-lime-600 text-base font-medium">
+                Book now for special December prices
+              </div>
+            </div>
+          </span>
+        </div>
+      </div>
+
+      {/* Packages Section */}
+      <div className="mx-auto max-w-7xl px-6 py-12">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-gray-900">
+            Our Umrah Packages
+          </h2>
+          <p className="mt-4 text-gray-600">
+            Everything included: Hotel, Flights, Visa, and Transport
+          </p>
+        </div>
+
+        <PackagesTable />
+      </div>
+
+      {/* Help Section */}
+      <CTA />
+
+      {/* Testimonials Preview */}
+
     </div>
   );
 };
 
-export default UmrahPackages;
+export default UmrahPackage;
