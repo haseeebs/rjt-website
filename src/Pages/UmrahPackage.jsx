@@ -1,8 +1,11 @@
 import { BadgePercent, MessageSquare, Shield, Users } from 'lucide-react';
 import CTA from '../components/CTA';
+import FeatureGrid from '../components/FeatureGrid';
 import PackagesTable from '../components/PackagesTable';
+import UmrahPackages from '../components/UmrahPackages';
 
 const UmrahPackage = () => {
+
   const features = [
     {
       icon: <Shield className="h-6 w-6 text-green-600" />,
@@ -23,9 +26,10 @@ const UmrahPackage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <UmrahPackages />
       {/* Hero Section */}
-      <div className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
+      <div className="">
+        <div className="mx-auto max-w-7xl px-6 py-24 mt-16 sm:py-32 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 sm:text-6xl">
               Book Your Umrah Package Today
@@ -38,23 +42,7 @@ const UmrahPackage = () => {
       </div>
 
       {/* Trust Indicators */}
-      <div className="mx-auto max-w-7xl px-6 py-12">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature, index) => (
-            <div key={index} className="border-green-100">
-              <div className="p-6">
-                <div className="flex items-center gap-4">
-                  {feature.icon}
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{feature.title}</h3>
-                    <p className="text-sm text-gray-600">{feature.description}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <FeatureGrid features={features} />
 
       {/* Current Offers Alert */}
       <div className="mx-auto max-w-7xl px-6 py-4">
@@ -84,7 +72,7 @@ const UmrahPackage = () => {
         <PackagesTable />
       </div>
 
-      {/* Help Section */}
+      {/* CTA Section */}
       <CTA />
 
       {/* Testimonials Preview */}
