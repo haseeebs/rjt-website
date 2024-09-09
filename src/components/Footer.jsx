@@ -17,6 +17,7 @@ const navigation = {
         {
             name: 'Instagram',
             href: 'https://www.instagram.com/riyazuljannahtourandtravels/',
+            target:"_blank",
             icon: (props) => (
                 <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
                     <path
@@ -29,7 +30,8 @@ const navigation = {
         },
         {
             name: 'WhatsApp',
-            href: '',
+            href: 'https://wa.me/919179664894',
+            target:"_blank",
             icon: (props) => (
                 <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
                     <path
@@ -61,18 +63,18 @@ const Footer = () => {
                         <p className="text-sm leading-6 text-black">
                             Your trusted travel partner since 2014. Led by an Islamic scholar who speaks Arabic and English. We have helped 1000+ happy travelers plan their holy journeys. 10 years of making your sacred trips comfortable and worry-free.
                         </p>
-                        <div className="space-y-3 cursor-default">
-                            <p className="text-sm leading-6 text-black hover:text-lime-900 transition-colors duration-300">
+                        <div className="space-y-3">
+                            <p className="text-sm leading-6 text-black hover:text-lime-900 transition-colors duration-300 cursor-default">
                                 <span className="font-bold text-black">Write to us:</span> Riyazuljannahtour@gmail.com
                             </p>
-                            <p className="text-sm leading-6 text-black hover:text-lime-900 transition-colors duration-300">
+                            <p className="text-sm leading-6 text-black hover:text-lime-900 transition-colors duration-300 cursor-default">
                                 <span className="font-bold text-black">Call us:</span> +91 9179664894
                             </p>
                         </div>
 
                         <div className="flex space-x-6">
                             {navigation.social.map((item) => (
-                                <a key={item.name} href={item.href} className="text-black hover:text-lime-900 transition-colors duration-300">
+                                <a key={item.name} href={item.href} target={item.target} className="text-black hover:text-lime-900 transition-colors duration-300">
                                     <span className="sr-only">{item.name}</span>
                                     <item.icon aria-hidden="true" className="h-6 w-6" />
                                 </a>
@@ -82,7 +84,7 @@ const Footer = () => {
 
 
                     {/* section two */}
-                    <div className="mt-16 xl:mt-0 grid grid-cols-1 bg-red-300">
+                    <div className="mt-16 xl:mt-0 grid grid-cols-1">
                         <div className="md:grid md:grid-cols-2">
                             <div>
                                 <h3 className="text-base font-bold leading-6 text-black">Quick Links</h3>
