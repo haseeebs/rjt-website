@@ -1,15 +1,35 @@
 const packages = [
     {
         type: "Budget",
-        price: "65,000",
         makkahHotel: "Al Safwah Royale Orchid",
         makkahDistance: "800m",
         madinahHotel: "Le Meridien Madinah",
         madinahDistance: "200m",
-        sharedRoomPrices: {
-            quad: "65,000",
-            triple: "67,500",
-            double: "70,000"
+        durations: {
+            15: {
+                basePrice: "65,000",
+                sharedRoomPrices: {
+                    quad: "65,000",
+                    triple: "67,500",
+                    double: "70,000"
+                }
+            },
+            20: {
+                basePrice: "75,000",
+                sharedRoomPrices: {
+                    quad: "75,000",
+                    triple: "77,500",
+                    double: "80,000"
+                }
+            },
+            25: {
+                basePrice: "85,000",
+                sharedRoomPrices: {
+                    quad: "85,000",
+                    triple: "87,500",
+                    double: "90,000"
+                }
+            }
         },
         inclusions: [
             "Economy Flights (India to Saudi Arabia)",
@@ -27,15 +47,35 @@ const packages = [
     },
     {
         type: "Deluxe",
-        price: "75,000",
         makkahHotel: "Hilton Suites Makkah",
         makkahDistance: "400m",
         madinahHotel: "Crowne Plaza Madinah",
         madinahDistance: "150m",
-        sharedRoomPrices: {
-            quad: "75,000",
-            triple: "77,500",
-            double: "80,000"
+        durations: {
+            15: {
+                basePrice: "75,000",
+                sharedRoomPrices: {
+                    quad: "75,000",
+                    triple: "77,500",
+                    double: "80,000"
+                }
+            },
+            20: {
+                basePrice: "85,000",
+                sharedRoomPrices: {
+                    quad: "85,000",
+                    triple: "87,500",
+                    double: "90,000"
+                }
+            },
+            25: {
+                basePrice: "95,000",
+                sharedRoomPrices: {
+                    quad: "95,000",
+                    triple: "97,500",
+                    double: "100,000"
+                }
+            }
         },
         inclusions: [
             "Economy Flights",
@@ -53,15 +93,35 @@ const packages = [
     },
     {
         type: "5-Star",
-        price: "1,15,000",
         makkahHotel: "Fairmont Makkah Clock Royal Tower",
         makkahDistance: "50m",
         madinahHotel: "The Oberoi Madinah",
         madinahDistance: "100m",
-        sharedRoomPrices: {
-            quad: "1,15,000",
-            triple: "1,17,500",
-            double: "1,20,000"
+        durations: {
+            15: {
+                basePrice: "1,15,000",
+                sharedRoomPrices: {
+                    quad: "1,15,000",
+                    triple: "1,17,500",
+                    double: "1,20,000"
+                }
+            },
+            20: {
+                basePrice: "1,35,000",
+                sharedRoomPrices: {
+                    quad: "1,35,000",
+                    triple: "1,37,500",
+                    double: "1,40,000"
+                }
+            },
+            25: {
+                basePrice: "1,55,000",
+                sharedRoomPrices: {
+                    quad: "1,55,000",
+                    triple: "1,57,500",
+                    double: "1,60,000"
+                }
+            }
         },
         inclusions: [
             "Premium Flights",

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { MadinahImage } from '../assets/images';
 import { MoveRight } from 'lucide-react';
+import SimpleState from './SimpleState';
 
 const Hero = () => {
   return (
@@ -50,23 +51,7 @@ const Hero = () => {
           </div>
         </div>
 
-
-        <div className="py-20">
-          <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <h3 className="text-3xl font-bold mb-2">1,000+</h3>
-              <p className="text-gray-600">Satisfied Pilgrims</p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-3xl font-bold mb-2">10+</h3>
-              <p className="text-gray-600">Years Experience</p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-3xl font-bold mb-2">24/7</h3>
-              <p className="text-gray-600">Support Available</p>
-            </div>
-          </div>
-        </div>
+        <SimpleState />
 
       </div>
     </div>

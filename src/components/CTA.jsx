@@ -9,10 +9,10 @@ const CTA = () => {
             <div className="px-6 py-24 sm:px-6 sm:py-32 lg:px-8">
                 <div className="mx-auto max-w-2xl text-center">
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                        Need help picking an Umrah package?
+                    Need Help Choosing Your Perfect Package?
                     </h2>
                     <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
-                        Let us help you find the perfect Umrah package that fits your budget. Just send us a message!
+                    We'll help you make this spiritual journey comfortable and memorable.
                     </p>
                     <div className="mt-10 flex items-center justify-center gap-x-6">
                         <a
