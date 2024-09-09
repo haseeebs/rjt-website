@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MakkahImage } from '../assets/images';
+import { MadinahImage } from '../assets/images';
 import { MoveRight } from 'lucide-react';
 
 const Hero = () => {
@@ -42,8 +42,8 @@ const Hero = () => {
                   className="absolute -inset-y-px left-1/2 -z-10 ml-10 w-[200%] skew-x-[-30deg] bg-indigo-900 opacity-20 ring-1 ring-inset ring-white md:ml-20 lg:ml-36"
                   aria-hidden="true"
                 />
-                <div className="px-2 pt-2 h-[32rem]">
-                  <img src={MakkahImage} alt="" className='h-full w-full object-cover rounded-3xl' />
+                <div className="px-2 pt-2 h-[20rem] lg:h-[32rem]">
+                  <img src={MadinahImage} alt="" className='h-full w-full object-cover rounded-3xl' />
                 </div>
               </div>
             </div>

@@ -3,7 +3,7 @@ import { Logo } from "../assets/images"
 const navigation = {
     solutions: [
         { name: 'Umrah Packages', href: '/umrah-packages' },
-        { name: 'Custom Package', href: '/custom-packages' },
+        { name: 'Customize Package', href: '/custom-packages' },
         { name: 'About Us', href: '/about' },
         { name: 'Contact Us', href: '/contact' },
     ],

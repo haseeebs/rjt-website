@@ -1,4 +1,4 @@
-import { MakkahImage } from '../assets/images';
+import { MadinahImage2, MadinahImage3, MadinahImage4, MakkahImage } from '../assets/images';
 import Card from './Card';
 
 const Packages = () => {
@@ -9,7 +9,7 @@ const Packages = () => {
                 <div className='grid grid-col-1 md:grid-cols-3 gap-8'>
                     <Card
                         badge="Economy"
-                        image={MakkahImage}
+                        image={MadinahImage4}
                         title="Luxury Hajj Package 2024"
                         price="₹78,600"
                         makkahLocation="Makkah - Lulu Al Sharq or Similar"
@@ -17,7 +17,7 @@ const Packages = () => {
                     />
                     <Card
                         badge="Deluxe"
-                        image={MakkahImage}
+                        image={MadinahImage2}
                         title="Luxury Hajj Package 2024"
                         price="₹78,600"
                         makkahLocation="Makkah - Lulu Al Sharq or Similar"
@@ -25,7 +25,7 @@ const Packages = () => {
                     />
                     <Card
                         badge="5 Star"
-                        image={MakkahImage}
+                        image={MadinahImage3}
                         title="Luxury Hajj Package 2024"
                         price="₹78,600"
                         makkahLocation="Makkah - Lulu Al Sharq or Similar"

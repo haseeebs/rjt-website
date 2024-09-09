@@ -1,3 +1,4 @@
-import MakkahImage from './Makkah-Photo.jpg';
+import MadinahImage from './Madinah-Photo.jpg';
 import Logo from './RJT Logo.png'
-export { MakkahImage, Logo };
+
+export { MadinahImage, Logo };
