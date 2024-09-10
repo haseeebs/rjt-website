@@ -1,10 +1,8 @@
-import { BadgePercent } from 'lucide-react';
 import CTA from '../components/CTA';
 import PackageComparison from '../components/PackageComparison';
 import { Gumbad } from '../assets/images';
 
 const UmrahPackage = () => {
-
   return (
     <div className="min-h-screen mx-auto max-w-7xl ">
       {/* Hero Section */}
@@ -27,31 +25,11 @@ const UmrahPackage = () => {
         </div>
       </div>
 
-
-      {/* Current Offers Alert */}
-      {/* <div className="px-6 py-4">
-        <div className="flex justify-center">
-          <span className="rounded-full ring-2 ring-inset ring-lime-500">
-            <div className='inline-flex items-center gap-x-1.5 px-6 py-4'>
-              <BadgePercent color='#65a30d' className='flex-shrink-0' />
-              <div className="text-lime-600 text-base font-medium">
-                Book now for special December prices
-              </div>
-            </div>
-          </span> 
-        </div>
-      </div> */}
-
-      {/* Packages Section */}
       <div className="py-10">
         <PackageComparison />
       </div>
 
-      {/* CTA Section */}
       <CTA />
-
-      {/* Testimonials Preview */}
-
     </div>
   );
 };

@@ -1,28 +1,32 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { hotels, packages, inclusions } from '../data/packages';
 
 const PackageComparison = () => {
+  const navigate = useNavigate();
   const [selectedDays, setSelectedDays] = useState(15);
   const [selectedRoomType, setSelectedRoomType] = useState("quad");
   const [activeTab, setActiveTab] = useState('details');
 
-  // Updated room types to match with sharedRoomPrices keys
   const roomTypes = [
     { value: "quad", label: "Quad Sharing" },
     { value: "triple", label: "Triple Sharing" },
     { value: "double", label: "Double Sharing" }
   ];
 
-  // Helper function to fetch inclusions by ID
   const getInclusions = (ids) => {
     return ids.map((id) => inclusions.find((inclusion) => inclusion.id === id)?.description);
   };
 
+  const handlePackageClick = (packageId) => {
+    navigate(`/packages/${packageId}`);
+  };
+
   return (
     <div className="mx-auto max-w-7xl bg-lime-400 px-4 py-4 rounded-3xl">
-      {/* Enhanced Filter Section */}
+      {/* Filter Section */}
       <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Duration Selection */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Select Duration</label>
@@ -44,7 +48,7 @@ const PackageComparison = () => {
             </div>
           </div>
 
-          {/* Room Type Selection - Updated */}
+          {/* Room Type Selection */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Select Room Type</label>
             <div className="relative">
@@ -66,7 +70,7 @@ const PackageComparison = () => {
           </div>
 
           {/* Tab Navigation */}
-          <div className="flex items-end">
+          {/* <div className="flex items-end">
             <div className="w-full bg-lime-50 rounded-lg p-1">
               <div className="flex space-x-1">
                 {['details', 'inclusions'].map((tab) => (
@@ -84,7 +88,7 @@ const PackageComparison = () => {
                 ))}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -113,12 +117,16 @@ const PackageComparison = () => {
                 const packageInclusions = pkg.inclusions ? getInclusions(pkg.inclusions) : [];
 
                 return (
-                  <tr key={pkg.id} className="hover:bg-lime-100 transition-colors duration-150 cursor-pointer">
+                  <tr 
+                    key={pkg.id} 
+                    onClick={() => handlePackageClick(pkg.id)}
+                    className="hover:bg-lime-100 transition-colors duration-150 cursor-pointer"
+                  >
                     <td className="px-6 py-16 font-medium text-gray-900">{pkg.type}</td>
                     {activeTab === "details" ? (
                       <>
                         <td className="px-6 py-4 text-lg font-semibold text-lime-600">
-                          {pkg.durations[selectedDays]?.sharedRoomPrices[selectedRoomType] || "N/A"}
+                          ₹{pkg.durations[selectedDays]?.sharedRoomPrices[selectedRoomType] || "N/A"}
                         </td>
                         <td className="px-6 py-4">
                           <div className="space-y-1">

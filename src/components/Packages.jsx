@@ -1,4 +1,4 @@
-import { MadinahImage2, MadinahImage3, MadinahImage4, MakkahImage } from '../assets/images';
+import { MadinahImage2, MadinahImage3, MadinahImage4 } from '../assets/images';
 import Card from './Card';
 
 const Packages = () => {
