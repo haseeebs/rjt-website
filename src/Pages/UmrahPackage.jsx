@@ -29,7 +29,7 @@ const UmrahPackage = () => {
 
 
       {/* Current Offers Alert */}
-      <div className="px-6 py-4">
+      {/* <div className="px-6 py-4">
         <div className="flex justify-center">
           <span className="rounded-full ring-2 ring-inset ring-lime-500">
             <div className='inline-flex items-center gap-x-1.5 px-6 py-4'>
@@ -38,12 +38,12 @@ const UmrahPackage = () => {
                 Book now for special December prices
               </div>
             </div>
-          </span>
+          </span> 
         </div>
-      </div>
+      </div> */}
 
       {/* Packages Section */}
-      <div className="">
+      <div className="py-10">
         <PackageComparison />
       </div>
 
