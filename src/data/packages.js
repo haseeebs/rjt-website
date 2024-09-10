@@ -1,11 +1,26 @@
 const hotels = [
-    { id: 1, city: "Makkah", name: "Al Safwah Royale Orchid", distance: "800m", category: "Economy" },
-    { id: 2, city: "Makkah", name: "Hilton Suites Makkah", distance: "400m", category: "Deluxe" },
-    { id: 3, city: "Makkah", name: "Fairmont Makkah Clock Royal Tower", distance: "50m", category: "5-Star" },
-    { id: 4, city: "Madinah", name: "Le Meridien Madinah", distance: "200m", category: "Economy" },
-    { id: 5, city: "Madinah", name: "Crowne Plaza Madinah", distance: "150m", category: "Deluxe" },
-    { id: 6, city: "Madinah", name: "The Oberoi Madinah", distance: "100m", category: "5-Star" }
+    { id: 1, city: "Makkah", name: "Al Safwah Royale Orchid", distance: "800m", category: "Economy", walkingTime: "8-10 mins", hasShuttle: true, transport: "Free Shuttle Bus (5 min journey)" },
+    { id: 2, city: "Makkah", name: "Hilton Suites Makkah", distance: "400m", category: "Deluxe", walkingTime: "4-5 mins" },
+    { id: 3, city: "Makkah", name: "Fairmont Makkah Clock Royal Tower", distance: "50m", category: "5-Star", walkingTime: "1-2 mins" },
+    { id: 4, city: "Madinah", name: "Le Meridien Madinah", distance: "200m", category: "Economy", walkingTime: "4-5 mins", hasShuttle: true, transport: "Free Shuttle Bus" },
+    { id: 5, city: "Madinah", name: "Crowne Plaza Madinah", distance: "150m", category: "Deluxe", walkingTime: "2-3 mins" },
+    { id: 6, city: "Madinah", name: "The Oberoi Madinah", distance: "100m", category: "5-Star", walkingTime: "1-2 mins" },
+
+    // Adding details from makkahHotels
+    { id: 7, city: "Makkah", name: "Hotel Al Safwah", distance: "700m", category: "Economy", walkingTime: "8-10 mins", hasShuttle: true, transport: "Free Shuttle Bus (5 min journey)" },
+    { id: 8, city: "Makkah", name: "Hotel Al Ghufran", distance: "500m", category: "Standard", walkingTime: "6-7 mins", hasShuttle: true, transport: "Free Shuttle Bus (5 min journey)" },
+    { id: 9, city: "Makkah", name: "Le Meridien", distance: "300m", category: "Premium", walkingTime: "4-5 mins", hasShuttle: false },
+    { id: 10, city: "Makkah", name: "Swissotel Al Maqam", distance: "100m", category: "Luxury", walkingTime: "2-3 mins", hasShuttle: false },
+    { id: 11, city: "Makkah", name: "Anjum Hotel", distance: "50m", category: "Elite 5★", walkingTime: "1-2 mins", hasShuttle: false },
+
+    // Adding details from madinahHotels
+    { id: 12, city: "Madinah", name: "Al Eiman Royal", distance: "300m", category: "Economy", walkingTime: "4-5 mins", hasShuttle: true, transport: "Free Shuttle Bus" },
+    { id: 13, city: "Madinah", name: "Al Safwah Royal Orchid", distance: "200m", category: "Standard", walkingTime: "3-4 mins", hasShuttle: true, transport: "Free Shuttle Bus" },
+    { id: 14, city: "Madinah", name: "Le Meridien Medina", distance: "150m", category: "Premium", walkingTime: "2-3 mins", hasShuttle: false },
+    { id: 15, city: "Madinah", name: "Pullman Zamzam", distance: "100m", category: "Luxury", walkingTime: "1-2 mins", hasShuttle: false },
+    { id: 16, city: "Madinah", name: "Anwar Al Madinah Mövenpick", distance: "50m", category: "Elite 5★", walkingTime: "1 min", hasShuttle: false }
 ];
+
 
 const packages = [
     {

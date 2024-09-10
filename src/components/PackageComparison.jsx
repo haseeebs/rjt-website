@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
-import { madinahHotels, makkahHotels, packageIncludes, packagePricing } from '../data/packages';
+import { useState } from 'react';
+import { hotels, packages, inclusions } from '../data/packages';
 
 const PackageComparison = () => {
   const [selectedDays, setSelectedDays] = useState(15);
-  const [selectedRoomType, setSelectedRoomType] = useState("Quad Sharing");
+  const [selectedRoomType, setSelectedRoomType] = useState("quad");
   const [activeTab, setActiveTab] = useState('details');
 
-  const categories = ["Economy", "Standard", "Premium", "Luxury", "Elite 5★"];
-  const roomTypes = ["Quad Sharing", "Triple Sharing", "Double Sharing"];
+  // Updated room types to match with sharedRoomPrices keys
+  const roomTypes = [
+    { value: "quad", label: "Quad Sharing" },
+    { value: "triple", label: "Triple Sharing" },
+    { value: "double", label: "Double Sharing" }
+  ];
 
-  const getPriceForPackage = (category, days, roomType) => {
-    const pricing = packagePricing[days].find(p => p.type === roomType);
-    return pricing[category.toLowerCase().replace(" 5★", "")];
+  // Helper function to fetch inclusions by ID
+  const getInclusions = (ids) => {
+    return ids.map((id) => inclusions.find((inclusion) => inclusion.id === id)?.description);
   };
 
   return (
@@ -40,7 +44,7 @@ const PackageComparison = () => {
             </div>
           </div>
 
-          {/* Room Type Selection */}
+          {/* Room Type Selection - Updated */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Select Room Type</label>
             <div className="relative">
@@ -50,7 +54,7 @@ const PackageComparison = () => {
                 onChange={(e) => setSelectedRoomType(e.target.value)}
               >
                 {roomTypes.map(type => (
-                  <option key={type} value={type}>{type}</option>
+                  <option key={type.value} value={type.value}>{type.label}</option>
                 ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -103,27 +107,24 @@ const PackageComparison = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-lime-200">
-              {categories.map((category) => {
-                const makkahHotel = makkahHotels.find(h => h.category === category);
-                const madinahHotel = madinahHotels.find(h => h.category === category);
+              {packages.map((pkg) => {
+                const makkahHotel = hotels.find((hotel) => hotel.id === pkg.makkahHotelId);
+                const madinahHotel = hotels.find((hotel) => hotel.id === pkg.madinahHotelId);
+                const packageInclusions = pkg.inclusions ? getInclusions(pkg.inclusions) : [];
 
                 return (
-                  <tr key={category} className="hover:bg-lime-100 transition-colors duration-150 cursor-pointer">
-                    <td className="px-6 py-16">
-                      <span className="font-medium text-gray-900">{category}</span>
-                    </td>
-                    {activeTab === 'details' ? (
+                  <tr key={pkg.id} className="hover:bg-lime-100 transition-colors duration-150 cursor-pointer">
+                    <td className="px-6 py-16 font-medium text-gray-900">{pkg.type}</td>
+                    {activeTab === "details" ? (
                       <>
-                        <td className="px-6 py-4">
-                          <span className="text-lg font-semibold text-lime-600">
-                            {getPriceForPackage(category, selectedDays, selectedRoomType)}
-                          </span>
+                        <td className="px-6 py-4 text-lg font-semibold text-lime-600">
+                          {pkg.durations[selectedDays]?.sharedRoomPrices[selectedRoomType] || "N/A"}
                         </td>
                         <td className="px-6 py-4">
                           <div className="space-y-1">
-                            <div className="font-medium text-gray-900">{makkahHotel.name}</div>
+                            <div className="font-medium text-gray-900">{makkahHotel?.name || "N/A"}</div>
                             <div className="text-sm text-gray-500">
-                              {makkahHotel.hasShuttle ? (
+                              {makkahHotel?.hasShuttle ? (
                                 <div className="flex items-center text-lime-600">
                                   <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -132,9 +133,9 @@ const PackageComparison = () => {
                                 </div>
                               ) : (
                                 <div className="flex items-center space-x-2">
-                                  <span>Distance: {makkahHotel.distance}</span>
+                                  <span>Distance: {makkahHotel?.distance || "N/A"}</span>
                                   <span>•</span>
-                                  <span>Walking: {makkahHotel.walkingTime}</span>
+                                  <span>Walking: {makkahHotel?.walkingTime || "N/A"}</span>
                                 </div>
                               )}
                             </div>
@@ -142,9 +143,9 @@ const PackageComparison = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div className="space-y-1">
-                            <div className="font-medium text-gray-900">{madinahHotel.name}</div>
+                            <div className="font-medium text-gray-900">{madinahHotel?.name || "N/A"}</div>
                             <div className="text-sm text-gray-500">
-                              {madinahHotel.hasShuttle ? (
+                              {madinahHotel?.hasShuttle ? (
                                 <div className="flex items-center text-lime-600">
                                   <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -153,9 +154,9 @@ const PackageComparison = () => {
                                 </div>
                               ) : (
                                 <div className="flex items-center space-x-2">
-                                  <span>Distance: {madinahHotel.distance}</span>
+                                  <span>Distance: {madinahHotel?.distance || "N/A"}</span>
                                   <span>•</span>
-                                  <span>Walking: {madinahHotel.walkingTime}</span>
+                                  <span>Walking: {madinahHotel?.walkingTime || "N/A"}</span>
                                 </div>
                               )}
                             </div>
@@ -165,7 +166,7 @@ const PackageComparison = () => {
                     ) : (
                       <td className="px-6 py-4">
                         <div className="grid grid-cols-2 gap-4">
-                          {packageIncludes.map((inclusion, idx) => (
+                          {packageInclusions.map((inclusion, idx) => (
                             <div key={idx} className="flex items-center space-x-2">
                               <svg className="w-5 h-5 text-lime-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -177,7 +178,7 @@ const PackageComparison = () => {
                       </td>
                     )}
                   </tr>
-                )
+                );
               })}
             </tbody>
           </table>
