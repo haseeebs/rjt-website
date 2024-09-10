@@ -1,195 +1,97 @@
+const hotels = [
+    { id: 1, city: "Makkah", name: "Al Safwah Royale Orchid", distance: "800m", category: "Economy" },
+    { id: 2, city: "Makkah", name: "Hilton Suites Makkah", distance: "400m", category: "Deluxe" },
+    { id: 3, city: "Makkah", name: "Fairmont Makkah Clock Royal Tower", distance: "50m", category: "5-Star" },
+    { id: 4, city: "Madinah", name: "Le Meridien Madinah", distance: "200m", category: "Economy" },
+    { id: 5, city: "Madinah", name: "Crowne Plaza Madinah", distance: "150m", category: "Deluxe" },
+    { id: 6, city: "Madinah", name: "The Oberoi Madinah", distance: "100m", category: "5-Star" }
+];
+
 const packages = [
     {
+        id: 1,
         type: "Budget",
-        makkahHotel: "Al Safwah Royale Orchid",
-        makkahDistance: "800m",
-        madinahHotel: "Le Meridien Madinah",
-        madinahDistance: "200m",
+        makkahHotelId: 1,
+        madinahHotelId: 4,
         durations: {
             15: {
-                basePrice: "65,000",
-                sharedRoomPrices: {
-                    quad: "65,000",
-                    triple: "67,500",
-                    double: "70,000"
-                }
+                basePrice: 65000,
+                sharedRoomPrices: { quad: 65000, triple: 67500, double: 70000 }
             },
             20: {
-                basePrice: "75,000",
-                sharedRoomPrices: {
-                    quad: "75,000",
-                    triple: "77,500",
-                    double: "80,000"
-                }
+                basePrice: 75000,
+                sharedRoomPrices: { quad: 75000, triple: 77500, double: 80000 }
             },
             25: {
-                basePrice: "85,000",
-                sharedRoomPrices: {
-                    quad: "85,000",
-                    triple: "87,500",
-                    double: "90,000"
-                }
+                basePrice: 85000,
+                sharedRoomPrices: { quad: 85000, triple: 87500, double: 90000 }
             }
         },
-        inclusions: [
-            "Economy Flights (India to Saudi Arabia)",
-            "Standard Transport (Airport to Hotel)",
-            "Basic Meals (Breakfast included)",
-            "Visa Processing",
-            "Indian Guide"
-        ],
-        exclusions: [
-            "Premium Transport",
-            "Zamzam Water",
-            "Travel Insurance",
-            "Extra Baggage"
-        ]
+        inclusions: [1, 2, 3, 4, 5],
+        exclusions: [6, 7, 8, 9]
     },
     {
+        id: 2,
         type: "Deluxe",
-        makkahHotel: "Hilton Suites Makkah",
-        makkahDistance: "400m",
-        madinahHotel: "Crowne Plaza Madinah",
-        madinahDistance: "150m",
+        makkahHotelId: 2,
+        madinahHotelId: 5,
         durations: {
             15: {
-                basePrice: "75,000",
-                sharedRoomPrices: {
-                    quad: "75,000",
-                    triple: "77,500",
-                    double: "80,000"
-                }
+                basePrice: 75000,
+                sharedRoomPrices: { quad: 75000, triple: 77500, double: 80000 }
             },
             20: {
-                basePrice: "85,000",
-                sharedRoomPrices: {
-                    quad: "85,000",
-                    triple: "87,500",
-                    double: "90,000"
-                }
+                basePrice: 85000,
+                sharedRoomPrices: { quad: 85000, triple: 87500, double: 90000 }
             },
             25: {
-                basePrice: "95,000",
-                sharedRoomPrices: {
-                    quad: "95,000",
-                    triple: "97,500",
-                    double: "100,000"
-                }
+                basePrice: 95000,
+                sharedRoomPrices: { quad: 95000, triple: 97500, double: 100000 }
             }
         },
-        inclusions: [
-            "Economy Flights",
-            "Premium Transport",
-            "Buffet Meals (Breakfast and Dinner)",
-            "Visa Processing",
-            "Experienced Guide",
-            "Ziyarat Tours"
-        ],
-        exclusions: [
-            "Travel Insurance",
-            "Excess Baggage",
-            "Personal expenses during stay"
-        ]
+        inclusions: [1, 2, 3, 5, 6, 10],
+        exclusions: [8, 9, 11]
     },
     {
+        id: 3,
         type: "5-Star",
-        makkahHotel: "Fairmont Makkah Clock Royal Tower",
-        makkahDistance: "50m",
-        madinahHotel: "The Oberoi Madinah",
-        madinahDistance: "100m",
+        makkahHotelId: 3,
+        madinahHotelId: 6,
         durations: {
             15: {
-                basePrice: "1,15,000",
-                sharedRoomPrices: {
-                    quad: "1,15,000",
-                    triple: "1,17,500",
-                    double: "1,20,000"
-                }
+                basePrice: 115000,
+                sharedRoomPrices: { quad: 115000, triple: 117500, double: 120000 }
             },
             20: {
-                basePrice: "1,35,000",
-                sharedRoomPrices: {
-                    quad: "1,35,000",
-                    triple: "1,37,500",
-                    double: "1,40,000"
-                }
+                basePrice: 135000,
+                sharedRoomPrices: { quad: 135000, triple: 137500, double: 140000 }
             },
             25: {
-                basePrice: "1,55,000",
-                sharedRoomPrices: {
-                    quad: "1,55,000",
-                    triple: "1,57,500",
-                    double: "1,60,000"
-                }
+                basePrice: 155000,
+                sharedRoomPrices: { quad: 155000, triple: 157500, double: 160000 }
             }
         },
-        inclusions: [
-            "Premium Flights",
-            "VIP Transport",
-            "Luxury Dining (All Meals Included)",
-            "Visa Processing",
-            "Expert Guide",
-            "Comprehensive Ziyarat Tours",
-            "Travel Insurance",
-            "Personalized Assistance",
-            "Special Souvenir Package"
-        ],
-        exclusions: [
-            "Personal shopping",
-            "Optional luxury services",
-            "Additional Ziyarat Tours",
-            "Special requests for private transport"
-        ]
+        inclusions: [1, 2, 3, 5, 6, 12, 13, 14],
+        exclusions: [8, 9, 15]
     }
 ];
 
-const makkahHotels = [
-    { category: "Economy", name: "Hotel Al Safwah", distance: "700m", walkingTime: "8-10 mins", hasShuttle: true, transport: "Free Shuttle Bus (5 min journey)" },
-    { category: "Standard", name: "Hotel Al Ghufran", distance: "500m", walkingTime: "6-7 mins", hasShuttle: true, transport: "Free Shuttle Bus (5 min journey)" },
-    { category: "Premium", name: "Le Meridien", distance: "300m", walkingTime: "4-5 mins", hasShuttle: false },
-    { category: "Luxury", name: "Swissotel Al Maqam", distance: "100m", walkingTime: "2-3 mins", hasShuttle: false },
-    { category: "Elite 5★", name: "Anjum Hotel", distance: "50m", walkingTime: "1-2 mins", hasShuttle: false },
+const inclusions = [
+    { id: 1, description: "Economy Flights" },
+    { id: 2, description: "Visa Processing" },
+    { id: 3, description: "Standard Transport" },
+    { id: 4, description: "Basic Meals" },
+    { id: 5, description: "Indian Guide" },
+    { id: 6, description: "Ziyarat Tours" },
+    { id: 7, description: "Premium Transport" },
+    { id: 8, description: "Zamzam Water" },
+    { id: 9, description: "Travel Insurance" },
+    { id: 10, description: "Luxury Dining" },
+    { id: 11, description: "Personal expenses during stay" },
+    { id: 12, description: "Comprehensive Ziyarat Tours" },
+    { id: 13, description: "Special Souvenir Package" },
+    { id: 14, description: "Personalized Assistance" },
+    { id: 15, description: "Optional luxury services" }
 ];
 
-const madinahHotels = [
-    { category: "Economy", name: "Al Eiman Royal", distance: "300m", walkingTime: "4-5 mins", hasShuttle: true, transport: "Free Shuttle Bus" },
-    { category: "Standard", name: "Al Safwah Royal Orchid", distance: "200m", walkingTime: "3-4 mins", hasShuttle: true, transport: "Free Shuttle Bus" },
-    { category: "Premium", name: "Le Meridien Medina", distance: "150m", walkingTime: "2-3 mins", hasShuttle: false },
-    { category: "Luxury", name: "Pullman Zamzam", distance: "100m", walkingTime: "1-2 mins", hasShuttle: false },
-    { category: "Elite 5★", name: "Anwar Al Madinah Mövenpick", distance: "50m", walkingTime: "1 min", hasShuttle: false },
-];
-
-const packagePricing = {
-    15: [
-        { type: "Quad Sharing", economy: "₹85,000", standard: "₹95,000", premium: "₹1,15,000", luxury: "₹1,35,000", elite: "₹1,65,000" },
-        { type: "Triple Sharing", economy: "₹95,000", standard: "₹1,05,000", premium: "₹1,25,000", luxury: "₹1,45,000", elite: "₹1,75,000" },
-        { type: "Double Sharing", economy: "₹1,05,000", standard: "₹1,15,000", premium: "₹1,35,000", luxury: "₹1,55,000", elite: "₹1,85,000" },
-    ],
-    20: [
-        { type: "Quad Sharing", economy: "₹95,000", standard: "₹1,05,000", premium: "₹1,25,000", luxury: "₹1,45,000", elite: "₹1,75,000" },
-        { type: "Triple Sharing", economy: "₹1,05,000", standard: "₹1,15,000", premium: "₹1,35,000", luxury: "₹1,55,000", elite: "₹1,85,000" },
-        { type: "Double Sharing", economy: "₹1,15,000", standard: "₹1,25,000", premium: "₹1,45,000", luxury: "₹1,65,000", elite: "₹1,95,000" },
-    ],
-    25: [
-        { type: "Quad Sharing", economy: "₹1,15,000", standard: "₹1,25,000", premium: "₹1,45,000", luxury: "₹1,65,000", elite: "₹1,95,000" },
-        { type: "Triple Sharing", economy: "₹1,25,000", standard: "₹1,35,000", premium: "₹1,55,000", luxury: "₹1,75,000", elite: "₹2,05,000" },
-        { type: "Double Sharing", economy: "₹1,35,000", standard: "₹1,45,000", premium: "₹1,65,000", luxury: "₹1,85,000", elite: "₹2,15,000" },
-    ],
-};
-
-const packageIncludes = [
-    "Return Flights with 30kg Baggage",
-    "Umrah Visa Processing",
-    "Airport Transfers in KSA",
-    "Hotel Accommodation",
-    "Daily Breakfast & Dinner Buffet",
-    "Licensed Umrah Guide Services",
-    "Ziyarat Tours in Both Cities",
-    "24/7 Ground Support Team",
-    "Prayer Mat & Guide Book",
-    "Local SIM Card with Data",
-    "All Taxes Included",
-    "No Hidden Charges"
-];
-
-export { packages, makkahHotels, madinahHotels, packagePricing, packageIncludes};
+export { hotels, packages, inclusions };
