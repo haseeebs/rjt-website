@@ -6,8 +6,8 @@ import SimpleState from './SimpleState';
 const Hero = () => {
   return (
     <div className="bg-white">
-      <div className="relative isolate overflow-hidden bg-gradient-to-b from-indigo-100/20">
-        <div className="mx-auto max-w-7xl pt-20 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:px-8 lg:pt-32">
+      <div className="relative overflow-hidden">
+        <div className="mx-auto max-w-7xl pt-20 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:px-8 lg:pt-8">
           <div className="px-6 lg:px-0 lg:pt-4">
             <div className="mx-auto max-w-2xl">
               <div className="max-w-lg">

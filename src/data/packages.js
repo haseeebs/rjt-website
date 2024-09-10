@@ -143,4 +143,53 @@ const packages = [
     }
 ];
 
-export default packages;
+const makkahHotels = [
+    { category: "Economy", name: "Hotel Al Safwah", distance: "700m", walkingTime: "8-10 mins", hasShuttle: true, transport: "Free Shuttle Bus (5 min journey)" },
+    { category: "Standard", name: "Hotel Al Ghufran", distance: "500m", walkingTime: "6-7 mins", hasShuttle: true, transport: "Free Shuttle Bus (5 min journey)" },
+    { category: "Premium", name: "Le Meridien", distance: "300m", walkingTime: "4-5 mins", hasShuttle: false },
+    { category: "Luxury", name: "Swissotel Al Maqam", distance: "100m", walkingTime: "2-3 mins", hasShuttle: false },
+    { category: "Elite 5★", name: "Anjum Hotel", distance: "50m", walkingTime: "1-2 mins", hasShuttle: false },
+];
+
+const madinahHotels = [
+    { category: "Economy", name: "Al Eiman Royal", distance: "300m", walkingTime: "4-5 mins", hasShuttle: true, transport: "Free Shuttle Bus" },
+    { category: "Standard", name: "Al Safwah Royal Orchid", distance: "200m", walkingTime: "3-4 mins", hasShuttle: true, transport: "Free Shuttle Bus" },
+    { category: "Premium", name: "Le Meridien Medina", distance: "150m", walkingTime: "2-3 mins", hasShuttle: false },
+    { category: "Luxury", name: "Pullman Zamzam", distance: "100m", walkingTime: "1-2 mins", hasShuttle: false },
+    { category: "Elite 5★", name: "Anwar Al Madinah Mövenpick", distance: "50m", walkingTime: "1 min", hasShuttle: false },
+];
+
+const packagePricing = {
+    15: [
+        { type: "Quad Sharing", economy: "₹85,000", standard: "₹95,000", premium: "₹1,15,000", luxury: "₹1,35,000", elite: "₹1,65,000" },
+        { type: "Triple Sharing", economy: "₹95,000", standard: "₹1,05,000", premium: "₹1,25,000", luxury: "₹1,45,000", elite: "₹1,75,000" },
+        { type: "Double Sharing", economy: "₹1,05,000", standard: "₹1,15,000", premium: "₹1,35,000", luxury: "₹1,55,000", elite: "₹1,85,000" },
+    ],
+    20: [
+        { type: "Quad Sharing", economy: "₹95,000", standard: "₹1,05,000", premium: "₹1,25,000", luxury: "₹1,45,000", elite: "₹1,75,000" },
+        { type: "Triple Sharing", economy: "₹1,05,000", standard: "₹1,15,000", premium: "₹1,35,000", luxury: "₹1,55,000", elite: "₹1,85,000" },
+        { type: "Double Sharing", economy: "₹1,15,000", standard: "₹1,25,000", premium: "₹1,45,000", luxury: "₹1,65,000", elite: "₹1,95,000" },
+    ],
+    25: [
+        { type: "Quad Sharing", economy: "₹1,15,000", standard: "₹1,25,000", premium: "₹1,45,000", luxury: "₹1,65,000", elite: "₹1,95,000" },
+        { type: "Triple Sharing", economy: "₹1,25,000", standard: "₹1,35,000", premium: "₹1,55,000", luxury: "₹1,75,000", elite: "₹2,05,000" },
+        { type: "Double Sharing", economy: "₹1,35,000", standard: "₹1,45,000", premium: "₹1,65,000", luxury: "₹1,85,000", elite: "₹2,15,000" },
+    ],
+};
+
+const packageIncludes = [
+    "Return Flights with 30kg Baggage",
+    "Umrah Visa Processing",
+    "Airport Transfers in KSA",
+    "Hotel Accommodation",
+    "Daily Breakfast & Dinner Buffet",
+    "Licensed Umrah Guide Services",
+    "Ziyarat Tours in Both Cities",
+    "24/7 Ground Support Team",
+    "Prayer Mat & Guide Book",
+    "Local SIM Card with Data",
+    "All Taxes Included",
+    "No Hidden Charges"
+];
+
+export { packages, makkahHotels, madinahHotels, packagePricing, packageIncludes};

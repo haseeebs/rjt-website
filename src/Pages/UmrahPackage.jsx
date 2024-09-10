@@ -1,52 +1,35 @@
-import { BadgePercent, MessageSquare, Shield, Users } from 'lucide-react';
+import { BadgePercent } from 'lucide-react';
 import CTA from '../components/CTA';
-import FeatureGrid from '../components/FeatureGrid';
-import PackagesTable from '../components/PackagesTable';
 import PackageComparison from '../components/PackageComparison';
-import UmrahPackages from '../components/UmrahPackages';
+import { Gumbad } from '../assets/images';
 
 const UmrahPackage = () => {
 
-  const features = [
-    {
-      icon: <Shield className="h-6 w-6 text-green-600" />,
-      title: "10+ Years Experience",
-      description: "Trusted by 1000+ pilgrims since 2014"
-    },
-    {
-      icon: <Users className="h-6 w-6 text-green-600" />,
-      title: "Expert Religious Guide",
-      description: "Led by an experienced Aalim fluent in Arabic & English"
-    },
-    {
-      icon: <MessageSquare className="h-6 w-6 text-green-600" />,
-      title: "WhatsApp Support",
-      description: "Quick responses to all your queries on WhatsApp"
-    }
-  ];
-
   return (
-    <div className="min-h-screen">
-      <UmrahPackages />
+    <div className="min-h-screen mx-auto max-w-7xl ">
       {/* Hero Section */}
-      <div className="">
-        <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 sm:text-6xl">
+      <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 sm:py-32 lg:px-8 rounded-3xl">
+        <img
+          alt=""
+          src={Gumbad}
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+        />
+        {/* Add a dark overlay */}
+        <div className="absolute inset-0 bg-black/50 -z-5"></div>
+
+        <div className="mx-auto max-w-2xl text-center relative z-10">
+          <h2 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
             Umrah Packages for Every Budget
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
+          </h2>
+          <p className="mt-6 text-lg leading-8 text-gray-300">
             From Economy to 5-Star Luxury, Tailored to Your Comfort & Budget
-            </p>
-          </div>
+          </p>
         </div>
       </div>
 
-      {/* Trust Indicators */}
-      <FeatureGrid features={features} />
 
       {/* Current Offers Alert */}
-      <div className="mx-auto max-w-7xl px-6 py-4">
+      <div className="px-6 py-4">
         <div className="flex justify-center">
           <span className="rounded-full ring-2 ring-inset ring-lime-500">
             <div className='inline-flex items-center gap-x-1.5 px-6 py-4'>

@@ -1,7 +1,7 @@
 const stats = [
     { id: 1, name: 'Satisfied Pilgrims', value: '1000+' },
     { id: 2, name: 'Years Experience', value: '10+' },
-    { id: 3, name: 'New users annually', value: '46,000' },
+    { id: 3, name: 'Led by an experienced Aalim fluent in Arabic & English', value: 'Guide' },
 ]
 
 const SimpleState = () => {
