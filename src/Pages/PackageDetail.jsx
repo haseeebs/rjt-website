@@ -2,15 +2,14 @@ import { useState, useEffect } from 'react';
 import { Phone, ArrowLeft, Check, X } from 'lucide-react';
 import HotelCard from '../components/HotelCard';
 import { useParams } from 'react-router-dom';
-import { hotels, packages } from '../data/packages';
+import { hotels, packages, commonInclusions } from '../data/packages';
 
 const PackageDetail = () => {
   const { id } = useParams();
-  const packageData = packages.find(pkg => pkg.id === Number(id));
-  const makkahHotel = hotels.find(hotel => hotel.id === packageData.makkahHotelId);
-  const madinahHotel = hotels.find(hotel => hotel.id === packageData.madinahHotelId);
-  console.log(packageData.inclusions);
-  console.log(packageData.exclusions);
+  const packageData = packages.find((pkg) => pkg.id === Number(id));
+  const makkahHotel = hotels.find((hotel) => hotel.id === packageData.makkahHotelId);
+  const madinahHotel = hotels.find((hotel) => hotel.id === packageData.madinahHotelId);
+
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState('15');
 
@@ -55,8 +54,8 @@ const PackageDetail = () => {
                 key={duration}
                 onClick={() => setSelectedDuration(duration)}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${selectedDuration === duration
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 hover:bg-gray-200'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 hover:bg-gray-200'
                   }`}
               >
                 {duration} Days
@@ -90,31 +89,70 @@ const PackageDetail = () => {
           </div>
         </div>
 
-        {/* Inclusions/Exclusions Grid */}
         <div className="grid md:grid-cols-2 gap-6">
+          {/* Specific Package Inclusions */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-2xl font-bold mb-4">Isme Kya Kya Milega?</h3>
-            <ul className="space-y-3">
-              {packageData.inclusions.map((item, index) => (
-                <li key={index} className="flex items-center">
-                  <Check className="w-5 h-5 text-green-500 mr-3" />
-                  <span>{item.description}</span>
-                </li>
-              ))}
-            </ul>
+            <h3 className="text-2xl font-bold mb-4">Exclusive Benefits for the {packageData.type} Package</h3>
+            {packageData.inclusions.length > 0 ? (
+              <>
+                <p className="text-gray-600 mb-4">
+                  Along with the common features, this package includes the following exclusive benefits:
+                </p>
+                <ul className="space-y-3">
+                  {packageData.inclusions.map((item, index) => (
+                    <li key={index} className="flex items-center">
+                      <Check className="w-5 h-5 text-green-500 mr-3" />
+                      <span>{item.description}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p className="text-gray-600 mb-4">
+                This package doesn’t have any additional inclusions apart from the common features. It’s designed to be budget-friendly while still covering the essentials for a fulfilling Umrah experience.
+              </p>
+            )}
           </div>
 
+          {/* Specific Package Exclusions */}
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-2xl font-bold mb-4">Isme Kya Nahi Milega?</h3>
-            <ul className="space-y-3">
-              {packageData.exclusions.map((item, index) => (
-                <li key={index} className="flex items-center">
-                  <X className="w-5 h-5 text-red-500 mr-3" />
-                  <span>{item.description}</span>
-                </li>
-              ))}
-            </ul>
+            <h3 className="text-2xl font-bold mb-4">What’s Not Covered in the {packageData.type} Package</h3>
+            {packageData.exclusions.length > 0 ? (
+              <>
+                <p className="text-gray-600 mb-4">
+                  The following services and features are not included in this package:
+                </p>
+                <ul className="space-y-3">
+                  {packageData.exclusions.map((item, index) => (
+                    <li key={index} className="flex items-center">
+                      <X className="w-5 h-5 text-red-500 mr-3" />
+                      <span>{item.description}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p className="text-gray-600 mb-4">
+                Good news! This package doesn’t have any exclusions, meaning you get a complete experience with no hidden surprises.
+              </p>
+            )}
           </div>
+          
+        </div>
+        {/* Common Inclusions */}
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h3 className="text-2xl font-bold mb-4">What’s Included in Every Package</h3>
+          <p className="text-gray-600 mb-4">
+            Every package we offer comes with the following essentials to ensure a smooth and memorable Umrah journey:
+          </p>
+          <ul className="space-y-3">
+            {commonInclusions.map((item) => (
+              <li key={item.id} className="flex items-center">
+                <Check className="w-5 h-5 text-green-500 mr-3" />
+                <span>{item.description}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </main>
 
