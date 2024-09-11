@@ -56,10 +56,12 @@ const HotelCard = ({ hotel }) => {
                         <Star className="w-4 h-4 text-yellow-400 mr-2" />
                         <span>{hotel.category}</span>
                     </div>
-                    <div className="flex items-center">
-                        <Clock className="w-4 h-4 mr-2" />
-                        <span>{hotel.walkingTime} walk to Haram</span>
-                    </div>
+                    {!hotel.hasShuttle && (
+                        <div className="flex items-center">
+                            <Clock className="w-4 h-4 mr-2" />
+                            <span>{hotel.walkingTime} walk to Haram</span>
+                        </div>
+                    )}
                     {hotel.hasShuttle && (
                         <div className="flex items-center">
                             <Bus className="w-4 h-4 mr-2" />
@@ -67,6 +69,7 @@ const HotelCard = ({ hotel }) => {
                         </div>
                     )}
                 </div>
+
             </div>
 
             {/* Image Modal */}

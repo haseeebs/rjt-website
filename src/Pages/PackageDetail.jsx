@@ -1,17 +1,23 @@
-import { useState, useEffect } from 'react';
-import { Phone, ArrowLeft, Check, X } from 'lucide-react';
+import { ArrowLeft, Calendar, Check, Phone, Users, X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import HotelCard from '../components/HotelCard';
-import { useParams } from 'react-router-dom';
-import { hotels, packages, commonInclusions } from '../data/packages';
+import { commonInclusions, hotels, packages } from '../data/packages';
 
 const PackageDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const packageData = packages.find((pkg) => pkg.id === Number(id));
   const makkahHotel = hotels.find((hotel) => hotel.id === packageData.makkahHotelId);
   const madinahHotel = hotels.find((hotel) => hotel.id === packageData.madinahHotelId);
 
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState('15');
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,15 +30,23 @@ const PackageDetail = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sticky Header */}
-      <header className={`sticky top-0 z-50 w-full bg-white shadow-sm transition-all duration-300 ${isHeaderSticky ? 'py-2' : 'py-4'
-        }`}>
+      <header 
+        className={`sticky top-0 z-50 w-full bg-white shadow-md transition-all duration-300 
+        ${isHeaderSticky ? 'py-2' : 'py-4'}`}
+      >
         <div className="container mx-auto px-4 flex items-center justify-between">
-          <a href="#" className="flex items-center text-blue-600 hover:text-blue-700">
+          {/* Back Button */}
+          <button 
+            onClick={() => navigate(-1)} // Navigate to previous page
+            className="flex items-center text-lime-600 hover:text-lime-700 font-medium"
+          >
             <ArrowLeft className="w-5 h-5 mr-2" />
-            Wapas Jao
-          </a>
-          <h1 className={`font-bold transition-all duration-300 ${isHeaderSticky ? 'text-xl' : 'text-2xl'
-            }`}>
+            Back
+          </button>
+          <h1 
+            className={`font-bold text-gray-800 transition-all duration-300 
+            ${isHeaderSticky ? 'text-xl' : 'text-2xl'}`}
+          >
             {packageData.type} Umrah Package
           </h1>
         </div>
@@ -40,6 +54,31 @@ const PackageDetail = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 space-y-8 pb-24">
+        {/* Package Summary */}
+        <div className="bg-gradient-to-br from-lime-400 to-lime-500 rounded-3xl p-6 text-white shadow-lg">
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <div className="text-lime-100">Starting From</div>
+              <div className="text-4xl font-bold">
+                ₹{packageData.durations[selectedDuration].basePrice.toLocaleString('en-IN')}
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="text-lime-100">Duration</div>
+              <div className="text-2xl font-semibold flex items-center gap-2">
+                <Calendar className="w-6 h-6" />
+                {selectedDuration} Days
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="text-lime-100">Base Occupancy</div>
+              <div className="text-2xl font-semibold flex items-center gap-2">
+                <Users className="w-6 h-6" />
+                Quad Sharing
+              </div>
+            </div>
+          </div>
+        </div>
         {/* Hotels Grid */}
         <div className="grid md:grid-cols-2 gap-6">
           <HotelCard hotel={makkahHotel} />
@@ -47,15 +86,17 @@ const PackageDetail = () => {
         </div>
 
         {/* Duration Tabs */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex space-x-2 mb-6">
+        <div className="bg-white rounded-3xl shadow-lg p-6">
+          <h3 className="text-2xl font-bold mb-6 text-gray-800">Choose Your Duration</h3>
+          <div className="flex flex-wrap gap-3 mb-6">
             {Object.keys(packageData.durations).map((duration) => (
               <button
                 key={duration}
                 onClick={() => setSelectedDuration(duration)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${selectedDuration === duration
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 hover:bg-gray-200'
+                className={`px-6 py-3 rounded-xl font-medium transition-all 
+                  ${selectedDuration === duration
+                    ? 'bg-lime-500 text-white shadow-lg scale-105'
+                    : 'bg-lime-50 text-lime-700 hover:bg-lime-100'
                   }`}
               >
                 {duration} Days
@@ -63,27 +104,23 @@ const PackageDetail = () => {
             ))}
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-2xl font-bold">
-              {selectedDuration} Din ka Package
-            </h3>
-            <div className="text-3xl font-bold text-blue-600">
-              ₹{packageData.durations[selectedDuration].basePrice.toLocaleString('en-IN')}
-            </div>
-            <p className="text-gray-600">Base Price (Quad Sharing)</p>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="font-semibold">Triple Sharing</div>
-                <div className="text-lg">
-                  ₹{packageData.durations[selectedDuration].sharedRoomPrices.triple.toLocaleString('en-IN')}
-                </div>
+          <div className="grid sm:grid-cols-3 gap-4">
+            <div className="bg-lime-50 p-4 ronded-xl">
+              <div className="font-semibold text-gray-700">Quad Sharing</div>
+              <div className="text-xl font-bold text-lime-700">
+                ₹{packageData.durations[selectedDuration].basePrice.toLocaleString('en-IN')}
               </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="font-semibold">Double Sharing</div>
-                <div className="text-lg">
-                  ₹{packageData.durations[selectedDuration].sharedRoomPrices.double.toLocaleString('en-IN')}
-                </div>
+            </div>
+            <div className="bg-lime-50 p-4 rounded-xl">
+              <div className="font-semibold text-gray-700">Triple Sharing</div>
+              <div className="text-xl font-bold text-lime-700">
+                ₹{packageData.durations[selectedDuration].sharedRoomPrices.triple.toLocaleString('en-IN')}
+              </div>
+            </div>
+            <div className="bg-lime-50 p-4 rounded-xl">
+              <div className="font-semibold text-gray-700">Double Sharing</div>
+              <div className="text-xl font-bold text-lime-700">
+                ₹{packageData.durations[selectedDuration].sharedRoomPrices.double.toLocaleString('en-IN')}
               </div>
             </div>
           </div>
@@ -91,81 +128,83 @@ const PackageDetail = () => {
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Specific Package Inclusions */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-2xl font-bold mb-4">Exclusive Benefits for the {packageData.type} Package</h3>
+          <div className="bg-white rounded-xl shadow-lg p-6">
+            <h3 className="text-2xl font-bold mb-4 text-gray-800">Package Benefits</h3>
+            <p className="text-gray-600 mb-4">
+              Along with the common features, this package includes the following exclusive benefits:
+            </p>
             {packageData.inclusions.length > 0 ? (
-              <>
-                <p className="text-gray-600 mb-4">
-                  Along with the common features, this package includes the following exclusive benefits:
-                </p>
-                <ul className="space-y-3">
-                  {packageData.inclusions.map((item, index) => (
-                    <li key={index} className="flex items-center">
-                      <Check className="w-5 h-5 text-green-500 mr-3" />
-                      <span>{item.description}</span>
-                    </li>
-                  ))}
-                </ul>
-              </>
+              <ul className="space-y-4">
+                {packageData.inclusions.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <div className="mt-1">
+                      <Check className="w-5 h-5 text-lime-500" />
+                    </div>
+                    <span className="ml-3 text-gray-600">{item.description}</span>
+                  </li>
+                ))}
+              </ul>
             ) : (
-              <p className="text-gray-600 mb-4">
-                This package doesn’t have any additional inclusions apart from the common features. It’s designed to be budget-friendly while still covering the essentials for a fulfilling Umrah experience.
+              <p className="text-gray-600">
+                This package includes all common features for a budget-friendly Umrah experience.
               </p>
             )}
           </div>
 
           {/* Specific Package Exclusions */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="text-2xl font-bold mb-4">What’s Not Covered in the {packageData.type} Package</h3>
+          <div className="bg-white rounded-3xl shadow-lg p-6">
+            <h3 className="text-2xl font-bold mb-4 text-gray-800">Not Included</h3>
+            <p className="text-gray-600 mb-4">
+              The following services and features are not included in this package:
+            </p>
             {packageData.exclusions.length > 0 ? (
-              <>
-                <p className="text-gray-600 mb-4">
-                  The following services and features are not included in this package:
-                </p>
-                <ul className="space-y-3">
-                  {packageData.exclusions.map((item, index) => (
-                    <li key={index} className="flex items-center">
-                      <X className="w-5 h-5 text-red-500 mr-3" />
-                      <span>{item.description}</span>
-                    </li>
-                  ))}
-                </ul>
-              </>
+              <ul className="space-y-4">
+                {packageData.exclusions.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <div className="mt-1">
+                      <X className="w-5 h-5 text-red-500" />
+                    </div>
+                    <span className="ml-3 text-gray-600">{item.description}</span>
+                  </li>
+                ))}
+              </ul>
             ) : (
-              <p className="text-gray-600 mb-4">
-                Good news! This package doesn’t have any exclusions, meaning you get a complete experience with no hidden surprises.
+              <p className="text-gray-600">
+                All essential services are included in this comprehensive package.
               </p>
             )}
           </div>
-          
         </div>
+
         {/* Common Inclusions */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-2xl font-bold mb-4">What’s Included in Every Package</h3>
+        <div className="bg-white rounded-3xl shadow-lg p-6">
+          <h3 className="text-2xl font-bold mb-4 text-gray-800">Standard Features</h3>
           <p className="text-gray-600 mb-4">
             Every package we offer comes with the following essentials to ensure a smooth and memorable Umrah journey:
           </p>
-          <ul className="space-y-3">
+          <div className="grid md:grid-cols-2 gap-x-6 gap-y-4">
             {commonInclusions.map((item) => (
-              <li key={item.id} className="flex items-center">
-                <Check className="w-5 h-5 text-green-500 mr-3" />
-                <span>{item.description}</span>
-              </li>
+              <div key={item.id} className="flex items-start">
+                <div className="mt-1">
+                  <Check className="w-5 h-5 text-lime-500" />
+                </div>
+                <span className="ml-3 text-gray-600">{item.description}</span>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </main>
 
       {/* Fixed Bottom Bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="text-center sm:text-left">
-            <p className="text-3xl font-bold text-blue-600">
+          <div>
+            <p className="text-3xl font-bold text-lime-600">
               ₹{packageData.durations[selectedDuration].basePrice.toLocaleString('en-IN')}
             </p>
             <p className="text-gray-600">Starting Price</p>
           </div>
-          <button className="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg flex items-center justify-center transition-colors">
+          <button className="w-full sm:w-auto bg-lime-500 hover:bg-lime-600 text-white px-8 py-4 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg hover:shadow-xl">
             <Phone className="w-5 h-5 mr-2" />
             WhatsApp par Puchho
           </button>

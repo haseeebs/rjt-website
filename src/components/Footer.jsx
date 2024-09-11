@@ -48,7 +48,7 @@ const navigation = {
 
 const Footer = () => {
     return (
-        <footer aria-labelledby="footer-heading" className="bg-lime-400">
+        <footer aria-labelledby="footer-heading" className="bg-lime-500">
             <h2 id="footer-heading" className="sr-only">
                 Footer
             </h2>
@@ -61,21 +61,21 @@ const Footer = () => {
                             src={Logo}
                             className="h-10 w-auto"
                         />
-                        <p className="text-sm leading-6 text-black">
+                        <p className="text-sm leading-6 text-white">
                             Your trusted travel partner since 2014. Led by an Islamic scholar who speaks Arabic and English. We have helped 1000+ happy travelers plan their holy journeys. 10 years of making your sacred trips comfortable and worry-free.
                         </p>
                         <div className="space-y-3">
-                            <p className="text-sm leading-6 text-black hover:text-lime-900 transition-colors duration-300 cursor-default">
-                                <span className="font-bold text-black">Write to us:</span> Riyazuljannahtour@gmail.com
+                            <p className="text-sm leading-6 text-white hover:text-lime-900 transition-colors duration-300 cursor-default">
+                                <span className="font-bold text-white">Write to us:</span> Riyazuljannahtour@gmail.com
                             </p>
-                            <p className="text-sm leading-6 text-black hover:text-lime-900 transition-colors duration-300 cursor-default">
-                                <span className="font-bold text-black">Call us:</span> +91 9179664894
+                            <p className="text-sm leading-6 text-white hover:text-lime-900 transition-colors duration-300 cursor-default">
+                                <span className="font-bold text-white">Call us:</span> +91 9179664894
                             </p>
                         </div>
 
                         <div className="flex space-x-6">
                             {navigation.social.map((item) => (
-                                <a key={item.name} href={item.href} target={item.target} className="text-black hover:text-lime-900 transition-colors duration-300">
+                                <a key={item.name} href={item.href} target={item.target} className="text-white hover:text-lime-900 transition-colors duration-300">
                                     <span className="sr-only">{item.name}</span>
                                     <item.icon aria-hidden="true" className="h-6 w-6" />
                                 </a>
@@ -88,11 +88,11 @@ const Footer = () => {
                     <div className="mt-16 xl:mt-0 grid grid-cols-1">
                         <div className="md:grid md:grid-cols-2">
                             <div>
-                                <h3 className="text-base font-bold leading-6 text-black">Quick Links</h3>
+                                <h3 className="text-base font-bold leading-6 text-white">Quick Links</h3>
                                 <ul role="list" className="mt-6 space-y-4">
                                     {navigation.solutions.map((item) => (
                                         <li key={item.name}>
-                                            <a href={item.href} className="text-sm leading-6 text-black hover:text-lime-900 transition-colors duration-300">
+                                            <a href={item.href} className="text-sm leading-6 text-white hover:text-lime-900 transition-colors duration-300">
                                                 {item.name}
                                             </a>
                                         </li>
@@ -100,11 +100,11 @@ const Footer = () => {
                                 </ul>
                             </div>
                             <div className="mt-10 md:mt-0">
-                                <h3 className="text-base font-bold leading-6 text-black">Services</h3>
+                                <h3 className="text-base font-bold leading-6 text-white">Services</h3>
                                 <ul role="list" className="mt-6 space-y-4">
                                     {navigation.services.map((item) => (
                                         <li key={item.name}>
-                                            <a href={item.href} className="text-sm leading-6 text-black hover:text-lime-900 transition-colors duration-300">
+                                            <a href={item.href} className="text-sm leading-6 text-white hover:text-lime-900 transition-colors duration-300">
                                                 {item.name}
                                             </a>
                                         </li>

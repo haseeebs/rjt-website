@@ -12,7 +12,7 @@ const CTA = () => {
                     <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
                         We'll help you make this spiritual journey comfortable and memorable.
                     </p>
-                    <div className="mt-10 flex items-center justify-center gap-x-6">
+                    <div className="mt-10 flex items-center justify-center gap-x-6 cursor-pointer">
                         <a
                             href={getWhatsappUrl}
                             target="_blank"
