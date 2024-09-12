@@ -1,8 +1,5 @@
-export const whatsappNumber = "919179664894";
-export const message = "Hi, I would like to know more about Umrah packages.";
-
-// Function to generate the WhatsApp URL
 export const getWhatsappUrl = () => {
-    const encodedMessage = encodeURIComponent(message);
-    return `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+    const phone = "919179664894"; // Replace with your WhatsApp number
+    const message = "Hi, I would like to know more about Umrah packages."; // Default message
+    return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 };

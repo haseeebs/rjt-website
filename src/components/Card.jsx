@@ -1,4 +1,13 @@
-const Card2 = ({ image, title, price, makkahLocation, madinahLocation, badge }) => {
+import { useNavigate } from "react-router-dom";
+
+const Card2 = ({ packageId, image, title, price, makkahLocation, madinahLocation, badge }) => {
+
+    const navigate = useNavigate();
+
+    const handleBookNow = () => {
+        navigate(`/packages/${packageId}`);
+    };
+
     return (
         <div className="relative w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
             {/* Featured Badge */}
@@ -58,6 +67,7 @@ const Card2 = ({ image, title, price, makkahLocation, madinahLocation, badge }) 
 
                 {/* Book Now Button */}
                 <button
+                    onClick={handleBookNow}
                     className="w-full bg-lime-500 text-white py-4 rounded-xl font-semibold transition-all duration-300 hover:bg-lime-600 active:bg-lime-700 focus:ring-2 focus:ring-lime-400 focus:ring-offset-2 focus:outline-none flex items-center justify-center group text-base shadow-lg shadow-lime-200"
                     aria-label={`Book ${title}`}
                 >

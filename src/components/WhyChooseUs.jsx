@@ -7,17 +7,17 @@ const SpiritualTravelFeatures = () => {
   const features = [
     {
       icon: UsersIcon,
-      title: 'Expert Guides',
+      title: 'Trusted Guidance',
       description: 'Each group is led by an experienced aalim, fluent in Arabic and English, with over 10 years of experience. They provide spiritual guidance and support throughout the journey.',
     },
     {
       icon: MapIcon,
-      title: 'Curated Itineraries',
-      description: 'Our itineraries are designed to ensure a smooth and meaningful journey, covering all essential aspects of your spiritual trip.',
+      title: 'Well-Planned Journeys',
+      description: 'From flights to accommodations, everything is planned to save you time and give you peace of mind.',
     },
     {
       icon: ShieldIcon,
-      title: 'Safe Travel',
+      title: 'Safe and Easy Travel',
       description: 'Your safety and comfort are our top priorities. We provide trusted services so you can travel with peace of mind.',
     },
   ];
@@ -34,8 +34,8 @@ const SpiritualTravelFeatures = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 items-stretch">
-          <div className="bg-white/80 backdrop-blur-sm border border-lime-500 rounded-3xl flex flex-col justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-8 items-stretch">
+          <div className="bg-white/80 backdrop-blur-sm border border-lime-500 rounded-3xl mb-8 md:mb-0 flex flex-col justify-between">
             <div className="p-6">
               <div className="flex items-center justify-center mb-6">
                 <div className="relative">
@@ -51,7 +51,7 @@ const SpiritualTravelFeatures = () => {
                 Our team works hard to make your journey peaceful and memorable. We take care of everything so you can focus on your worship.
               </p>
             </div>
-            <div className="p-6 bg-lime-300 hover:bg-lime-400 transition-colors duration-300 rounded-b-3xl cursor-pointer">
+            <div className="p-6 bg-lime-300 hover:bg-lime-400 transition-colors duration-300 rounded-b-3xl cursor-default">
               <p className="text-lime-700 font-semibold text-center">Trusted by Thousands</p>
             </div>
           </div>

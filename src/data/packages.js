@@ -4,6 +4,7 @@ const packages = [
         type: "Budget",
         makkahHotelId: 1,
         madinahHotelId: 6,
+        // date: "10th March 2024",
         durations: {
             15: {
                 basePrice: 65000,
@@ -18,7 +19,7 @@ const packages = [
                 sharedRoomPrices: { quad: 85000, triple: 87500, double: 90000 },
             },
         },
-        inclusions: [], // Basic package has no extra inclusions
+        inclusions: [],
         exclusions: [
             { id: 6, description: "Luxury Accommodation" },
             { id: 7, description: "Premium Meals" },
@@ -31,6 +32,7 @@ const packages = [
         type: "Deluxe",
         makkahHotelId: 2,
         madinahHotelId: 7,
+        // date: "10th March 2024",
         durations: {
             15: {
                 basePrice: 75000,
@@ -60,6 +62,7 @@ const packages = [
         type: "5-Star",
         makkahHotelId: 3,
         madinahHotelId: 8,
+        // date: "20th April 2024",
         durations: {
             15: {
                 basePrice: 115000,
@@ -87,6 +90,7 @@ const packages = [
         ],
     },
 ];
+
 
 
 const commonInclusions = [

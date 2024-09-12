@@ -14,7 +14,7 @@ const CTA = () => {
                     </p>
                     <div className="mt-10 flex items-center justify-center gap-x-6 cursor-pointer">
                         <a
-                            href={getWhatsappUrl}
+                            href={getWhatsappUrl()}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="rounded-full bg-lime-400 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-lime-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-600 flex items-center gap-2"

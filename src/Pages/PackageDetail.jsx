@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import HotelCard from '../components/HotelCard';
 import { commonInclusions, hotels, packages } from '../data/packages';
+import { getWhatsappUrl } from '../utils/whatsappUtils';
 
 const PackageDetail = () => {
   const { id } = useParams();
@@ -26,24 +27,24 @@ const PackageDetail = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
+  console.log(packageData.date);
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sticky Header */}
-      <header 
+      <header
         className={`sticky top-0 z-50 w-full bg-white shadow-md transition-all duration-300 
         ${isHeaderSticky ? 'py-2' : 'py-4'}`}
       >
         <div className="container mx-auto px-4 flex items-center justify-between">
           {/* Back Button */}
-          <button 
+          <button
             onClick={() => navigate(-1)} // Navigate to previous page
             className="flex items-center text-lime-600 hover:text-lime-700 font-medium"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back
           </button>
-          <h1 
+          <h1
             className={`font-bold text-gray-800 transition-all duration-300 
             ${isHeaderSticky ? 'text-xl' : 'text-2xl'}`}
           >
@@ -56,7 +57,7 @@ const PackageDetail = () => {
       <main className="container mx-auto px-4 py-8 space-y-8 pb-24">
         {/* Package Summary */}
         <div className="bg-gradient-to-br from-lime-400 to-lime-500 rounded-3xl p-6 text-white shadow-lg">
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className={`grid ${packageData.date ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3"} gap-6`}>
             <div className="space-y-2">
               <div className="text-lime-100">Starting From</div>
               <div className="text-4xl font-bold">
@@ -77,6 +78,13 @@ const PackageDetail = () => {
                 Quad Sharing
               </div>
             </div>
+            {packageData.date && <div className="space-y-2">
+              <div className="text-lime-100">Date</div>
+              <div className="text-2xl font-semibold flex items-center gap-2">
+                <Users className="w-6 h-6" />
+                {packageData.date}
+              </div>
+            </div>}
           </div>
         </div>
         {/* Hotels Grid */}
@@ -206,7 +214,7 @@ const PackageDetail = () => {
           </div>
           <button className="w-full sm:w-auto bg-lime-500 hover:bg-lime-600 text-white px-8 py-4 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg hover:shadow-xl">
             <Phone className="w-5 h-5 mr-2" />
-            WhatsApp par Puchho
+            <a href={getWhatsappUrl()} target="_blank" rel="noopener noreferrer">WhatsApp par Puchho</a>
           </button>
         </div>
       </div>
