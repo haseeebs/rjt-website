@@ -4,7 +4,7 @@ const navigation = {
     solutions: [
         { name: 'Home', href: '/' },
         { name: 'Umrah Packages', href: '/umrah-packages' },
-        { name: 'Customize Package', href: '/custom-packages' },
+        { name: 'Customize Package', href: '/customize-package' },
         { name: 'About Us', href: '/about' },
         { name: 'Contact Us', href: '/contact' },
     ],

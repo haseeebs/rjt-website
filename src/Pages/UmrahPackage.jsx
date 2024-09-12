@@ -4,7 +4,7 @@ import { Gumbad } from '../assets/images';
 
 const UmrahPackage = () => {
   return (
-    <div className="min-h-screen mx-auto max-w-7xl ">
+    <div className="min-h-screen mx-auto max-w-7xl py-10">
       {/* Hero Section */}
       <div className="relative isolate overflow-hidden bg-gray-900 px-6 py-24 sm:py-32 lg:px-8 rounded-3xl">
         <img

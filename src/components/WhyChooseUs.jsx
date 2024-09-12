@@ -51,8 +51,8 @@ const SpiritualTravelFeatures = () => {
                 Our team works hard to make your journey peaceful and memorable. We take care of everything so you can focus on your worship.
               </p>
             </div>
-            <div className="p-6 bg-lime-300 hover:bg-lime-400 transition-colors duration-300 rounded-b-3xl cursor-default">
-              <p className="text-lime-700 font-semibold text-center">Trusted by Thousands</p>
+            <div className="p-6 bg-lime-300 hover:bg-lime-400 text-lime-700 hover:text-lime-950 transition-colors duration-300 rounded-b-3xl cursor-default">
+              <p className="font-semibold text-center">Trusted by Thousands</p>
             </div>
           </div>
 
