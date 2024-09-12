@@ -11,10 +11,10 @@ const Hero = () => {
           <div className="px-6 lg:px-0 lg:pt-4">
             <div className="mx-auto max-w-2xl">
               <div className="max-w-lg">
-                <h1 className="mt-10 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                <h1 className="mt-10 text-4xl font-bold tracking-tight text-lime-950 sm:text-6xl">
                   Stress-Free Umrah Led by Knowledgeable Aalim
                 </h1>
-                <p className="mt-6 text-lg leading-8 text-gray-600">
+                <p className="mt-6 text-lg leading-8 text-lime-900">
                   Complete Care, Peaceful Travel, and Trusted Guidance for Your Umrah Journey — Backed by Over 10 Years of Experience.
                 </p>
                 <div className="mt-10 flex items-center gap-x-6">

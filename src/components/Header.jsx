@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
-import { Menu, X } from 'lucide-react'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Logo, MakkahImage } from '../assets/images'
 import { Link } from 'react-router-dom'
 
@@ -31,12 +31,12 @@ const Header = () => {
               className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
             >
               <span className="sr-only">Open main menu</span>
-              <Menu aria-hidden="true" className="h-6 w-6"/>
+              <Bars3Icon aria-hidden="true" className="h-6 w-6" />
             </button>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <Link key={item.name} to={item.to} className="text-sm font-semibold leading-6 text-gray-900">
+              <Link key={item.name} to={item.to} className="text-sm font-semibold leading-6 text-lime-950">
                 {item.name}
               </Link>
             ))}
@@ -56,7 +56,7 @@ const Header = () => {
                 className="-m-2.5 rounded-md p-2.5 text-gray-700"
               >
                 <span className="sr-only">Close menu</span>
-                <X aria-hidden="true" className="h-6 w-6" />
+                <XMarkIcon aria-hidden="true" className="h-6 w-6" />
               </button>
             </div>
             <div className="mt-6 flow-root">

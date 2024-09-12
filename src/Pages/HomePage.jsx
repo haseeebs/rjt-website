@@ -1,6 +1,6 @@
 import Hero from '../components/Hero'
 import Packages from '../components/Packages'
-import WhyChooseUs from './WhyChooseUs'
+import WhyChooseUs from '../components/WhyChooseUs'
 
 const HomePage = () => {
     return (

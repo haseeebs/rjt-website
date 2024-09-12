@@ -19,7 +19,7 @@ const Card2 = ({ image, title, price, makkahLocation, madinahLocation, badge }) 
             {/* Content */}
             <div className="p-7">
                 {/* Title */}
-                <h2 className="text-2xl font-bold mb-4 text-gray-800 line-clamp-2 cursor-default tracking-tight hover:text-lime-700 transition-colors">
+                <h2 className="text-2xl font-bold mb-4 text-lime-950 line-clamp-2 cursor-default tracking-tight hover:text-lime-700 transition-colors">
                     {title}
                 </h2>
 
