@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const CustomizePackage = () => {
+const UmrahBookingForm = () => {
   const [packageType] = useState('customized');
   const [hotelCategory, setHotelCategory] = useState('');
   const [travelMode, setTravelMode] = useState('');
@@ -13,6 +13,46 @@ const CustomizePackage = () => {
   const [inclusions, setInclusions] = useState([]);
   const [totalPrice, setTotalPrice] = useState(75000);
   const [formError, setFormError] = useState('');
+
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const [contactDetails, setContactDetails] = useState({
+    fullName: '',
+    phoneNumber: '',
+    email: '',
+    specialRequests: ''
+  });
+
+  const [contactErrors, setContactErrors] = useState({});
+
+  const validateContactDetails = () => {
+    const errors = {};
+
+    // Full Name validation
+    if (!contactDetails.fullName.trim()) {
+      errors.fullName = 'Full Name is required';
+    } else if (contactDetails.fullName.trim().length < 2) {
+      errors.fullName = 'Name must be at least 2 characters long';
+    }
+
+    // Phone Number validation
+    const phoneRegex = /^[0-9]{10}$/; // Assumes 10-digit phone number
+    if (!contactDetails.phoneNumber.trim()) {
+      errors.phoneNumber = 'Phone Number is required';
+    } else if (!phoneRegex.test(contactDetails.phoneNumber)) {
+      errors.phoneNumber = 'Please enter a valid 10-digit phone number';
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!contactDetails.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!emailRegex.test(contactDetails.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+
+    return errors;
+  };
 
   const calculatePrice = () => {
     let price = 75000; // Base price
@@ -37,32 +77,51 @@ const CustomizePackage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Validate package details
     if (!hotelCategory || !travelMode || !date || !roomSharing) {
-      setFormError('Please fill in all required fields');
+      setFormError('Please fill in all required package details');
       return;
     }
-    
-    // Prepare form data object
+
+    // Validate contact details
+    const contactValidationErrors = validateContactDetails();
+    if (Object.keys(contactValidationErrors).length > 0) {
+      setContactErrors(contactValidationErrors);
+      return;
+    }
+
+    // Prepare complete form data
     const formData = {
-      packageType,
-      hotelCategory,
-      travelMode,
-      flightType,
-      travelDates: {
-        from: date.from,
-        to: date.to
+      packageDetails: {
+        packageType,
+        hotelCategory,
+        travelMode,
+        flightType,
+        travelDates: {
+          from: date.from,
+          to: date.to
+        },
+        roomSharing,
+        inclusions,
+        totalPrice
       },
-      roomSharing,
-      inclusions,
-      totalPrice
+      contactDetails: {
+        fullName: contactDetails.fullName.trim(),
+        phoneNumber: contactDetails.phoneNumber.trim(),
+        email: contactDetails.email.trim(),
+        specialRequests: contactDetails.specialRequests.trim()
+      }
     };
-  
-    // Log form data to console
-    console.log('Submitted Umrah Package Details:', formData);
-  
-    // Reset form error
+
+    // Log or send form data
+    console.log('Complete Umrah Package Submission:', formData);
+
+    // Reset errors
     setFormError('');
+    setContactErrors({});
   };
+
 
   const handleInclusionChange = (inclusion) => {
     setInclusions(prev =>
@@ -73,10 +132,10 @@ const CustomizePackage = () => {
   };
 
   const formatDate = (date) => {
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
     });
   };
 
@@ -249,8 +308,8 @@ const CustomizePackage = () => {
                           onChange={() => handleInclusionChange(inclusion.id)}
                           className="h-4 w-4 rounded border-gray-300 text-lime-600 focus:ring-lime-500"
                         />
-                        <label 
-                          htmlFor={inclusion.id} 
+                        <label
+                          htmlFor={inclusion.id}
                           className="ml-2 block text-sm text-gray-900"
                         >
                           {inclusion.label}
@@ -265,25 +324,74 @@ const CustomizePackage = () => {
                   <label className="block text-sm font-medium text-gray-700">
                     Contact Information
                   </label>
-                  <input 
-                    type="text" 
-                    placeholder="Full Name" 
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
-                  />
-                  <input 
-                    type="tel" 
-                    placeholder="Phone Number" 
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
-                  />
-                  <input 
-                    type="email" 
-                    placeholder="Email Address" 
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
-                  />
-                  <textarea 
-                    placeholder="Special Requests (Optional)" 
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
-                  />
+                  <div className="space-y-2">
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        value={contactDetails.fullName}
+                        onChange={(e) => setContactDetails(prev => ({
+                          ...prev,
+                          fullName: e.target.value
+                        }))}
+                        className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 ${contactErrors.fullName ? 'border-red-500' : ''
+                          }`}
+                      />
+                      {contactErrors.fullName && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {contactErrors.fullName}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <input
+                        type="tel"
+                        placeholder="Phone Number"
+                        value={contactDetails.phoneNumber}
+                        onChange={(e) => setContactDetails(prev => ({
+                          ...prev,
+                          phoneNumber: e.target.value
+                        }))}
+                        className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 ${contactErrors.phoneNumber ? 'border-red-500' : ''
+                          }`}
+                      />
+                      {contactErrors.phoneNumber && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {contactErrors.phoneNumber}
+                        </p>
+                      )}
+                    </div>
+
+                    <div>
+                      <input
+                        type="email"
+                        placeholder="Email Address"
+                        value={contactDetails.email}
+                        onChange={(e) => setContactDetails(prev => ({
+                          ...prev,
+                          email: e.target.value
+                        }))}
+                        className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 ${contactErrors.email ? 'border-red-500' : ''
+                          }`}
+                      />
+                      {contactErrors.email && (
+                        <p className="text-red-500 text-xs mt-1">
+                          {contactErrors.email}
+                        </p>
+                      )}
+                    </div>
+
+                    <textarea
+                      placeholder="Special Requests (Optional)"
+                      value={contactDetails.specialRequests}
+                      onChange={(e) => setContactDetails(prev => ({
+                        ...prev,
+                        specialRequests: e.target.value
+                      }))}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -319,8 +427,8 @@ const CustomizePackage = () => {
                   <div>
                     <p className="text-emerald-100 text-sm">Travel Mode</p>
                     <p className="font-semibold capitalize">
-                      {travelMode === 'flight' 
-                        ? `Flight (${flightType || 'Not selected'})` 
+                      {travelMode === 'flight'
+                        ? `Flight (${flightType || 'Not selected'})`
                         : travelMode || 'Not selected'}
                     </p>
                   </div>
@@ -376,15 +484,16 @@ const CustomizePackage = () => {
 
               {/* Buttons Section */}
               <div className="w-full flex flex-col sm:flex-row gap-4">
-                <button 
+                <button
                   type="button"
+                  onClick={() => setIsPreviewOpen(true)}
                   className="flex-1 py-2 px-4 border border-lime-500 text-lime-500 rounded-md hover:bg-lime-50 transition duration-300"
                 >
                   Preview Package
                 </button>
                 <button 
                   type="reset"
-                  className="flex-1 py-2 px-4 border border-red-500 text-red-500 rounded-md hover:bg-red-50 transition duration-300"
+                  className="flex-1 py-2 px-4 border border-red-400 text-red-400 rounded-md hover:bg-red-50 transition duration-300"
                   onClick={() => {
                     // Reset all states
                     setHotelCategory('');
@@ -402,7 +511,7 @@ const CustomizePackage = () => {
                 >
                   Reset Form
                 </button>
-                <button 
+                <button
                   type="submit"
                   className="flex-1 py-2 px-4 bg-lime-500 text-white rounded-md hover:bg-lime-600 transition duration-300"
                 >
@@ -413,8 +522,72 @@ const CustomizePackage = () => {
           </form>
         </div>
       </div>
+      {isPreviewOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">Package Preview</h2>
+              <button
+                onClick={() => setIsPreviewOpen(false)}
+                className="text-gray-600 hover:text-gray-900"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">Package Details</h3>
+                <p><strong>Hotel Category:</strong> {hotelCategory || 'Not Selected'}</p>
+                <p><strong>Travel Mode:</strong> {travelMode || 'Not Selected'}</p>
+                {travelMode === 'flight' && (
+                  <p><strong>Flight Type:</strong> {flightType || 'Not Selected'}</p>
+                )}
+                <p>
+                  <strong>Travel Dates:</strong> {' '}
+                  {date.from && date.to
+                    ? `${formatDate(date.from)} - ${formatDate(date.to)}`
+                    : 'Not Selected'}
+                </p>
+                <p><strong>Room Sharing:</strong> {roomSharing ? `${roomSharing} People` : 'Not Selected'}</p>
+              </div>
+
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">Inclusions</h3>
+                {inclusions.length > 0 ? (
+                  <ul className="list-disc list-inside">
+                    {inclusions.map((inclusion) => (
+                      <li key={inclusion}>
+                        {inclusion === 'ziyarat' && 'Ziyarat in Makkah and Madinah'}
+                        {inclusion === 'meals' && 'Daily Meal Plans'}
+                        {inclusion === 'guide' && 'Professional Guide Services'}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No inclusions selected</p>
+                )}
+              </div>
+
+              <div className="bg-lime-50 p-4 rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">Total Price</h3>
+                <p className="text-2xl font-bold text-emerald-600">
+                  ₹{totalPrice.toLocaleString('en-IN')}
+                </p>
+              </div>
+
+              <button
+                onClick={() => setIsPreviewOpen(false)}
+                className="w-full py-2 px-4 bg-lime-500 text-white rounded-md hover:bg-lime-600 transition duration-300"
+              >
+                Close Preview
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default CustomizePackage;
+export default UmrahBookingForm;
