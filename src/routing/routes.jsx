@@ -4,6 +4,7 @@ import HomePage from '../Pages/HomePage';
 import UmrahPackage from '../Pages/UmrahPackage';
 import CustomizePackage from '../Pages/CustomizePackage';
 import PackageDetail from '../Pages/PackageDetail';
+import PackageForm from '../components/PackageForm';
 
 const router = createBrowserRouter([
     {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <HomePage />
+            },
+            {
+                path: '/create-package',
+                element: <PackageForm />
             },
             {
                 path: '/umrah-packages',
