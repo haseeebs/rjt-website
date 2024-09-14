@@ -27,11 +27,11 @@ const PackageForm = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.makkahHotel) newErrors.makkahHotel = "Makkah hotel is required";
     if (!formData.madinahHotel) newErrors.madinahHotel = "Madinah hotel is required";
-    if (!formData.travelDate) newErrors.travelDate = "Travel date is required";
-    
+    // if (!formData.travelDate) newErrors.travelDate = "Travel date is required";
+
     formData.durations.forEach((duration, index) => {
       if (!duration.days) newErrors[`duration${index}Days`] = "Days are required";
       if (!duration.basePrice) newErrors[`duration${index}BasePrice`] = "Base price is required";
@@ -140,9 +140,8 @@ const PackageForm = () => {
                 <button
                   key={tab}
                   type="button"
-                  className={`rounded-lg py-2 ${
-                    activeTab === index ? "bg-lime-500 text-white" : ""
-                  }`}
+                  className={`rounded-lg py-2 ${activeTab === index ? "bg-lime-500 text-white" : ""
+                    }`}
                   onClick={() => setActiveTab(index)}
                 >
                   {tab}
@@ -176,9 +175,8 @@ const PackageForm = () => {
                       value={formData.makkahHotel}
                       onChange={handleInputChange}
                       placeholder="Select Makkah Hotel"
-                      className={`rounded-xl p-4 border ${
-                        errors.makkahHotel ? "border-red-500" : "border-lime-200"
-                      } focus:ring-lime-500 w-full`}
+                      className={`rounded-xl p-4 border ${errors.makkahHotel ? "border-red-500" : "border-lime-200"
+                        } focus:ring-lime-500 w-full`}
                     />
                     {errors.makkahHotel && (
                       <p className="text-red-500 text-sm mt-1">{errors.makkahHotel}</p>
@@ -191,9 +189,8 @@ const PackageForm = () => {
                       value={formData.madinahHotel}
                       onChange={handleInputChange}
                       placeholder="Select Madinah Hotel"
-                      className={`rounded-xl p-4 border ${
-                        errors.madinahHotel ? "border-red-500" : "border-lime-200"
-                      } focus:ring-lime-500 w-full`}
+                      className={`rounded-xl p-4 border ${errors.madinahHotel ? "border-red-500" : "border-lime-200"
+                        } focus:ring-lime-500 w-full`}
                     />
                     {errors.madinahHotel && (
                       <p className="text-red-500 text-sm mt-1">{errors.madinahHotel}</p>
@@ -202,15 +199,14 @@ const PackageForm = () => {
                 </div>
 
                 <div>
-                  <label className="block text-lime-700">Travel Date *</label>
+                  <label className="block text-lime-700">Travel Date ( optional )</label>
                   <input
                     name="travelDate"
                     type="month"
                     value={formData.travelDate}
                     onChange={handleInputChange}
-                    className={`rounded-xl p-4 border ${
-                      errors.travelDate ? "border-red-500" : "border-lime-200"
-                    } focus:ring-lime-500 w-full`}
+                    className={`rounded-xl p-4 border ${errors.travelDate ? "border-red-500" : "border-lime-200"
+                      } focus:ring-lime-500 w-full`}
                   />
                   {errors.travelDate && (
                     <p className="text-red-500 text-sm mt-1">{errors.travelDate}</p>
@@ -408,31 +404,31 @@ const PackageForm = () => {
             )}
           </div>
 
-          {/* Navigation and Submit Buttons */}
+          {/* Navigation and Submit Buttons section should be updated as follows */}
           <div className="border-t border-lime-100 p-4 flex justify-between">
             <button
               type="button"
               onClick={() => setActiveTab(Math.max(0, activeTab - 1))}
-              className={`px-4 py-2 rounded-xl ${
-                activeTab === 0
+              className={`px-4 py-2 rounded-xl ${activeTab === 0
                   ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                   : "bg-lime-100 text-lime-700 hover:bg-lime-200"
-              }`}
+                }`}
               disabled={activeTab === 0}
             >
               Previous
             </button>
 
             <div className="flex gap-2">
-              {activeTab < tabs.length - 1 ? (
+              {activeTab < tabs.length - 1 && (
                 <button
                   type="button"
-                  onClick={() => setActiveTab(Math.min(tabs.length - 1, activeTab + 1))}
+                  onClick={() => setActiveTab(activeTab + 1)}
                   className="px-4 py-2 rounded-xl bg-lime-500 text-white hover:bg-lime-600"
                 >
                   Next
                 </button>
-              ) : (
+              )}
+              {activeTab === tabs.length - 1 && (
                 <button
                   type="submit"
                   className="px-4 py-2 rounded-xl bg-lime-500 text-white hover:bg-lime-600"
