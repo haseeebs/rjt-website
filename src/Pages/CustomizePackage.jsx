@@ -1,5 +1,6 @@
-import { CheckCircleIcon } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+
+import { CheckCircleIcon, CircleCheck, Group, Lock, User, Users } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import SelectMenu from '../components/SelectMenu';
 
 const UmrahBookingForm = () => {
@@ -11,6 +12,8 @@ const UmrahBookingForm = () => {
     from: new Date(),
     to: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
   });
+  const fromDateRef = useRef(null);
+  const toDateRef = useRef(null);
   const [roomSharing, setRoomSharing] = useState('');
   const [inclusions, setInclusions] = useState([]);
   const [totalPrice, setTotalPrice] = useState(75000);
@@ -198,108 +201,112 @@ const UmrahBookingForm = () => {
 
             <div className="p-4">
               {activeTab === 0 && (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {/* Package Type */}
                   <div className="space-y-2">
-                    <label
-                      htmlFor="packageType"
-                      className="block text-sm font-medium text-gray-700"
-                    >
+                    <label htmlFor="packageType" className="block text-sm font-semibold text-lime-700">
                       Package Type
                     </label>
-                    <input
-                      id="packageType"
-                      value="Customize Package"
-                      disabled
-                      className="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 py-2 px-3 cursor-not-allowed shadow-sm"
-                    />
+                    <div className="relative">
+                      <input
+                        id="packageType"
+                        value="Customize Package"
+                        disabled
+                        className="mt-1 block w-full rounded-xl border-2 border-lime-200 bg-lime-50/50 py-3 px-4 text-lime-800 cursor-not-allowed shadow-sm"
+                      />
+                      <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                        <Lock color='#84cc16' />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Date Selection */}
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-semibold text-lime-700">
                       Travel Dates
                     </label>
-                    <div className="flex space-x-2">
-                      <input
-                        type="date"
-                        value={date.from.toISOString().split('T')[0]}
-                        onChange={(e) =>
-                          setDate({
-                            ...date,
-                            from: new Date(e.target.value),
-                          })
-                        }
-                        className="mt-1 block w-full rounded-md border-gray-300 py-2 px-3 shadow-sm cursor-pointer"
-                      />
-                      <input
-                        type="date"
-                        value={date.to.toISOString().split('T')[0]}
-                        onChange={(e) =>
-                          setDate({
-                            ...date,
-                            to: new Date(e.target.value),
-                          })
-                        }
-                        className="mt-1 block w-full rounded-md border-gray-300 py-2 px-3 shadow-sm cursor-pointer"
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="relative">
+                        <input
+                          type="date"
+                          value={date.from.toISOString().split('T')[0]}
+                          onChange={(e) => setDate({ ...date, from: new Date(e.target.value) })}
+                          className="w-full rounded-xl border-2 border-lime-200 py-3 px-4 text-lime-800 shadow-sm hover:border-lime-300 focus:border-lime-500 focus:ring focus:ring-lime-200 focus:ring-opacity-50 cursor-pointer [&::-webkit-calendar-picker-indicator]{opacity:0}"
+                          ref={fromDateRef}
+                        />
+                      </div>
+                      <div className="relative">
+                        <input
+                          type="date"
+                          value={date.to.toISOString().split('T')[0]}
+                          onChange={(e) => setDate({ ...date, to: new Date(e.target.value) })}
+                          className="w-full rounded-xl border-2 border-lime-200 py-3 px-4 text-lime-800 shadow-sm hover:border-lime-300 focus:border-lime-500 focus:ring focus:ring-lime-200 focus:ring-opacity-50 cursor-pointer [&::-webkit-calendar-picker-indicator]{opacity:0}"
+                          ref={toDateRef}
+                        />
+                      </div>
                     </div>
                   </div>
 
                   {/* Group Size Section */}
-                  <div className="space-y-2">
-                    <label htmlFor="groupSize" className="block text-sm font-medium text-gray-700">
+                  <div className="space-y-4">
+                    <label className="block text-sm font-semibold text-lime-700">
                       Number of Travelers
                     </label>
-                    <div className="space-y-2">
-                      <div className="grid grid-cols-2 gap-2">
-                        {[
-                          { value: '2', label: '2 People' },
-                          { value: 'family', label: 'Family Group' },
-                          { value: 'more-than-10', label: '10+ People' },
-                          { value: 'more-than-15', label: '15+ People' }
-                        ].map((option) => (
-                          <div
-                            key={option.value}
-                            className={`border rounded-md p-3 cursor-pointer ${groupSize === option.value
-                              ? 'border-lime-500 bg-lime-50 text-lime-700'
-                              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
-                              }`}
-                            onClick={() => {
-                              setGroupSize(option.value);
-                              setCustomGroupSize('');
-                            }}
-                          >
-                            {option.label}
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Custom Group Size Input */}
-                      <div className="mt-2 flex items-center">
-                        <input
-                          type="number"
-                          placeholder="Custom Group Size"
-                          value={customGroupSize}
-                          onChange={(e) => {
-                            setCustomGroupSize(e.target.value);
-                            setGroupSize('');
+                    <div className="grid grid-cols-2 gap-4">
+                      {[
+                        { value: "2", label: "2 People", icon: User },
+                        { value: "family", label: "Family Group", icon: Users },
+                        { value: "more-than-10", label: "10+ People", icon: Group },
+                        { value: "more-than-15", label: "15+ People", icon: Group }
+                      ].map((option) => (
+                        <div
+                          key={option.value}
+                          onClick={() => {
+                            setGroupSize(option.value);
+                            setCustomGroupSize("");
                           }}
-                          min="1"
-                          className="flex-grow rounded-md border-gray-300 shadow-sm py-2 px-3"
-                        />
-                      </div>
+                          className={`relative rounded-xl p-4 cursor-pointer transition-all duration-300 transform ${groupSize === option.value
+                            ? "bg-lime-500 text-white shadow-lg"
+                            : "bg-white border-2 border-lime-200 text-lime-800 hover:border-lime-300"
+                            }`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <span
+                              className={`text-xl ${groupSize === option.value ? "text-white" : "text-lime-500"
+                                }`}
+                            >
+                              <option.icon />
+                            </span>
+                            <span className="font-medium">{option.label}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Custom Group Size Input */}
+                    <div className="relative">
+                      <input
+                        type="number"
+                        placeholder="Or enter custom group size"
+                        value={customGroupSize}
+                        onChange={(e) => {
+                          setCustomGroupSize(e.target.value);
+                          setGroupSize('');
+                        }}
+                        min="1"
+                        className="w-full rounded-xl border-2 border-lime-200 py-3 px-4 text-lime-800 shadow-sm hover:border-lime-300 focus:border-lime-500 focus:ringlime-200 focus:ring-opacity-50"
+                      />
                     </div>
 
                     {/* Group Discount Information */}
                     {(groupSize === 'more-than-10' || groupSize === 'more-than-15' ||
                       (customGroupSize && parseInt(customGroupSize) >= 10)) && (
-                        <div className="bg-lime-50 border-l-4 border-lime-500 p-3 mt-2">
-                          <p className="text-sm text-lime-700">
-                            {groupSize === 'more-than-15' ||
-                              (customGroupSize && parseInt(customGroupSize) >= 15)
-                              ? 'Group Discount: 15% off + One Free Package!'
-                              : 'Group Discount: 10% off for groups of 10 or more'}
+                        <div className="bg-gradient-to-r from-lime-500 to-lime-400 rounded-xl p-4 shadow-lg">
+                          <p className="text-white font-medium flex items-center">
+                            <span className="mr-2">🎉</span>
+                            {groupSize === 'more-than-15' || (customGroupSize && parseInt(customGroupSize) >= 15)
+                              ? 'Amazing! 15% off + One Free Package!'
+                              : 'Great! 10% off for your group'}
                           </p>
                         </div>
                       )}
@@ -338,21 +345,86 @@ const UmrahBookingForm = () => {
                     ]}
                     helperText="Select the number of people sharing the room"
                   />
+                  {/* Travel Mode */}
+                  <div className="space-y-4">
+                    <label className="text-sm font-semibold leading-6 text-gray-900">
+                      Select Travel Mode
+                    </label>
+                    <div className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                      <div
+                        className={`relative flex cursor-pointer rounded-lg border ${travelMode === 'flight'
+                          ? 'border-lime-600 ring-2 ring-lime-600'
+                          : 'border-gray-300'
+                          } bg-white p-4 shadow-sm focus:outline-none`}
+                        onClick={() => setTravelMode('flight')}
+                      >
+                        <input
+                          type="radio"
+                          id="flight"
+                          name="travelMode"
+                          value="flight"
+                          checked={travelMode === 'flight'}
+                          onChange={() => setTravelMode('flight')}
+                          className="sr-only"
+                        />
+                        <span className="flex flex-1">
+                          <span className="flex flex-col">
+                            <span className="block text-sm font-medium text-gray-900">Flight</span>
+                            <span className="mt-1 flex items-center text-sm text-gray-500">
+                              We'll arrange your flights
+                            </span>
+                          </span>
+                        </span>
+                        {travelMode === 'flight' && (
+                          <CircleCheck color='#65a30d'/>
+                        )}
+                      </div>
 
-                  {/* Flight Type Select (only shown when flight is selected) */}
-                  {travelMode === 'flight' && (
-                    <SelectMenu
-                      id="flightType"
-                      label="Flight Type"
-                      value={flightType}
-                      onChange={setFlightType}
-                      options={[
-                        { value: "direct", label: "Direct Flight" },
-                        { value: "connecting", label: "Connecting Flight" },
-                      ]}
-                      helperText="Choose your preferred flight routing"
-                    />
-                  )}
+                      <div
+                        className={`relative flex cursor-pointer rounded-lg border ${travelMode === 'self'
+                          ? 'border-lime-600 ring-2 ring-lime-600'
+                          : 'border-gray-300'
+                          } bg-white p-4 shadow-sm focus:outline-none`}
+                        onClick={() => setTravelMode('self')}
+                      >
+                        <input
+                          type="radio"
+                          id="self"
+                          name="travelMode"
+                          value="self"
+                          checked={travelMode === 'self'}
+                          onChange={() => setTravelMode('self')}
+                          className="sr-only"
+                        />
+                        <span className="flex flex-1">
+                          <span className="flex flex-col">
+                            <span className="block text-sm font-medium text-gray-900">Self-Arranged</span>
+                            <span className="mt-1 flex items-center text-sm text-gray-500">
+                              Arrange your own transportation
+                            </span>
+                          </span>
+                        </span>
+                        {travelMode === 'self' && (
+                          <CircleCheck color='#65a30d'/>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Flight Type Select (only shown when flight is selected) */}
+                    {travelMode === 'flight' && (
+                      <SelectMenu
+                        id="flightType"
+                        label="Flight Type"
+                        value={flightType}
+                        onChange={setFlightType}
+                        options={[
+                          { value: "direct", label: "Direct Flight" },
+                          { value: "connecting", label: "Connecting Flight" },
+                        ]}
+                        helperText="Choose your preferred flight routing"
+                      />
+                    )}
+                  </div>
 
                   {/* Inclusions */}
                   <fieldset>
