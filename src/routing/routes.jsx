@@ -4,7 +4,7 @@ import HomePage from '../Pages/HomePage';
 import UmrahPackage from '../Pages/UmrahPackage';
 import CustomizePackage from '../Pages/CustomizePackage';
 import PackageDetail from '../Pages/PackageDetail';
-import PackageForm from '../components/PackageForm';
+import PackageForm from '../Pages/PackageForm';
 
 const router = createBrowserRouter([
     {

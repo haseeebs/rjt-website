@@ -29,7 +29,7 @@ class PackageServices {
     }
 
     // Add a new package
-    async addPacakges({ type, makkahHotelId, madinahHotelId, durations, inclusions, exclusions, date = null }) {
+    async addPacakges({ type, makkahHotelId, madinahHotelId, durations, inclusions, exclusions, travelDate = null }) {
         try {
             const packageData = {
                 type,
@@ -38,16 +38,16 @@ class PackageServices {
                 durations,
                 inclusions: inclusions || [],
                 exclusions: exclusions || [],
-                date
+                travelDate
             }
-
-            const response = await this.databases.createDocument(
-                config.databaseId,
-                config.collectionId,
-                ID.unique(),
-                packageData
-            );
-            return response;
+            console.log(packageData);
+            // const response = await this.databases.createDocument(
+            //     config.databaseId,
+            //     config.collectionId,
+            //     ID.unique(),
+            //     packageData
+            // );
+            // return response;
         } catch (error) {
             console.error("Error adding package:", error);
             throw error;
