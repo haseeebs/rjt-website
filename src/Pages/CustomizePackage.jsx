@@ -1,4 +1,6 @@
+import { CheckCircleIcon } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
+import SelectMenu from '../components/SelectMenu';
 
 const UmrahBookingForm = () => {
   const [packageType] = useState('customized');
@@ -13,8 +15,15 @@ const UmrahBookingForm = () => {
   const [inclusions, setInclusions] = useState([]);
   const [totalPrice, setTotalPrice] = useState(75000);
   const [formError, setFormError] = useState('');
-
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  // New state for group size and custom input
+  const [groupSize, setGroupSize] = useState('');
+  const [customGroupSize, setCustomGroupSize] = useState('');
+
+
+  const [activeTab, setActiveTab] = useState(0);
+  const tabs = ["Basic Info", "Travel & Stay", "Contact Details"];
 
   const [contactDetails, setContactDetails] = useState({
     fullName: '',
@@ -54,6 +63,7 @@ const UmrahBookingForm = () => {
     return errors;
   };
 
+  // Updated calculatePrice function to include group discounts
   const calculatePrice = () => {
     let price = 75000; // Base price
 
@@ -68,12 +78,30 @@ const UmrahBookingForm = () => {
     // Flight type adjustments
     if (flightType === 'direct') price += 20000;
 
-    setTotalPrice(price);
+    // Group size discounts
+    const finalGroupSize = customGroupSize ? parseInt(customGroupSize) :
+      (groupSize === 'more-than-15' ? 16 :
+        groupSize === 'more-than-10' ? 11 :
+          groupSize === 'family' ? 5 :
+            groupSize ? parseInt(groupSize) : 1);
+
+    if (finalGroupSize >= 10) {
+      // 10% discount for groups of 10 or more
+      price = price * 0.9;
+    }
+
+    if (finalGroupSize >= 15) {
+      // Additional 5% discount for groups of 15 or more
+      // Also, one person gets a free package
+      price = price * 0.85 - 75000;
+    }
+
+    setTotalPrice(Math.round(price));
   };
 
   useEffect(() => {
     calculatePrice();
-  }, [hotelCategory, roomSharing, flightType]);
+  }, [hotelCategory, roomSharing, flightType, groupSize, customGroupSize]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -141,102 +169,51 @@ const UmrahBookingForm = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <div className="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
-          {/* Header */}
-          <div className="bg-lime-500 px-6 py-8">
-            <h1 className="text-3xl font-bold text-white">Customize Your Umrah Package</h1>
-            <p className="text-emerald-50 mt-2">Create your perfect spiritual journey with our customizable packages</p>
-          </div>
+      <div className="mx-auto max-w-7xl p-6 bg-lime-50">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="rounded-3xl border border-lime-200 bg-white shadow-lg">
+            <div className="bg-lime-500 px-6 py-8 rounded-t-3xl">
+              <h1 className="text-3xl font-bold text-white">Customize Your Umrah Package</h1>
+              <p className="text-emerald-50 mt-2">Create your perfect spiritual journey with our customizable packages</p>
+            </div>
 
-          <form onSubmit={handleSubmit} className="p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Left Column */}
-              <div className="space-y-6">
-                {/* Package Type */}
-                <div className="space-y-2">
-                  <label htmlFor="packageType" className="block text-sm font-medium text-gray-700">
-                    Package Type
-                  </label>
-                  <input
-                    id="packageType"
-                    value="Customize Package"
-                    disabled
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm bg-gray-100 py-2 px-3"
-                  />
-                </div>
-
-                {/* Hotel Selection */}
-                <div className="space-y-2">
-                  <label htmlFor="hotelCategory" className="block text-sm font-medium text-gray-700">
-                    Hotel Category
-                  </label>
-                  <select
-                    id="hotelCategory"
-                    value={hotelCategory}
-                    onChange={(e) => setHotelCategory(e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
+            {/* Tab Navigation */}
+            <div className="border-b border-lime-100">
+              <nav className="flex">
+                {tabs.map((tab, index) => (
+                  <button
+                    key={tab}
+                    type="button"
+                    className={`w-full px-6 py-4 text-sm font-medium ${activeTab === index
+                      ? "border-b-2 border-lime-500 text-lime-600"
+                      : "text-gray-500 hover:text-gray-700"
+                      }`}
+                    onClick={() => setActiveTab(index)}
                   >
-                    <option value="">Select hotel category</option>
-                    <option value="standard">Standard</option>
-                    <option value="premium">Premium</option>
-                    <option value="luxury">Luxury</option>
-                  </select>
-                </div>
+                    {tab}
+                  </button>
+                ))}
+              </nav>
+            </div>
 
-                {/* Travel Mode */}
+            <div className="p-4">
+              {activeTab === 0 && (
                 <div className="space-y-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Travel Mode
-                  </label>
+                  {/* Package Type */}
                   <div className="space-y-2">
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        id="flight"
-                        name="travelMode"
-                        value="flight"
-                        checked={travelMode === 'flight'}
-                        onChange={() => setTravelMode('flight')}
-                        className="h-4 w-4 border-gray-300 text-lime-600 focus:ring-lime-500"
-                      />
-                      <label htmlFor="flight" className="ml-2 block text-sm text-gray-900">
-                        Flight
-                      </label>
-                    </div>
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        id="self"
-                        name="travelMode"
-                        value="self"
-                        checked={travelMode === 'self'}
-                        onChange={() => setTravelMode('self')}
-                        className="h-4 w-4 border-gray-300 text-lime-600 focus:ring-lime-500"
-                      />
-                      <label htmlFor="self" className="ml-2 block text-sm text-gray-900">
-                        Self-Arranged
-                      </label>
-                    </div>
+                    <label
+                      htmlFor="packageType"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Package Type
+                    </label>
+                    <input
+                      id="packageType"
+                      value="Customize Package"
+                      disabled
+                      className="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 py-2 px-3 cursor-not-allowed shadow-sm"
+                    />
                   </div>
-
-                  {travelMode === 'flight' && (
-                    <div className="space-y-2 mt-2">
-                      <label htmlFor="flightType" className="block text-sm font-medium text-gray-700">
-                        Flight Type
-                      </label>
-                      <select
-                        id="flightType"
-                        value={flightType}
-                        onChange={(e) => setFlightType(e.target.value)}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
-                      >
-                        <option value="">Select flight type</option>
-                        <option value="direct">Direct Flight</option>
-                        <option value="connecting">Connecting Flight</option>
-                      </select>
-                    </div>
-                  )}
 
                   {/* Date Selection */}
                   <div className="space-y-2">
@@ -247,292 +224,420 @@ const UmrahBookingForm = () => {
                       <input
                         type="date"
                         value={date.from.toISOString().split('T')[0]}
-                        onChange={(e) => setDate({
-                          ...date,
-                          from: new Date(e.target.value)
-                        })}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
+                        onChange={(e) =>
+                          setDate({
+                            ...date,
+                            from: new Date(e.target.value),
+                          })
+                        }
+                        className="mt-1 block w-full rounded-md border-gray-300 py-2 px-3 shadow-sm cursor-pointer"
                       />
                       <input
                         type="date"
                         value={date.to.toISOString().split('T')[0]}
-                        onChange={(e) => setDate({
-                          ...date,
-                          to: new Date(e.target.value)
-                        })}
+                        onChange={(e) =>
+                          setDate({
+                            ...date,
+                            to: new Date(e.target.value),
+                          })
+                        }
+                        className="mt-1 block w-full rounded-md border-gray-300 py-2 px-3 shadow-sm cursor-pointer"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Group Size Section */}
+                  <div className="space-y-2">
+                    <label htmlFor="groupSize" className="block text-sm font-medium text-gray-700">
+                      Number of Travelers
+                    </label>
+                    <div className="space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { value: '2', label: '2 People' },
+                          { value: 'family', label: 'Family Group' },
+                          { value: 'more-than-10', label: '10+ People' },
+                          { value: 'more-than-15', label: '15+ People' }
+                        ].map((option) => (
+                          <div
+                            key={option.value}
+                            className={`border rounded-md p-3 cursor-pointer ${groupSize === option.value
+                              ? 'border-lime-500 bg-lime-50 text-lime-700'
+                              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                              }`}
+                            onClick={() => {
+                              setGroupSize(option.value);
+                              setCustomGroupSize('');
+                            }}
+                          >
+                            {option.label}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Custom Group Size Input */}
+                      <div className="mt-2 flex items-center">
+                        <input
+                          type="number"
+                          placeholder="Custom Group Size"
+                          value={customGroupSize}
+                          onChange={(e) => {
+                            setCustomGroupSize(e.target.value);
+                            setGroupSize('');
+                          }}
+                          min="1"
+                          className="flex-grow rounded-md border-gray-300 shadow-sm py-2 px-3"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Group Discount Information */}
+                    {(groupSize === 'more-than-10' || groupSize === 'more-than-15' ||
+                      (customGroupSize && parseInt(customGroupSize) >= 10)) && (
+                        <div className="bg-lime-50 border-l-4 border-lime-500 p-3 mt-2">
+                          <p className="text-sm text-lime-700">
+                            {groupSize === 'more-than-15' ||
+                              (customGroupSize && parseInt(customGroupSize) >= 15)
+                              ? 'Group Discount: 15% off + One Free Package!'
+                              : 'Group Discount: 10% off for groups of 10 or more'}
+                          </p>
+                        </div>
+                      )}
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 1 && (
+                <div className="space-y-4">
+                  {/* Hotel Category */}
+                  <SelectMenu
+                    id="hotelCategory"
+                    label="Hotel Category"
+                    value={hotelCategory}
+                    onChange={setHotelCategory}
+                    options={[
+                      { value: "standard", label: "Standard" },
+                      { value: "premium", label: "Premium" },
+                      { value: "luxury", label: "Luxury" },
+                    ]}
+                    helperText="Choose your preferred accommodation level"
+                  />
+
+                  {/* Room Sharing */}
+                  <SelectMenu
+                    id="roomSharing"
+                    label="Room Sharing Preference"
+                    value={roomSharing}
+                    onChange={setRoomSharing}
+                    options={[
+                      { value: "5", label: "5 People (Most Economical)" },
+                      { value: "4", label: "4 People" },
+                      { value: "3", label: "3 People" },
+                      { value: "2", label: "2 People" },
+                      { value: "1", label: "Single Room" },
+                    ]}
+                    helperText="Select the number of people sharing the room"
+                  />
+
+                  {/* Flight Type Select (only shown when flight is selected) */}
+                  {travelMode === 'flight' && (
+                    <SelectMenu
+                      id="flightType"
+                      label="Flight Type"
+                      value={flightType}
+                      onChange={setFlightType}
+                      options={[
+                        { value: "direct", label: "Direct Flight" },
+                        { value: "connecting", label: "Connecting Flight" },
+                      ]}
+                      helperText="Choose your preferred flight routing"
+                    />
+                  )}
+
+                  {/* Inclusions */}
+                  <fieldset>
+                    <legend className="text-sm font-semibold leading-6 text-gray-900">Package Inclusions</legend>
+                    <div className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+                      {[
+                        { id: 'ziyarat', label: 'Ziyarat in Makkah and Madinah', description: 'Visit all historical sites with expert guidance' },
+                        { id: 'meals', label: 'Daily Meal Plans', description: 'Breakfast & Dinner included throughout your stay' },
+                        { id: 'guide', label: 'Professional Guide Services', description: '24/7 assistance from experienced guides' }
+                      ].map((inclusion) => (
+                        <div
+                          key={inclusion.id}
+                          className="relative flex cursor-pointer rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus:outline-none hover:border-lime-600"
+                        >
+                          <div className="flex flex-1 flex-col">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <input
+                                  type="checkbox"
+                                  id={inclusion.id}
+                                  checked={inclusions.includes(inclusion.id)}
+                                  onChange={() => handleInclusionChange(inclusion.id)}
+                                  className="h-4 w-4 rounded border-gray-300 text-lime-600 focus:ring-lime-500"
+                                />
+                                <label htmlFor={inclusion.id} className="ml-3 block text-sm font-medium text-gray-900">
+                                  {inclusion.label}
+                                </label>
+                              </div>
+                            </div>
+                            <p className="mt-1 text-sm text-gray-500">{inclusion.description}</p>
+                          </div>
+                          {inclusions.includes(inclusion.id) && (
+                            <CheckCircleIcon className="h-5 w-5 text-lime-600" aria-hidden="true" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </fieldset>
+
+                </div>
+              )}
+
+              {activeTab === 2 && (
+                <div className="space-y-4">
+                  {/* Contact Information */}
+                  <div className="space-y-4">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Contact Information
+                    </label>
+                    <div className="space-y-2">
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="Full Name"
+                          value={contactDetails.fullName}
+                          onChange={(e) => setContactDetails(prev => ({
+                            ...prev,
+                            fullName: e.target.value
+                          }))}
+                          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 ${contactErrors.fullName ? 'border-red-500' : ''
+                            }`}
+                        />
+                        {contactErrors.fullName && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {contactErrors.fullName}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <input
+                          type="tel"
+                          placeholder="Phone Number"
+                          value={contactDetails.phoneNumber}
+                          onChange={(e) => setContactDetails(prev => ({
+                            ...prev,
+                            phoneNumber: e.target.value
+                          }))}
+                          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 ${contactErrors.phoneNumber ? 'border-red-500' : ''
+                            }`}
+                        />
+                        {contactErrors.phoneNumber && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {contactErrors.phoneNumber}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <input
+                          type="email"
+                          placeholder="Email Address"
+                          value={contactDetails.email}
+                          onChange={(e) => setContactDetails(prev => ({
+                            ...prev,
+                            email: e.target.value
+                          }))}
+                          className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 ${contactErrors.email ? 'border-red-500' : ''
+                            }`}
+                        />
+                        {contactErrors.email && (
+                          <p className="text-red-500 text-xs mt-1">
+                            {contactErrors.email}
+                          </p>
+                        )}
+                      </div>
+
+                      <textarea
+                        placeholder="Special Requests (Optional)"
+                        value={contactDetails.specialRequests}
+                        onChange={(e) => setContactDetails(prev => ({
+                          ...prev,
+                          specialRequests: e.target.value
+                        }))}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
                       />
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-              {/* Right Column */}
-              <div className="space-y-6">
-                {/* Room Sharing */}
-                <div className="space-y-2">
-                  <label htmlFor="roomSharing" className="block text-sm font-medium text-gray-700">
-                    Room Sharing
-                  </label>
-                  <select
-                    id="roomSharing"
-                    value={roomSharing}
-                    onChange={(e) => setRoomSharing(e.target.value)}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
-                  >
-                    <option value="">Select room sharing</option>
-                    <option value="5">5 People (Most Economical)</option>
-                    <option value="4">4 People</option>
-                    <option value="3">3 People</option>
-                    <option value="2">2 People</option>
-                    <option value="1">Single Room</option>
-                  </select>
-                </div>
-
-                {/* Inclusions */}
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Package Inclusions
-                  </label>
-                  <div className="space-y-2">
-                    {[
-                      { id: 'ziyarat', label: 'Ziyarat in Makkah and Madinah' },
-                      { id: 'meals', label: 'Daily Meal Plans (Breakfast & Dinner)' },
-                      { id: 'guide', label: 'Professional Guide Services' }
-                    ].map((inclusion) => (
-                      <div key={inclusion.id} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={inclusion.id}
-                          checked={inclusions.includes(inclusion.id)}
-                          onChange={() => handleInclusionChange(inclusion.id)}
-                          className="h-4 w-4 rounded border-gray-300 text-lime-600 focus:ring-lime-500"
-                        />
-                        <label
-                          htmlFor={inclusion.id}
-                          className="ml-2 block text-sm text-gray-900"
-                        >
-                          {inclusion.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Contact Details */}
-                <div className="space-y-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Contact Information
-                  </label>
-                  <div className="space-y-2">
-                    <div>
-                      <input
-                        type="text"
-                        placeholder="Full Name"
-                        value={contactDetails.fullName}
-                        onChange={(e) => setContactDetails(prev => ({
-                          ...prev,
-                          fullName: e.target.value
-                        }))}
-                        className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 ${contactErrors.fullName ? 'border-red-500' : ''
-                          }`}
-                      />
-                      {contactErrors.fullName && (
-                        <p className="text-red-500 text-xs mt-1">
-                          {contactErrors.fullName}
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <input
-                        type="tel"
-                        placeholder="Phone Number"
-                        value={contactDetails.phoneNumber}
-                        onChange={(e) => setContactDetails(prev => ({
-                          ...prev,
-                          phoneNumber: e.target.value
-                        }))}
-                        className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 ${contactErrors.phoneNumber ? 'border-red-500' : ''
-                          }`}
-                      />
-                      {contactErrors.phoneNumber && (
-                        <p className="text-red-500 text-xs mt-1">
-                          {contactErrors.phoneNumber}
-                        </p>
-                      )}
-                    </div>
-
-                    <div>
-                      <input
-                        type="email"
-                        placeholder="Email Address"
-                        value={contactDetails.email}
-                        onChange={(e) => setContactDetails(prev => ({
-                          ...prev,
-                          email: e.target.value
-                        }))}
-                        className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3 ${contactErrors.email ? 'border-red-500' : ''
-                          }`}
-                      />
-                      {contactErrors.email && (
-                        <p className="text-red-500 text-xs mt-1">
-                          {contactErrors.email}
-                        </p>
-                      )}
-                    </div>
-
-                    <textarea
-                      placeholder="Special Requests (Optional)"
-                      value={contactDetails.specialRequests}
-                      onChange={(e) => setContactDetails(prev => ({
-                        ...prev,
-                        specialRequests: e.target.value
-                      }))}
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-2 px-3"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Error Message */}
-            {formError && (
-              <div className="mt-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700">
-                {formError}
-              </div>
-            )}
-
-            {/* Package Summary */}
-            <div className="mt-8 space-y-6">
-              <div className="bg-lime-500 rounded-xl p-6 text-white">
-                <h3 className="text-xl font-bold mb-4">Package Summary</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div>
-                    <p className="text-emerald-100 text-sm">Travel Dates</p>
-                    <p className="font-semibold">
-                      {formatDate(date.from)} - {formatDate(date.to)}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-emerald-100 text-sm">Hotel Category</p>
-                    <p className="font-semibold capitalize">{hotelCategory || 'Not selected'}</p>
-                  </div>
-                  <div>
-                    <p className="text-emerald-100 text-sm">Room Sharing</p>
-                    <p className="font-semibold">
-                      {roomSharing ? `${roomSharing} People` : 'Not selected'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-emerald-100 text-sm">Travel Mode</p>
-                    <p className="font-semibold capitalize">
-                      {travelMode === 'flight'
-                        ? `Flight (${flightType || 'Not selected'})`
-                        : travelMode || 'Not selected'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Price Breakdown */}
-              <div className="bg-lime-100 rounded-xl p-6 shadow-md">
-                <h3 className="text-xl font-bold mb-4 text-gray-800">Price Breakdown</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center py-2 border-b border-lime-400">
-                    <span className="text-gray-600">Base Package</span>
-                    <span className="font-semibold">₹75,000</span>
-                  </div>
-                  {hotelCategory === 'premium' && (
-                    <div className="flex justify-between items-center py-2">
-                      <span className="text-gray-600">Premium Hotel Upgrade</span>
-                      <span className="font-semibold text-emerald-600">+₹25,000</span>
-                    </div>
-                  )}
-                  {hotelCategory === 'luxury' && (
-                    <div className="flex justify-between items-center py-2">
-                      <span className="text-gray-600">Luxury Hotel Upgrade</span>
-                      <span className="font-semibold text-emerald-600">+₹50,000</span>
-                    </div>
-                  )}
-                  {flightType === 'direct' && (
-                    <div className="flex justify-between items-center py-2">
-                      <span className="text-gray-600">Direct Flight Premium</span>
-                      <span className="font-semibold text-emerald-600">+₹20,000</span>
-                    </div>
-                  )}
-                  {roomSharing === '1' && (
-                    <div className="flex justify-between items-center py-2">
-                      <span className="text-gray-600">Single Room Supplement</span>
-                      <span className="font-semibold text-emerald-600">+₹30,000</span>
-                    </div>
-                  )}
-                  {roomSharing === '2' && (
-                    <div className="flex justify-between items-center py-2">
-                      <span className="text-gray-600">Double Room Supplement</span>
-                      <span className="font-semibold text-emerald-600">+₹15,000</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between items-center py-3 border-t-2 border-dashed border-lime-500">
-                    <span className="font-bold text-lg">Total Package Cost</span>
-                    <span className="font-bold text-lg text-emerald-600">
-                      ₹{totalPrice.toLocaleString('en-IN')}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Buttons Section */}
-              <div className="w-full flex flex-col sm:flex-row gap-4">
+              {/* Navigation Buttons */}
+              <div className="border-t border-lime-100 p-4 flex justify-between">
                 <button
                   type="button"
-                  onClick={() => setIsPreviewOpen(true)}
-                  className="flex-1 py-2 px-4 border border-lime-500 text-lime-500 rounded-md hover:bg-lime-50 transition duration-300"
+                  onClick={() => setActiveTab((prev) => Math.max(0, prev - 1))}
+                  className={`px-4 py-2 text-sm font-medium rounded-md ${activeTab === 0
+                    ? 'text-gray-400 cursor-not-allowed'
+                    : 'text-lime-600 hover:bg-lime-50'
+                    }`}
+                  disabled={activeTab === 0}
                 >
-                  Preview Package
+                  Previous
                 </button>
-                <button 
-                  type="reset"
-                  className="flex-1 py-2 px-4 border border-red-400 text-red-400 rounded-md hover:bg-red-50 transition duration-300"
-                  onClick={() => {
-                    // Reset all states
-                    setHotelCategory('');
-                    setTravelMode('');
-                    setFlightType('');
-                    setDate({
-                      from: new Date(),
-                      to: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
-                    });
-                    setRoomSharing('');
-                    setInclusions([]);
-                    setTotalPrice(75000);
-                    setFormError('');
-                  }}
-                >
-                  Reset Form
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-2 px-4 bg-lime-500 text-white rounded-md hover:bg-lime-600 transition duration-300"
-                >
-                  Proceed to Book
-                </button>
+                {activeTab === tabs.length - 1 ? (
+                  <button
+                    type="submit"
+                    className="px-4 py-2 text-sm font-medium text-white bg-lime-500 rounded-md hover:bg-lime-600"
+                  >
+                    Submit
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab((prev) => Math.min(tabs.length - 1, prev + 1))}
+                    className="px-4 py-2 text-sm font-medium text-lime-600 hover:bg-lime-50 rounded-md"
+                  >
+                    Next
+                  </button>
+                )}
               </div>
             </div>
-          </form>
-        </div>
+          </div>
+
+          {/* Error Message */}
+          {formError && (
+            <div className="mt-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700">
+              {formError}
+            </div>
+          )}
+
+          {/* Package Summary */}
+          <div className="mt-8 space-y-6">
+            <div className="bg-lime-500 rounded-xl p-6 text-white">
+              <h3 className="text-xl font-bold mb-4">Package Summary</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <p className="text-emerald-100 text-sm">Travel Dates</p>
+                  <p className="font-semibold">
+                    {formatDate(date.from)} - {formatDate(date.to)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-emerald-100 text-sm">Hotel Category</p>
+                  <p className="font-semibold capitalize">{hotelCategory || 'Not selected'}</p>
+                </div>
+                <div>
+                  <p className="text-emerald-100 text-sm">Room Sharing</p>
+                  <p className="font-semibold">
+                    {roomSharing ? `${roomSharing} People` : 'Not selected'}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-emerald-100 text-sm">Travel Mode</p>
+                  <p className="font-semibold capitalize">
+                    {travelMode === 'flight'
+                      ? `Flight (${flightType || 'Not selected'})`
+                      : travelMode || 'Not selected'}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Price Breakdown */}
+            <div className="bg-lime-100 rounded-xl p-6 shadow-md">
+              <h3 className="text-xl font-bold mb-4 text-gray-800">Price Breakdown</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center py-2 border-b border-lime-400">
+                  <span className="text-gray-600">Base Package</span>
+                  <span className="font-semibold">₹75,000</span>
+                </div>
+                {hotelCategory === 'premium' && (
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-600">Premium Hotel Upgrade</span>
+                    <span className="font-semibold text-emerald-600">+₹25,000</span>
+                  </div>
+                )}
+                {hotelCategory === 'luxury' && (
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-600">Luxury Hotel Upgrade</span>
+                    <span className="font-semibold text-emerald-600">+₹50,000</span>
+                  </div>
+                )}
+                {flightType === 'direct' && (
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-600">Direct Flight Premium</span>
+                    <span className="font-semibold text-emerald-600">+₹20,000</span>
+                  </div>
+                )}
+                {roomSharing === '1' && (
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-600">Single Room Supplement</span>
+                    <span className="font-semibold text-emerald-600">+₹30,000</span>
+                  </div>
+                )}
+                {roomSharing === '2' && (
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-gray-600">Double Room Supplement</span>
+                    <span className="font-semibold text-emerald-600">+₹15,000</span>
+                  </div>
+                )}
+                <div className="flex justify-between items-center py-3 border-t-2 border-dashed border-lime-500">
+                  <span className="font-bold text-lg">Total Package Cost</span>
+                  <span className="font-bold text-lg text-emerald-600">
+                    ₹{totalPrice.toLocaleString('en-IN')}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Buttons Section */}
+            <div className="w-full flex flex-col sm:flex-row gap-4">
+              <button
+                type="button"
+                onClick={() => setIsPreviewOpen(true)}
+                className="flex-1 py-2 px-4 border border-lime-500 text-lime-500 rounded-md hover:bg-lime-50 transition duration-300"
+              >
+                Preview Package
+              </button>
+              <button
+                type="reset"
+                className="flex-1 py-2 px-4 border border-red-400 text-red-400 rounded-md hover:bg-red-50 transition duration-300"
+                onClick={() => {
+                  // Reset all states
+                  setHotelCategory('');
+                  setTravelMode('');
+                  setFlightType('');
+                  setDate({
+                    from: new Date(),
+                    to: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
+                  });
+                  setRoomSharing('');
+                  setInclusions([]);
+                  setTotalPrice(75000);
+                  setFormError('');
+                }}
+              >
+                Reset Form
+              </button>
+              <button
+                type="submit"
+                className="flex-1 py-2 px-4 bg-lime-500 text-white rounded-md hover:bg-lime-600 transition duration-300"
+              >
+                Proceed to Book
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
+
       {isPreviewOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-800">Package Preview</h2>
-              <button
-                onClick={() => setIsPreviewOpen(false)}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                ✕
-              </button>
             </div>
 
             <div className="space-y-4">

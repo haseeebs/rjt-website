@@ -1,4 +1,6 @@
 import { useState } from "react";
+import packageServices from "../services/packageService";
+import { hotels } from '../data/packages.js'
 
 const PackageForm = () => {
   // Form tabs state
@@ -8,8 +10,8 @@ const PackageForm = () => {
   // Form state
   const [formData, setFormData] = useState({
     type: "Budget",
-    makkahHotel: "",
-    madinahHotel: "",
+    makkahHotelId: "",
+    madinahHotelId: "",
     travelDate: "",
     durations: [
       {
@@ -22,14 +24,21 @@ const PackageForm = () => {
     exclusions: [{ description: "Visa Fees" }],
   });
 
+  // Filter hotels by city
+  const makkahHotels = hotels.filter(hotel => hotel.city === "Makkah");
+  const madinahHotels = hotels.filter(hotel => hotel.city === "Madinah");
+
+  // Selected hotels state for displaying details
+  const [selectedMakkahHotel, setSelectedMakkahHotel] = useState(null);
+  const [selectedMadinahHotel, setSelectedMadinahHotel] = useState(null);
   // Form validation state
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.makkahHotel) newErrors.makkahHotel = "Makkah hotel is required";
-    if (!formData.madinahHotel) newErrors.madinahHotel = "Madinah hotel is required";
+    if (!formData.makkahHotelId) newErrors.makkahHotelId = "Makkah hotel is required";
+    if (!formData.madinahHotelId) newErrors.madinahHotelId = "Madinah hotel is required";
     // if (!formData.travelDate) newErrors.travelDate = "Travel date is required";
 
     formData.durations.forEach((duration, index) => {
@@ -47,6 +56,16 @@ const PackageForm = () => {
       ...prev,
       [name]: value,
     }));
+
+    // Update selected hotel details
+    if (name === "makkahHotelId") {
+      const hotel = hotels.find(h => h.id.toString() === value);
+      setSelectedMakkahHotel(hotel);
+    }
+    if (name === "madinahHotelId") {
+      const hotel = hotels.find(h => h.id.toString() === value);
+      setSelectedMadinahHotel(hotel);
+    }
   };
 
   const handleDurationChange = (index, field, value) => {
@@ -116,6 +135,7 @@ const PackageForm = () => {
     e.preventDefault();
     if (validateForm()) {
       console.log("Form Data:", formData);
+      packageServices.addPacakges(formData);
       alert("Package created successfully!");
     } else {
       alert("Please fill in all required fields");
@@ -140,8 +160,7 @@ const PackageForm = () => {
                 <button
                   key={tab}
                   type="button"
-                  className={`rounded-lg py-2 ${activeTab === index ? "bg-lime-500 text-white" : ""
-                    }`}
+                  className={`rounded-lg py-2 ${activeTab === index ? "bg-lime-500 text-white" : ""}`}
                   onClick={() => setActiveTab(index)}
                 >
                   {tab}
@@ -158,7 +177,7 @@ const PackageForm = () => {
                     name="type"
                     value={formData.type}
                     onChange={handleInputChange}
-                    className="rounded-xl p-4 border border-lime-200 focus:ring-lime-500 w-full"
+                    className="rounded-xl p-4 border border-lime-200 focus:ring-lime-500 w-full cursor-pointer"
                   >
                     <option value="Budget">Budget</option>
                     <option value="Deluxe">Deluxe</option>
@@ -167,50 +186,81 @@ const PackageForm = () => {
                   </select>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div>
-                    <label className="block text-lime-700">Makkah Hotel *</label>
-                    <input
-                      name="makkahHotel"
-                      value={formData.makkahHotel}
-                      onChange={handleInputChange}
-                      placeholder="Select Makkah Hotel"
-                      className={`rounded-xl p-4 border ${errors.makkahHotel ? "border-red-500" : "border-lime-200"
-                        } focus:ring-lime-500 w-full`}
-                    />
-                    {errors.makkahHotel && (
-                      <p className="text-red-500 text-sm mt-1">{errors.makkahHotel}</p>
+                <div className="grid gap-6 md:grid-cols-2">
+                  {/* Makkah Hotel Selection */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-lime-700">Makkah Hotel *</label>
+                      <select
+                        name="makkahHotelId"
+                        value={formData.makkahHotelId}
+                        onChange={handleInputChange}
+                        className={`rounded-xl p-4 border ${errors.makkahHotelId ? "border-red-500" : "border-lime-200"} focus:ring-lime-500 w-full cursor-pointer`}
+                      >
+                        <option value="">Select Makkah Hotel</option>
+                        {makkahHotels.map(hotel => (
+                          <option key={hotel.id} value={hotel.id}>
+                            {hotel.name} - {hotel.category}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.makkahHotelId && (
+                        <p className="text-red-500 text-sm mt-1">{errors.makkahHotelId}</p>
+                      )}
+                    </div>
+
+                    {selectedMakkahHotel && (
+                      <div className="bg-lime-50 p-4 rounded-xl">
+                        <h4 className="font-medium text-lime-800">{selectedMakkahHotel.name}</h4>
+                        <p className="text-sm text-lime-600">Distance: {selectedMakkahHotel.distance}</p>
+                        <p className="text-sm text-lime-600">Walking Time: {selectedMakkahHotel.walkingTime}</p>
+                        <p className="text-sm text-lime-600">Transport: {selectedMakkahHotel.transport}</p>
+                      </div>
                     )}
                   </div>
-                  <div>
-                    <label className="block text-lime-700">Madinah Hotel *</label>
-                    <input
-                      name="madinahHotel"
-                      value={formData.madinahHotel}
-                      onChange={handleInputChange}
-                      placeholder="Select Madinah Hotel"
-                      className={`rounded-xl p-4 border ${errors.madinahHotel ? "border-red-500" : "border-lime-200"
-                        } focus:ring-lime-500 w-full`}
-                    />
-                    {errors.madinahHotel && (
-                      <p className="text-red-500 text-sm mt-1">{errors.madinahHotel}</p>
+
+                  {/* Madinah Hotel Selection */}
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-lime-700">Madinah Hotel *</label>
+                      <select
+                        name="madinahHotelId"
+                        value={formData.madinahHotelId}
+                        onChange={handleInputChange}
+                        className={`rounded-xl p-4 border ${errors.madinahHotelId ? "border-red-500" : "border-lime-200"} focus:ring-lime-500 w-full cursor-pointer`}
+                      >
+                        <option value="">Select Madinah Hotel</option>
+                        {madinahHotels.map(hotel => (
+                          <option key={hotel.id} value={hotel.id}>
+                            {hotel.name} - {hotel.category}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.madinahHotelId && (
+                        <p className="text-red-500 text-sm mt-1">{errors.madinahHotelId}</p>
+                      )}
+                    </div>
+
+                    {selectedMadinahHotel && (
+                      <div className="bg-lime-50 p-4 rounded-xl">
+                        <h4 className="font-medium text-lime-800">{selectedMadinahHotel.name}</h4>
+                        <p className="text-sm text-lime-600">Distance: {selectedMadinahHotel.distance}</p>
+                        <p className="text-sm text-lime-600">Walking Time: {selectedMadinahHotel.walkingTime}</p>
+                        <p className="text-sm text-lime-600">Transport: {selectedMadinahHotel.transport}</p>
+                      </div>
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-lime-700">Travel Date ( optional )</label>
+                  <label className="block text-lime-700">Travel Date (optional)</label>
                   <input
                     name="travelDate"
                     type="month"
                     value={formData.travelDate}
                     onChange={handleInputChange}
-                    className={`rounded-xl p-4 border ${errors.travelDate ? "border-red-500" : "border-lime-200"
-                      } focus:ring-lime-500 w-full`}
+                    className="rounded-xl p-4 border border-lime-200 focus:ring-lime-500 w-full cursor-pointer"
                   />
-                  {errors.travelDate && (
-                    <p className="text-red-500 text-sm mt-1">{errors.travelDate}</p>
-                  )}
                 </div>
               </div>
             )}
@@ -410,8 +460,8 @@ const PackageForm = () => {
               type="button"
               onClick={() => setActiveTab(Math.max(0, activeTab - 1))}
               className={`px-4 py-2 rounded-xl ${activeTab === 0
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-lime-100 text-lime-700 hover:bg-lime-200"
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-lime-100 text-lime-700 hover:bg-lime-200"
                 }`}
               disabled={activeTab === 0}
             >

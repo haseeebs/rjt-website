@@ -19,7 +19,7 @@ class PackageServices {
         try {
             const response = await this.databases.listDocuments(
                 config.databaseId,
-                config.collectionId
+                config.packageCollectionId
             );
             return response;
         } catch (error) {
@@ -43,7 +43,7 @@ class PackageServices {
             console.log(packageData);
             // const response = await this.databases.createDocument(
             //     config.databaseId,
-            //     config.collectionId,
+            //     config.packageCollectionId,
             //     ID.unique(),
             //     packageData
             // );
@@ -59,7 +59,7 @@ class PackageServices {
         try {
             const response = await this.databases.updateDocument(
                 config.databaseId,
-                config.collectionId,
+                config.packageCollectionId,
                 packageId,
                 updateData
             );
@@ -75,7 +75,7 @@ class PackageServices {
         try {
             await this.databases.deleteDocument(
                 config.databaseId,
-                config.collectionId,
+                config.packageCollectionId,
                 packageId
             );
             return true;
@@ -84,6 +84,30 @@ class PackageServices {
             throw error;
         }
     }
+    
+    // Fetch one package of each type
+    async fetchUniqueTypePackages() {
+        try {
+            const response = await this.databases.listDocuments(
+                config.databaseId,
+                config.packageCollectionId
+            );
+
+            const uniquePackages = response.documents.reduce((acc, pkg) => {
+                // If this type doesn't exist in accumulator, add it
+                if (!acc.some(existingPkg => existingPkg.type === pkg.type)) {
+                    acc.push(pkg);
+                }
+                return acc;
+            }, []);
+
+            return uniquePackages;
+        } catch (error) {
+            console.error("Error fetching unique type packages:", error);
+            throw error;
+        }
+    }
+
 }
 
 const packageServices = new PackageServices();
