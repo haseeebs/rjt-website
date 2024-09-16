@@ -84,7 +84,7 @@ class PackageServices {
             throw error;
         }
     }
-    
+
     // Fetch one package of each type
     async fetchUniqueTypePackages() {
         try {
@@ -108,6 +108,75 @@ class PackageServices {
         }
     }
 
+    // File upload service
+    async fileUpload(file) {
+        try {
+            const response = await this.storage.createFile(
+                config.bucketId,
+                ID.unique(),
+                file
+            );
+            return response;
+        } catch (error) {
+            console.error("Error uploading file:", error);
+            throw error;
+        }
+    }
+
+    // Delete file
+    async deleteFile(fileId) {
+        try {
+            await this.storage.deleteFile(
+                config.bucketId,
+                fileId
+            );
+            return true;
+        } catch (error) {
+            console.error("Error deleting file:", error);
+            throw error;
+        }
+    }
+
+    // Get file preview URL
+    getFilePreview(fileId) {
+        try {
+            return this.storage.getFilePreview(
+                config.bucketId,
+                fileId,
+                400, // width
+                300, // height
+            );
+        } catch (error) {
+            console.error("Error getting file preview:", error);
+            throw error;
+        }
+    }
+
+     // Get file view URL
+     getFileView(fileId) {
+        try {
+            return this.storage.getFileView(
+                config.bucketId,
+                fileId
+            );
+        } catch (error) {
+            console.error("Error getting file view:", error);
+            throw error;
+        }
+    }
+
+    // List all files
+    async listFiles() {
+        try {
+            const response = await this.storage.listFiles(
+                config.bucketId
+            );
+            return response;
+        } catch (error) {
+            console.error("Error listing files:", error);
+            throw error;
+        }
+    }
 }
 
 const packageServices = new PackageServices();
