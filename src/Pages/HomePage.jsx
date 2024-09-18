@@ -5,10 +5,11 @@ import WhyChooseUs from '../components/WhyChooseUs';
 import authService from '../services/authService';
 import { useDispatch } from 'react-redux';
 import { login, logout } from '../store/authSlice';
+import HeroSkeleton from '../components/skeleton/HeroSkeleton';
 
 const HomePage = () => {
     const dispatch = useDispatch();
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     const init = async () => {
         try {
@@ -21,7 +22,7 @@ const HomePage = () => {
         } catch (error) {
             console.error("Auth check failed:", error);
         } finally {
-            setLoading(false);
+            setIsLoading(false);
         }
     };
 
@@ -29,8 +30,8 @@ const HomePage = () => {
         init();
     }, []);
 
-    if (loading) {
-        return <h1>Loading...</h1>;
+    if (isLoading) {
+        return <HeroSkeleton />;
     }
 
     return (
