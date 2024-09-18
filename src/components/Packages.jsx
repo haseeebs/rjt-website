@@ -1,28 +1,36 @@
-import { MadinahImage2, MadinahImage3, MadinahImage4 } from '../assets/images';
-import { hotels, packages } from '../data/packages';
+import { useEffect, useState } from 'react';
+import { hotels } from '../data/packages';
 import Card from './Card';
-
-const packageImages = {
-    Budget: MadinahImage4,
-    Deluxe: MadinahImage2,
-    "5-Star": MadinahImage3,
-};
+import packageServices from '../services/packageService';
+import PackagesSkeleton from './skeleton/CardSkeleton';
 
 const Packages = () => {
+    const [uniquePackages, setUniquePackages] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     // Function to get hotel name by ID
     const getHotelName = (hotelId) => {
         const hotel = hotels.find(h => h.id === hotelId);
         return hotel ? hotel.name : 'Hotel name not found';
     };
 
-    // Use reduce to create a unique set of packages by type
-    const uniquePackages = packages.reduce((acc, pkg) => {
-        // If this type doesn't exist in accumulator, add it
-        if (!acc.some(existingPkg => existingPkg.type === pkg.type)) {
-            acc.push(pkg);
+    const fetchPackages = async () => {
+        try {
+            const fetchedPackages = await packageServices.fetchUniqueTypePackages();
+            setUniquePackages(fetchedPackages);
+        } catch (error) {
+            console.error('Failed to fetch packages:', error);
+        } finally {
+            setIsLoading(false);
         }
-        return acc;
-    }, []);
+    };
+
+    useEffect(() => {
+        fetchPackages();
+    }, [])
+
+    if (isLoading) {
+        return <PackagesSkeleton />;
+    }
 
     return (
         <div className="mx-auto max-w-7xl p-1 bg-gradient-to-b from-lime-500 to-lime-400 rounded-3xl">
@@ -34,7 +42,7 @@ const Packages = () => {
                             key={pkg.id}
                             packageId={pkg.id}
                             badge={pkg.type}
-                            image={packageImages[pkg.type]}
+                            image={pkg.image}
                             title={`${pkg.type} Package ${pkg.date ? ` - ${pkg.date}` : ""}`}
                             price={`₹${pkg.durations[15].basePrice.toLocaleString()}`}
                             makkahLocation={`Makkah - ${getHotelName(pkg.makkahHotelId)}`}

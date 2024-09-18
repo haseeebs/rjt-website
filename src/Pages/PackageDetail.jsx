@@ -27,7 +27,7 @@ const PackageDetail = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  console.log(packageData.date);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sticky Header */}
