@@ -1,11 +1,13 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Layout from '../Pages/Layout';
-import HomePage from '../Pages/HomePage';
-import UmrahPackage from '../Pages/UmrahPackage';
-import CustomizePackage from '../Pages/CustomizePackage';
-import PackageDetail from '../Pages/PackageDetail';
-import PackageForm from '../Pages/PackageForm';
-import HotelForm from '../Pages/HotelForm';
+import Layout from '../pages/Layout';
+import HomePage from '../pages/HomePage';
+import UmrahPackage from '../pages/UmrahPackage';
+import CustomizePackage from '../pages/CustomizePackage';
+import PackageDetail from '../pages/PackageDetail';
+import PackageForm from '../pages/PackageForm';
+import HotelForm from '../pages/HotelForm';
+import LoginPage from '../pages/LoginPage';
+import SignupPage from '../pages/SignupPage';
 
 const router = createBrowserRouter([
     {
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
             {
                 path: '/customize-package',
                 element: <CustomizePackage />
+            },
+            {
+                path: '/signup',
+                element: <SignupPage />
+            },
+            {
+                path: '/login',
+                element: <LoginPage />
             },
         ]
     }
