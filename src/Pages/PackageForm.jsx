@@ -1,10 +1,11 @@
 import { useState } from "react";
 import packageServices from "../services/packageService";
-import { hotels } from '../data/packages.js'
+import { useSelector } from "react-redux";
 
 const PackageForm = () => {
   // Form tabs state
   const [activeTab, setActiveTab] = useState(0);
+  const { hotels } = useSelector(store => store.package);
   const tabs = ["Basic Info", "Pricing & Duration", "Package Details"];
 
   // Form state
@@ -13,6 +14,7 @@ const PackageForm = () => {
     makkahHotelId: "",
     madinahHotelId: "",
     travelDate: "",
+    image: "",
     durations: [
       {
         days: 15,
@@ -39,6 +41,7 @@ const PackageForm = () => {
 
     if (!formData.makkahHotelId) newErrors.makkahHotelId = "Makkah hotel is required";
     if (!formData.madinahHotelId) newErrors.madinahHotelId = "Madinah hotel is required";
+    if (!formData.image) newErrors.image = "Package image is required";
     // if (!formData.travelDate) newErrors.travelDate = "Travel date is required";
 
     formData.durations.forEach((duration, index) => {
@@ -142,6 +145,23 @@ const PackageForm = () => {
     }
   };
 
+  const handleImageUpload = async (e) => {
+    try {
+      const file = e.target.files[0];
+      if (file) {
+        const response = await packageServices.fileUpload(file);
+        if (response) {
+          setFormData(prev => ({
+            ...prev,
+            image: response.$id // Store the file ID
+          }));
+        }
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-7xl p-6 bg-lime-50">
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -171,6 +191,28 @@ const PackageForm = () => {
             {/* Tab Content */}
             {activeTab === 0 && (
               <div className="space-y-4">
+                <div>
+                  <label className="block text-lime-700">Package Image *</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className={`rounded-xl p-4 border ${errors.image ? "border-red-500" : "border-lime-200"
+                      } focus:ring-lime-500 w-full`}
+                  />
+                  {errors.image && (
+                    <p className="text-red-500 text-sm mt-1">{errors.image}</p>
+                  )}
+                  {formData.image && (
+                    <div className="mt-2">
+                      <img
+                        src={packageServices.getFilePreview(formData.image)}
+                        alt="Package preview"
+                        className="w-40 h-40 object-cover rounded-lg"
+                      />
+                    </div>
+                  )}
+                </div>
                 <div>
                   <label className="block text-lime-700">Package Type</label>
                   <select

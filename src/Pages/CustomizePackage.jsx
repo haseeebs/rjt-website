@@ -1,4 +1,3 @@
-
 import { CheckCircleIcon, CircleCheck, Group, Lock, User, Users } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import SelectMenu from '../components/SelectMenu';
@@ -12,6 +11,21 @@ const UmrahBookingForm = () => {
     from: new Date(),
     to: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),
   });
+  const [numberOfDays, setNumberOfDays] = useState(7);
+
+  // Calculate the number of days whenever the dates change
+  useEffect(() => {
+    const calculateDays = () => {
+      const fromDate = new Date(date.from);
+      const toDate = new Date(date.to);
+      const timeDifference = toDate - fromDate;
+      const days = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+      setNumberOfDays(days);
+    };
+
+    calculateDays();
+  }, [date]);
+
   const fromDateRef = useRef(null);
   const toDateRef = useRef(null);
   const [roomSharing, setRoomSharing] = useState('');
@@ -376,7 +390,7 @@ const UmrahBookingForm = () => {
                           </span>
                         </span>
                         {travelMode === 'flight' && (
-                          <CircleCheck color='#65a30d'/>
+                          <CircleCheck color='#65a30d' />
                         )}
                       </div>
 
@@ -405,7 +419,7 @@ const UmrahBookingForm = () => {
                           </span>
                         </span>
                         {travelMode === 'self' && (
-                          <CircleCheck color='#65a30d'/>
+                          <CircleCheck color='#65a30d' />
                         )}
                       </div>
                     </div>
@@ -590,6 +604,7 @@ const UmrahBookingForm = () => {
           <div className="mt-8 space-y-6">
             <div className="bg-lime-500 rounded-xl p-6 text-white">
               <h3 className="text-xl font-bold mb-4">Package Summary</h3>
+              <p>Number of Days: {numberOfDays}</p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
                   <p className="text-emerald-100 text-sm">Travel Dates</p>

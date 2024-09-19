@@ -2,12 +2,15 @@ import { ArrowLeft, Calendar, Check, Phone, Users, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import HotelCard from '../components/HotelCard';
-import { commonInclusions, hotels, packages } from '../data/packages';
+import { commonInclusions } from '../data/packages';
 import { getWhatsappUrl } from '../utils/whatsappUtils';
+import { useSelector } from 'react-redux';
 
 const PackageDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const { packages, hotels } = useSelector(store => store.package)
 
   const packageData = packages.find((pkg) => pkg.id === Number(id));
   const makkahHotel = hotels.find((hotel) => hotel.id === packageData.makkahHotelId);
@@ -27,7 +30,7 @@ const PackageDetail = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
+  
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sticky Header */}
