@@ -85,29 +85,6 @@ class PackageServices {
         }
     }
 
-    // Fetch one package of each type
-    async fetchUniqueTypePackages() {
-        try {
-            const response = await this.databases.listDocuments(
-                config.databaseId,
-                config.packageCollectionId
-            );
-
-            const uniquePackages = response.documents.reduce((acc, pkg) => {
-                // If this type doesn't exist in accumulator, add it
-                if (!acc.some(existingPkg => existingPkg.type === pkg.type)) {
-                    acc.push(pkg);
-                }
-                return acc;
-            }, []);
-
-            return uniquePackages;
-        } catch (error) {
-            console.error("Error fetching unique type packages:", error);
-            throw error;
-        }
-    }
-
     // File upload service
     async fileUpload(file) {
         try {
