@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const Card2 = ({ packageId, image, title, price, makkahLocation, madinahLocation, badge }) => {
+const Card = ({ packageId, image, title, price, makkahLocation, madinahLocation, badge }) => {
 
     const navigate = useNavigate();
 
@@ -90,4 +90,4 @@ const Card2 = ({ packageId, image, title, price, makkahLocation, madinahLocation
     );
 };
 
-export default Card2;
+export default Card;

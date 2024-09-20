@@ -62,11 +62,11 @@ const PackageForm = () => {
 
     // Update selected hotel details
     if (name === "makkahHotelId") {
-      const hotel = hotels.find(h => h.id.toString() === value);
+      const hotel = hotels.find(h => h.$id.toString() === value);
       setSelectedMakkahHotel(hotel);
     }
     if (name === "madinahHotelId") {
-      const hotel = hotels.find(h => h.id.toString() === value);
+      const hotel = hotels.find(h => h.$id.toString() === value);
       setSelectedMadinahHotel(hotel);
     }
   };
@@ -134,17 +134,6 @@ const PackageForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log("Form Data:", formData);
-      packageServices.addPacakges(formData);
-      alert("Package created successfully!");
-    } else {
-      alert("Please fill in all required fields");
-    }
-  };
-
   const handleImageUpload = async (e) => {
     try {
       const file = e.target.files[0];
@@ -153,12 +142,60 @@ const PackageForm = () => {
         if (response) {
           setFormData(prev => ({
             ...prev,
-            image: response.$id // Store the file ID
+            image: response.$id // Storing the file ID
           }));
         }
       }
     } catch (error) {
       console.error("Error uploading image:", error);
+    }
+  };
+
+  const handleRemoveImage = async () => {
+    try {
+      if (formData.image) {
+        await packageServices.deleteFile(formData.image);
+
+        setFormData(prev => ({
+          ...prev,
+          image: ""
+        }));
+      }
+    } catch (error) {
+      console.error("Error removing image:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const packageData = {
+          type: formData.type,
+          makkahHotelId: formData.makkahHotelId,
+          madinahHotelId: formData.madinahHotelId,
+          durations: formData.durations,
+          inclusions: formData.inclusions,
+          exclusions: formData.exclusions,
+          image: formData.image,
+          travelDate: formData.travelDate
+        };
+
+        if (!packageData.type || !packageData.makkahHotelId || !packageData.madinahHotelId) {
+          throw new Error("Required fields are missing");
+        }
+
+        console.log("Formatted package data:", packageData);
+        const response = await packageServices.addPackage(packageData);
+
+        if (response) {
+          console.log(`Ye response aaya hai package create karne ke baad ${response}`);
+          // dispatch(setPackages(response))
+        }
+      } catch (error) {
+        console.error("Error creating package:", error);
+        alert(`Failed to create package: ${error.message}`);
+      }
     }
   };
 
@@ -210,6 +247,14 @@ const PackageForm = () => {
                         alt="Package preview"
                         className="w-40 h-40 object-cover rounded-lg"
                       />
+                      <button
+                        type="button"
+                        onClick={handleRemoveImage}
+                        className="text-red-500 hover:bg-red-50 px-2 py-1 rounded"
+
+                      >
+                        Remove image
+                      </button>
                     </div>
                   )}
                 </div>
@@ -241,7 +286,7 @@ const PackageForm = () => {
                       >
                         <option value="">Select Makkah Hotel</option>
                         {makkahHotels.map(hotel => (
-                          <option key={hotel.id} value={hotel.id}>
+                          <option key={hotel.$id} value={hotel.$id}>
                             {hotel.name} - {hotel.category}
                           </option>
                         ))}
@@ -273,7 +318,7 @@ const PackageForm = () => {
                       >
                         <option value="">Select Madinah Hotel</option>
                         {madinahHotels.map(hotel => (
-                          <option key={hotel.id} value={hotel.id}>
+                          <option key={hotel.$id} value={hotel.$id}>
                             {hotel.name} - {hotel.category}
                           </option>
                         ))}
