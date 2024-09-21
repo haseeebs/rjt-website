@@ -1,6 +1,10 @@
 import { useState } from "react";
+import hotelServices from "../services/hotelService";
+import { setHotels } from "../store/packageSlice";
+import { useDispatch } from "react-redux";
 
 const HotelForm = () => {
+    const dispatch = useDispatch();
     const [activeTab, setActiveTab] = useState(0);
     const tabs = ["Basic Info", "Location & Transport", "Images"];
 
@@ -12,7 +16,7 @@ const HotelForm = () => {
         walkingTime: "",
         hasShuttle: false,
         transport: "",
-        images: [""]
+        images: []
     });
 
     const [errors, setErrors] = useState({});
@@ -23,7 +27,7 @@ const HotelForm = () => {
         if (!formData.name) newErrors.name = "Hotel name is required";
         if (!formData.distance) newErrors.distance = "Distance is required";
         if (!formData.walkingTime) newErrors.walkingTime = "Walking time is required";
-        if (!formData.transport) newErrors.transport = "Transport details are required";
+        // if (!formData.transport) newErrors.transport = "Transport details are required";
         if (formData.images.length === 0) newErrors.images = "At least one image is required";
 
         setErrors(newErrors);
@@ -32,42 +36,97 @@ const HotelForm = () => {
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: type === "checkbox" ? checked : value,
-        }));
+
+        if (name === "hasShuttle") {
+            setFormData((prev) => ({
+                ...prev,
+                hasShuttle: checked,
+                transport: checked ? "Free Shuttle Service (5 min journey)" : "",
+            }));
+        } else {
+            setFormData((prev) => ({
+                ...prev,
+                [name]: type === "checkbox" ? checked : value,
+            }));
+        }
     };
 
-    const handleImageChange = (index, value) => {
-        const newImages = [...formData.images];
-        newImages[index] = value;
-        setFormData((prev) => ({
-            ...prev,
-            images: newImages,
-        }));
+    const handleDeleteImage = async (index) => {
+        try {
+            const imageId = formData.images[index];
+            if (imageId) {
+                await hotelServices.deleteFile(imageId);
+                console.log(`Image with ID ${imageId} deleted successfully.`);
+            }
+
+            setFormData((prev) => ({
+                ...prev,
+                images: prev.images.filter((_, i) => i !== index),
+            }));
+        } catch (error) {
+            console.error("Error deleting image:", error);
+            alert("Failed to delete the image. Please try again.");
+        }
     };
 
-    const handleAddImage = () => {
-        setFormData((prev) => ({
-            ...prev,
-            images: [...prev.images, ""],
-        }));
+    // Handle image upload with improved file tracking
+    const handleImageUpload = async (e, index) => {
+        try {
+            const file = e.target.files[0];
+            if (file) {
+                const response = await hotelServices.fileUpload(file);
+                if (response) {
+                    // Track the newly uploaded file
+                    setTemporaryUploadedFiles(prev => {
+                        // Ensure no duplicates
+                        return prev.includes(response.$id)
+                            ? prev
+                            : [...prev, response.$id];
+                    });
+
+                    // Update form images
+                    setFormData(prev => {
+                        const newImages = [...prev.images];
+                        newImages[index] = response.$id;
+                        return { ...prev, images: newImages };
+                    });
+                }
+            }
+        } catch (error) {
+            console.error("Error uploading image:", error);
+        }
     };
 
-    const handleDeleteImage = (index) => {
-        setFormData((prev) => ({
-            ...prev,
-            images: prev.images.filter((_, i) => i !== index),
-        }));
-    };
-
-    const handleSubmit = (e) => {
+    // Handle form submission
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateForm()) {
             console.log("Form Data:", formData);
-            // Call your API service here
-            alert("Hotel added successfully!");
-        } else {
+            try {
+                // Add hotel logic
+                await hotelServices.addHotel(formData);
+                const hotelsResponse = await hotelServices.fetchHotels();
+                dispatch(setHotels(hotelsResponse.documents));
+
+                alert("Hotel added successfully!");
+
+                // Reset form
+                setFormData({
+                    city: "Makkah",
+                    name: "",
+                    category: "Economy",
+                    distance: "",
+                    walkingTime: "",
+                    hasShuttle: false,
+                    transport: "",
+                    images: []
+                });
+            } catch (error) {
+                console.error("Error adding hotel:", error);
+                alert("Failed to add hotel. Please try again.");
+            }
+        }
+        else {
             alert("Please fill in all required fields");
         }
     };
@@ -200,8 +259,9 @@ const HotelForm = () => {
                                             value={formData.transport}
                                             onChange={handleInputChange}
                                             placeholder="e.g. Free Shuttle Bus (5 min journey)"
+                                            disabled={formData.hasShuttle}
                                             className={`rounded-xl p-4 border ${errors.transport ? "border-red-500" : "border-lime-200"
-                                                } focus:ring-lime-500 w-full`}
+                                                } focus:ring-lime-500 w-full ${formData.hasShuttle ? "cursor-not-allowed" : "cursor-auto"}`}
                                         />
                                         {errors.transport && (
                                             <p className="text-red-500 text-sm mt-1">{errors.transport}</p>
@@ -214,14 +274,27 @@ const HotelForm = () => {
                         {activeTab === 2 && (
                             <div className="space-y-4">
                                 <h3 className="text-lg text-lime-800">Hotel Images</h3>
-                                {formData.images.map((image, index) => (
+                                {formData.images.map((imageId, index) => (
                                     <div key={index} className="flex gap-2">
                                         <input
-                                            value={image}
-                                            onChange={(e) => handleImageChange(index, e.target.value)}
-                                            placeholder="Enter image URL"
-                                            className="rounded-xl p-4 border border-lime-200 focus:ring-lime-500 flex-1"
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => handleImageUpload(e, index)}
+                                            className={`rounded-xl p-4 border ${errors.walkingTime ? "border-red-500" : "border-lime-200"
+                                                } focus:ring-lime-500 w-full flex-1`}
                                         />
+                                        {errors.images && (
+                                            <p className="text-red-500 text-sm mt-1">{errors.images}</p>
+                                        )}
+                                        {imageId && (
+                                            <div className="w-20 h-20">
+                                                <img
+                                                    src={hotelServices.getFilePreview(imageId)}
+                                                    alt={`Hotel image ${index + 1}`}
+                                                    className="w-full h-full object-cover rounded-lg"
+                                                />
+                                            </div>
+                                        )}
                                         <button
                                             type="button"
                                             onClick={() => handleDeleteImage(index)}
@@ -233,7 +306,10 @@ const HotelForm = () => {
                                 ))}
                                 <button
                                     type="button"
-                                    onClick={handleAddImage}
+                                    onClick={() => setFormData(prev => ({
+                                        ...prev,
+                                        images: [...prev.images, ""]
+                                    }))}
                                     className="w-full rounded-xl border border-lime-400 text-lime-700 hover:bg-lime-50 py-2"
                                 >
                                     Add Image
@@ -248,8 +324,8 @@ const HotelForm = () => {
                             type="button"
                             onClick={() => setActiveTab(Math.max(0, activeTab - 1))}
                             className={`px-4 py-2 rounded-xl ${activeTab === 0
-                                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                    : "bg-lime-100 text-lime-700 hover:bg-lime-200"
+                                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                : "bg-lime-100 text-lime-700 hover:bg-lime-200"
                                 }`}
                             disabled={activeTab === 0}
                         >
