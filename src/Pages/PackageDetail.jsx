@@ -10,14 +10,18 @@ const PackageDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { packages, hotels } = useSelector(store => store.package)
+  const { packages, hotels } = useSelector((store) => store.package);
 
-  const packageData = packages.find((pkg) => pkg.id === Number(id));
-  const makkahHotel = hotels.find((hotel) => hotel.id === packageData.makkahHotelId);
-  const madinahHotel = hotels.find((hotel) => hotel.id === packageData.madinahHotelId);
+  const currentPackage = packages.find((pkg) => pkg.$id === id);
+  const makkahHotel = hotels.find((hotel) => hotel.$id === currentPackage?.makkahHotelId);
+  const madinahHotel = hotels.find((hotel) => hotel.$id === currentPackage?.madinahHotelId);
 
   const [isHeaderSticky, setIsHeaderSticky] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState('15');
+
+  const currentDuration = currentPackage?.durations.find(
+    (duration) => duration.days.toString() === selectedDuration
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -30,28 +34,31 @@ const PackageDetail = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
+  if (!currentPackage || !makkahHotel || !madinahHotel) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Sticky Header */}
       <header
-        className={`sticky top-0 z-50 w-full bg-white shadow-md transition-all duration-300 
-        ${isHeaderSticky ? 'py-2' : 'py-4'}`}
+        className={`sticky top-0 z-50 w-full bg-white shadow-md transition-all duration-300 ${isHeaderSticky ? 'py-2' : 'py-4'
+          }`}
       >
         <div className="container mx-auto px-4 flex items-center justify-between">
-          {/* Back Button */}
           <button
-            onClick={() => navigate(-1)} // Navigate to previous page
+            onClick={() => navigate(-1)}
             className="flex items-center text-lime-600 hover:text-lime-700 font-medium"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back
           </button>
           <h1
-            className={`font-bold text-gray-800 transition-all duration-300 
-            ${isHeaderSticky ? 'text-xl' : 'text-2xl'}`}
+            className={`font-bold text-gray-800 transition-all duration-300 ${isHeaderSticky ? 'text-xl' : 'text-2xl'
+              }`}
           >
-            {packageData.type} Umrah Package
+            {currentPackage.type} Umrah Package
           </h1>
         </div>
       </header>
@@ -60,11 +67,11 @@ const PackageDetail = () => {
       <main className="container mx-auto px-4 py-8 space-y-8 pb-24">
         {/* Package Summary */}
         <div className="bg-gradient-to-br from-lime-400 to-lime-500 rounded-3xl p-6 text-white shadow-lg">
-          <div className={`grid ${packageData.date ? "md:grid-cols-2 lg:grid-cols-4" : "md:grid-cols-3"} gap-6`}>
+          <div className={`grid ${currentPackage.date ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'} gap-6`}>
             <div className="space-y-2">
               <div className="text-lime-100">Starting From</div>
               <div className="text-4xl font-bold">
-                ₹{packageData.durations[selectedDuration].basePrice.toLocaleString('en-IN')}
+                ₹{currentDuration?.sharedRoomPrices.quad.toLocaleString('en-IN')}
               </div>
             </div>
             <div className="space-y-2">
@@ -81,15 +88,18 @@ const PackageDetail = () => {
                 Quad Sharing
               </div>
             </div>
-            {packageData.date && <div className="space-y-2">
-              <div className="text-lime-100">Date</div>
-              <div className="text-2xl font-semibold flex items-center gap-2">
-                <Users className="w-6 h-6" />
-                {packageData.date}
+            {currentPackage.date && (
+              <div className="space-y-2">
+                <div className="text-lime-100">Date</div>
+                <div className="text-2xl font-semibold flex items-center gap-2">
+                  <Users className="w-6 h-6" />
+                  {currentPackage.date}
+                </div>
               </div>
-            </div>}
+            )}
           </div>
         </div>
+
         {/* Hotels Grid */}
         <div className="grid md:grid-cols-2 gap-6">
           <HotelCard hotel={makkahHotel} />
@@ -100,43 +110,36 @@ const PackageDetail = () => {
         <div className="bg-white rounded-3xl shadow-lg p-6">
           <h3 className="text-2xl font-bold mb-6 text-gray-800">Choose Your Duration</h3>
           <div className="flex flex-wrap gap-3 mb-6">
-            {Object.keys(packageData.durations).map((duration) => (
+            {currentPackage.durations.map((duration) => (
               <button
-                key={duration}
-                onClick={() => setSelectedDuration(duration)}
-                className={`px-6 py-3 rounded-xl font-medium transition-all 
-                  ${selectedDuration === duration
+                key={duration.days}
+                onClick={() => setSelectedDuration(duration.days.toString())}
+                className={`px-6 py-3 rounded-xl font-medium transition-all ${selectedDuration === duration.days.toString()
                     ? 'bg-lime-500 text-white shadow-lg scale-105'
                     : 'bg-lime-50 text-lime-700 hover:bg-lime-100'
                   }`}
               >
-                {duration} Days
+                {duration.days} Days
               </button>
             ))}
           </div>
 
           <div className="grid sm:grid-cols-3 gap-4">
-            <div className="bg-lime-50 p-4 ronded-xl">
-              <div className="font-semibold text-gray-700">Quad Sharing</div>
-              <div className="text-xl font-bold text-lime-700">
-                ₹{packageData.durations[selectedDuration].basePrice.toLocaleString('en-IN')}
+            {/* Pricing */}
+            {['quad', 'triple', 'double'].map((type) => (
+              <div key={type} className="bg-lime-50 p-4 rounded-xl">
+                <div className="font-semibold text-gray-700">
+                  {type.charAt(0).toUpperCase() + type.slice(1)} Sharing
+                </div>
+                <div className="text-xl font-bold text-lime-700">
+                  ₹{currentDuration?.sharedRoomPrices[type]?.toLocaleString('en-IN')}
+                </div>
               </div>
-            </div>
-            <div className="bg-lime-50 p-4 rounded-xl">
-              <div className="font-semibold text-gray-700">Triple Sharing</div>
-              <div className="text-xl font-bold text-lime-700">
-                ₹{packageData.durations[selectedDuration].sharedRoomPrices.triple.toLocaleString('en-IN')}
-              </div>
-            </div>
-            <div className="bg-lime-50 p-4 rounded-xl">
-              <div className="font-semibold text-gray-700">Double Sharing</div>
-              <div className="text-xl font-bold text-lime-700">
-                ₹{packageData.durations[selectedDuration].sharedRoomPrices.double.toLocaleString('en-IN')}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
+        {/* Add remaining sections like Inclusions, Exclusions, and Common Features */}
         <div className="grid md:grid-cols-2 gap-6">
           {/* Specific Package Inclusions */}
           <div className="bg-white rounded-xl shadow-lg p-6">
@@ -144,9 +147,9 @@ const PackageDetail = () => {
             <p className="text-gray-600 mb-4">
               Along with the common features, this package includes the following exclusive benefits:
             </p>
-            {packageData.inclusions.length > 0 ? (
+            {currentPackage.inclusions.length > 0 ? (
               <ul className="space-y-4">
-                {packageData.inclusions.map((item, index) => (
+                {currentPackage.inclusions.map((item, index) => (
                   <li key={index} className="flex items-start">
                     <div className="mt-1">
                       <Check className="w-5 h-5 text-lime-500" />
@@ -168,9 +171,9 @@ const PackageDetail = () => {
             <p className="text-gray-600 mb-4">
               The following services and features are not included in this package:
             </p>
-            {packageData.exclusions.length > 0 ? (
+            {currentPackage.exclusions.length > 0 ? (
               <ul className="space-y-4">
-                {packageData.exclusions.map((item, index) => (
+                {currentPackage.exclusions.map((item, index) => (
                   <li key={index} className="flex items-start">
                     <div className="mt-1">
                       <X className="w-5 h-5 text-red-500" />
@@ -205,13 +208,12 @@ const PackageDetail = () => {
           </div>
         </div>
       </main>
-
       {/* Fixed Bottom Bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4">
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
           <div>
             <p className="text-3xl font-bold text-lime-600">
-              ₹{packageData.durations[selectedDuration].basePrice.toLocaleString('en-IN')}
+              ₹{currentPackage.durations[selectedDuration].basePrice.toLocaleString('en-IN')}
             </p>
             <p className="text-gray-600">Starting Price</p>
           </div>
