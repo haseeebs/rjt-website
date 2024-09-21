@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ChevronDown } from "lucide-react";
 
 const PackageComparison = () => {
   const navigate = useNavigate();
@@ -8,9 +9,10 @@ const PackageComparison = () => {
 
   const [selectedDays, setSelectedDays] = useState(15);
   const [selectedRoomType, setSelectedRoomType] = useState("quad");
+  const [availableDurations, setAvailableDurations] = useState([]);
 
   const roomTypes = [
-    { value: "quad", label: "Quad Sharing" },
+    { value: "quad", label: "Quint/Quad Sharing" },
     { value: "triple", label: "Triple Sharing" },
     { value: "double", label: "Double Sharing" }
   ];
@@ -18,6 +20,22 @@ const PackageComparison = () => {
   const handlePackageClick = (packageId) => {
     navigate(`/packages/${packageId}`);
   };
+
+  useEffect(() => {
+    const durations = [
+      ...new Set(
+        packages.flatMap((pkg) =>
+          pkg.durations.map((duration) => duration.days)
+        )
+      ),
+    ].sort((a, b) => a - b);
+
+    setAvailableDurations(durations);
+
+    if (durations.length > 0) {
+      setSelectedDays(durations[0]); // Automatically select the first duration
+    }
+  }, [packages]);
 
   // Check if packages or hotels are empty
   if (!packages || packages.length === 0) {
@@ -51,28 +69,32 @@ const PackageComparison = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Duration Selection */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Select Duration</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Select Duration
+            </label>
             <div className="relative">
               <select
                 className="block w-full pl-4 pr-8 py-3 text-base border border-lime-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-lime-500 bg-white appearance-none"
                 value={selectedDays}
                 onChange={(e) => setSelectedDays(Number(e.target.value))}
               >
-                {[15, 20, 25].map((days) => (
-                  <option key={days} value={days}>{days} Days Package</option>
+                {availableDurations.map((days) => (
+                  <option key={days} value={days}>
+                    {days} Days Package
+                  </option>
                 ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
+                <ChevronDown className="w-4 h-4" />
               </div>
             </div>
           </div>
 
           {/* Room Type Selection */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Select Room Type</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Select Room Type
+            </label>
             <div className="relative">
               <select
                 className="block w-full pl-4 pr-8 py-3 text-base border border-lime-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-500 focus:border-lime-500 bg-white appearance-none"
@@ -80,13 +102,13 @@ const PackageComparison = () => {
                 onChange={(e) => setSelectedRoomType(e.target.value)}
               >
                 {roomTypes.map((type) => (
-                  <option key={type.value} value={type.value}>{type.label}</option>
+                  <option key={type.value} value={type.value}>
+                    {type.label}
+                  </option>
                 ))}
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
+                <ChevronDown className="w-4 h-4" />
               </div>
             </div>
           </div>
@@ -99,14 +121,20 @@ const PackageComparison = () => {
           <table className="w-full">
             <thead className="sticky top-0 bg-white z-10">
               <tr className="border-b border-lime-200">
-                <th className="px-6 py-4 bg-lime-50 text-left text-sm font-semibold text-gray-900">Category</th>
-                <th className="px-6 py-4 bg-lime-50 text-left text-sm font-semibold text-gray-900">Price</th>
-                <th className="px-6 py-4 bg-lime-50 text-left text-sm font-semibold text-gray-900">Makkah Hotel</th>
-                <th className="px-6 py-4 bg-lime-50 text-left text-sm font-semibold text-gray-900">Madinah Hotel</th>
+                {['Category', 'Price', 'Makkah Hotel', 'Madinah Hotel'].map((header) => (
+                  <th key={header}
+                    className="px-6 py-4 bg-lime-50 text-left text-sm font-semibold text-gray-900"
+                  > {header}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-lime-200">
               {packages.map((pkg) => {
+                const matchingPackage = pkg.durations.find(
+                  (duration) => duration.days === selectedDays
+                );
+
                 const makkahHotel = hotels.find((hotel) => hotel.$id === pkg.makkahHotelId);
                 const madinahHotel = hotels.find((hotel) => hotel.$id === pkg.madinahHotelId);
 
@@ -114,20 +142,26 @@ const PackageComparison = () => {
                   <tr
                     key={pkg.$id}
                     onClick={() => handlePackageClick(pkg.$id)}
-                    className="hover:bg-lime-100 transition-colors duration-150 cursor-pointer"
+                    className="h-40 hover:bg-lime-100 transition-colors duration-300 cursor-pointer"
                   >
-                    <td className="px-6 py-4 font-medium text-gray-900">{pkg.type}</td>
+                    <td className="px-6 py-4 font-medium text-gray-900">
+                      {pkg.type}
+                    </td>
                     <td className="px-6 py-4 text-lg font-semibold text-lime-600">
-                      ₹{pkg.durations[selectedDays]?.sharedRoomPrices[selectedRoomType] || "N/A"}
+                      ₹{matchingPackage?.sharedRoomPrices[selectedRoomType] || "N/A"}
                     </td>
                     <td className="px-6 py-4">
                       <div className="space-y-1">
-                        <div className="font-medium text-gray-900">{makkahHotel?.name || "N/A"}</div>
+                        <div className="font-medium text-gray-900">
+                          {makkahHotel?.name || "N/A"}
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="space-y-1">
-                        <div className="font-medium text-gray-900">{madinahHotel?.name || "N/A"}</div>
+                        <div className="font-medium text-gray-900">
+                          {madinahHotel?.name || "N/A"}
+                        </div>
                       </div>
                     </td>
                   </tr>
