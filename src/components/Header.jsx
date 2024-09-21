@@ -6,20 +6,30 @@ import { Logo, MakkahImage } from '../assets/images'
 import { Link } from 'react-router-dom'
 import Logout from './Logout'
 
-const navigation = [
+const publicNavigation = [
   { name: 'Umrah Packages', to: '/umrah-packages' },
   { name: 'Customize Package', to: '/customize-package' },
+]
+
+const protectedNavigation = [
+  { name: 'Create New Hotel', to: '/create-hotel' },
+  { name: 'Create New Package', to: '/create-package' },
 ]
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const authStatus = useSelector((state) => state.auth.userData);
 
+  // Combine navigation items based on auth status
+  const navigationItems = authStatus
+    ? [...publicNavigation, ...protectedNavigation]
+    : [...publicNavigation, { name: 'Login', to: '/login' }];
+
   return (
     <header>
       <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
         <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5 h-16">
+          <Link to="/" className="-m-1.5 p-1.5 h-16">
             <span className="sr-only">Riyazul Jannah tour and travels</span>
             <img src={Logo} className='h-full w-full object-cover' alt="Riyazul Jannah tour and travels logo" />
           </Link>
@@ -35,7 +45,7 @@ const Header = () => {
           </button>
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) => (
+          {navigationItems.map((item) => (
             <Link key={item.name} to={item.to} className="text-sm font-semibold leading-6 text-lime-950">
               {item.name}
             </Link>
@@ -63,14 +73,14 @@ const Header = () => {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
-                {navigation.map((item) => (
-                  <a
+                {navigationItems.map((item) => (
+                  <Link
                     key={item.name}
-                    href={item.href}
+                    to={item.to}
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
                 {authStatus && <Logout />}
               </div>
