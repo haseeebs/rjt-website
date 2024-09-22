@@ -4,15 +4,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Logo } from '../assets/images';
 import authService from '../services/authService';
 import { login as authLogin } from '../store/authSlice';
+import { useState } from 'react';
 
 const SignupPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [errorMessage, setErrorMessage] = useState('');
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const onSubmit = async (data) => {
         try {
+            setErrorMessage('');
             const session = await authService.createAccount(data);
 
             if (session) {
@@ -24,6 +27,7 @@ const SignupPage = () => {
             }
         } catch (error) {
             console.error('Signup failed:', error.message);
+            setErrorMessage(error?.response?.message || 'An unexpected error occurred');
         }
     };
 
@@ -89,6 +93,12 @@ const SignupPage = () => {
                         </div>
                     </div>
 
+                    {errorMessage && (
+                        <div className="text-red-500 text-sm text-center">
+                            {errorMessage}
+                        </div>
+                    )}
+
                     <div>
                         <button
                             type="submit"
@@ -98,6 +108,7 @@ const SignupPage = () => {
                         </button>
                     </div>
                 </form>
+
                 <p className="text-center text-sm text-gray-600">
                     Already have an account?{' '}
                     <Link

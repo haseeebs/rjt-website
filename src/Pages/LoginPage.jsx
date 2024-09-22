@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { login as authLogin } from '../store/authSlice';
 import authService from '../services/authService';
 import { Logo } from '../assets/images';
@@ -8,11 +9,13 @@ import { Logo } from '../assets/images';
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async (data) => {
     try {
+      setErrorMessage('');
       const session = await authService.login(data);
       if (session) {
         const userData = await authService.getCurrentUser();
@@ -21,6 +24,7 @@ const LoginPage = () => {
       }
     } catch (error) {
       console.error('Login failed:', error);
+      setErrorMessage(error?.response?.message || 'An unexpected error occurred');
     }
   };
 
@@ -62,6 +66,12 @@ const LoginPage = () => {
               )}
             </div>
           </div>
+
+          {errorMessage && (
+            <div className="text-red-500 text-sm text-center">
+              {errorMessage}
+            </div>
+          )}
 
           <div>
             <button
