@@ -29,28 +29,29 @@ class PackageServices {
     }
 
     // Add a new package
-    async addPacakges({ type, makkahHotelId, madinahHotelId, durations, inclusions, exclusions, travelDate = null }) {
+    async addPackage(packageData) {
         try {
-            const packageData = {
-                type,
-                makkahHotelId,
-                madinahHotelId,
-                durations,
-                inclusions: inclusions || [],
-                exclusions: exclusions || [],
-                travelDate
-            }
-            console.log(packageData);
-            // const response = await this.databases.createDocument(
-            //     config.databaseId,
-            //     config.packageCollectionId,
-            //     ID.unique(),
-            //     packageData
-            // );
-            // return response;
+            const formattedData = {
+                type: packageData.type,
+                makkahHotelId: packageData.makkahHotelId,
+                madinahHotelId: packageData.madinahHotelId,
+                durations: packageData.durations.map(duration => JSON.stringify(duration)),
+                inclusions: packageData.inclusions.map(inclusion => JSON.stringify({ description: inclusion })),
+                exclusions: packageData.exclusions.map(exclusion => JSON.stringify({ description: exclusion })),
+                image: packageData.image,
+                travelDate: packageData.travelDate
+            };
+
+            const response = await this.databases.createDocument(
+                config.databaseId,
+                config.packageCollectionId,
+                ID.unique(),
+                formattedData
+            );
+            return response;
         } catch (error) {
             console.error("Error adding package:", error);
-            throw error;
+            alert(error.response);
         }
     }
 
@@ -129,8 +130,8 @@ class PackageServices {
         }
     }
 
-     // Get file view URL
-     getFileView(fileId) {
+    // Get file view URL
+    getFileView(fileId) {
         try {
             return this.storage.getFileView(
                 config.bucketId,
