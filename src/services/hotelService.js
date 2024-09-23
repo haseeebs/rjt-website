@@ -94,6 +94,46 @@ class HotelServices {
             throw error;
         }
     }
+
+    // Get file view URL
+    async fileUpload(file) {
+        try {
+            const response = await this.storage.createFile(
+                config.bucketId,
+                ID.unique(),
+                file
+            );
+            return response;
+        } catch (error) {
+            console.error("Error uploading file:", error);
+            throw error;
+        }
+    }
+    
+    // Get file preview URL
+    getFilePreview(fileId) {
+        try {
+            return this.storage.getFilePreview(
+                config.bucketId,
+                fileId
+            );
+        } catch (error) {
+            console.error("Error getting file preview:", error);
+            throw error;
+        }
+    }
+    
+    async deleteFile(fileId) {
+        try {
+            return await this.storage.deleteFile(
+                config.bucketId,
+                fileId
+            );
+        } catch (error) {
+            console.error("Error deleting file:", error);
+            throw error;
+        }
+    }    
 }
 
 const hotelServices = new HotelServices();

@@ -52,7 +52,7 @@ class AuthService {
             const user = await this.account.get();
             return user;
         } catch (error) {
-            console.error("Error getting current user:", error);
+            console.error(`Error getting current user: ${error} and here's the message ${error.message}`);
             return null;
         }
     }
