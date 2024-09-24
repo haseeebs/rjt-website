@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { Logo } from '../assets/images';
-import authService from '../services/authService';
-import { login as authLogin } from '../store/authSlice';
+import { Logo } from '../../assets/images';
+import authService from '../../services/authService';
+import { login as authLogin } from '../../store/authSlice';
 import { useState } from 'react';
 
 const SignupPage = () => {
