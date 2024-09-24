@@ -1,11 +1,22 @@
-import { useState } from "react";
-import packageServices from "../services/packageService";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import packageServices from "../../services/packageService";
+import { useDispatch, useSelector } from "react-redux";
+import { setPackages } from "../../store/packageSlice";
+import PackageFormSkeleton from "../../components/skeleton/PackageFormSkeleton";
+import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import { parsePackages } from "../../utils/parsePackages";
 
 const PackageForm = () => {
-  // Form tabs state
+  const { id } = useParams();
+  const isEditing = Boolean(id);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { packages } = useSelector(store => store.package);
+
   const [activeTab, setActiveTab] = useState(0);
-  const { hotels } = useSelector(store => store.package);
+  const { hotels, loading } = useSelector(store => store.package);
   const tabs = ["Basic Info", "Pricing & Duration", "Package Details"];
 
   // Form state
@@ -26,9 +37,28 @@ const PackageForm = () => {
     exclusions: [{ description: "Visa Fees" }],
   });
 
+  useEffect(() => {
+    // If editing, fetch and populate form data
+    if (isEditing && id) {
+      const currentPackage = packages.find(pkg => pkg.$id === id);
+      if (currentPackage) {
+        setFormData({
+          type: currentPackage.type,
+          makkahHotelId: currentPackage.makkahHotelId,
+          madinahHotelId: currentPackage.madinahHotelId,
+          durations: currentPackage.durations,
+          inclusions: currentPackage.inclusions,
+          exclusions: currentPackage.exclusions,
+          image: currentPackage.image,
+          travelDate: currentPackage.travelDate
+        });
+      }
+    }
+  }, [isEditing, id, packages]);
+
   // Filter hotels by city
-  const makkahHotels = hotels.filter(hotel => hotel.city === "Makkah");
-  const madinahHotels = hotels.filter(hotel => hotel.city === "Madinah");
+  const makkahHotels = hotels.filter(hotel => hotel?.city === "Makkah");
+  const madinahHotels = hotels.filter(hotel => hotel?.city === "Madinah");
 
   // Selected hotels state for displaying details
   const [selectedMakkahHotel, setSelectedMakkahHotel] = useState(null);
@@ -138,16 +168,20 @@ const PackageForm = () => {
     try {
       const file = e.target.files[0];
       if (file) {
+        // Store current image as oldImage before updating
+        const oldImage = formData.image;
         const response = await packageServices.fileUpload(file);
         if (response) {
           setFormData(prev => ({
             ...prev,
-            image: response.$id // Storing the file ID
+            oldImage: oldImage,
+            image: response.$id
           }));
         }
       }
     } catch (error) {
       console.error("Error uploading image:", error);
+      toast.error("Failed to upload image");
     }
   };
 
@@ -166,41 +200,120 @@ const PackageForm = () => {
     }
   };
 
+  const handleUpdatePackage = async (packageId, updatedData) => {
+    // Create a promise-based toast for loading state
+    const loadingToast = toast.loading('Updating package...');
+
+    try {
+      if (updatedData.oldImage) {
+        const result = await packageServices.deleteFile(updatedData.oldImage);
+        if(result){
+          toast.success("Old image deleted successfully")
+        } else {
+          toast.error("Error deleting old file...")
+        }
+      }
+
+      // Format the data similar to how it's done in PackageForm
+      const formattedData = {
+        type: updatedData.type,
+        makkahHotelId: updatedData.makkahHotelId,
+        madinahHotelId: updatedData.madinahHotelId,
+        durations: updatedData.durations.map(duration => JSON.stringify(duration)),
+        inclusions: updatedData.inclusions.map(inclusion =>
+          JSON.stringify({ description: inclusion })),
+        exclusions: updatedData.exclusions.map(exclusion =>
+          JSON.stringify({ description: exclusion })),
+        image: updatedData.image,
+        travelDate: updatedData.travelDate
+      };
+
+      await packageServices.updatePackage(packageId, formattedData);
+      
+      // Fetch updated packages and update Redux store
+      const packagesResponse = await packageServices.fetchPackages();
+      const parsedPackages = parsePackages(packagesResponse);
+      dispatch(setPackages(parsedPackages));
+
+      // Dismiss loading toast and show success
+      toast.dismiss(loadingToast);
+      toast.success('Package updated successfully', {
+        duration: 3000,
+        position: 'top-right'
+      });
+      navigate('/packages');
+    } catch (error) {
+      console.error('Error updating package:', error);
+      // Dismiss loading toast and show error
+      toast.dismiss(loadingToast);
+      toast.error(`Failed to update package: ${error.message}`, {
+        duration: 4000,
+        position: 'top-right'
+      });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (validateForm()) {
+      let loadingToast;
       try {
-        const packageData = {
-          type: formData.type,
-          makkahHotelId: formData.makkahHotelId,
-          madinahHotelId: formData.madinahHotelId,
-          durations: formData.durations,
-          inclusions: formData.inclusions,
-          exclusions: formData.exclusions,
-          image: formData.image,
-          travelDate: formData.travelDate
-        };
+        if (isEditing) {
+          await handleUpdatePackage(id, formData);
+        } else {
+          // Show loading toast before the async operation
+          loadingToast = toast.loading('Creating package...');
 
-        if (!packageData.type || !packageData.makkahHotelId || !packageData.madinahHotelId) {
-          throw new Error("Required fields are missing");
-        }
+          const formattedData = {
+            type: formData.type,
+            makkahHotelId: formData.makkahHotelId,
+            madinahHotelId: formData.madinahHotelId,
+            durations: formData.durations.map(duration => JSON.stringify(duration)),
+            inclusions: formData.inclusions.map(inclusion => JSON.stringify({ description: inclusion })),
+            exclusions: formData.exclusions.map(exclusion => JSON.stringify({ description: exclusion })),
+            image: formData.image,
+            travelDate: formData.travelDate
+          };
 
-        console.log("Formatted package data:", packageData);
-        const response = await packageServices.addPackage(packageData);
+          await packageServices.addPackage(formattedData);
 
-        if (response) {
-          console.log(`Ye response aaya hai package create karne ke baad ${response}`);
-          // dispatch(setPackages(response))
+          const packagesResponse = await packageServices.fetchPackages();
+          const parsedPackages = parsePackages(packagesResponse);
+          dispatch(setPackages(parsedPackages));
+
+          // Dismiss loading toast and show success
+          toast.dismiss(loadingToast);
+          toast.success('Package created successfully');
+
+          // Optional: Reset form or navigate
+          navigate('/packages');
         }
       } catch (error) {
-        console.error("Error creating package:", error);
-        alert(`Failed to create package: ${error.message}`);
+        // Always check if loadingToast exists before dismissing
+        if (loadingToast) {
+          toast.dismiss(loadingToast);
+        }
+
+        console.error("Error creating/updating package:", error);
+
+        // More detailed error handling
+        const errorMessage = error.response?.message || error.message || 'An unexpected error occurred';
+
+        toast.error(`Failed to ${isEditing ? 'update' : 'create'} package: ${errorMessage}`, {
+          duration: 4000,
+          position: 'top-right'
+        });
       }
     }
   };
 
+  if (loading || !hotels) {
+    return <PackageFormSkeleton />
+  }
+
   return (
-    <div className="mx-auto max-w-7xl p-6 bg-lime-50">
+    <div className="mx-auto max-w-7xl p-6">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="rounded-3xl border border-lime-200 bg-white shadow-lg">
           <div className="border-b border-lime-100 p-4">
@@ -243,7 +356,7 @@ const PackageForm = () => {
                   {formData.image && (
                     <div className="mt-2">
                       <img
-                        src={packageServices.getFilePreview(formData.image)}
+                        src={packageServices.getOptimizedFilePreview(formData.image)}
                         alt="Package preview"
                         className="w-40 h-40 object-cover rounded-lg"
                       />
@@ -570,7 +683,7 @@ const PackageForm = () => {
                   type="submit"
                   className="px-4 py-2 rounded-xl bg-lime-500 text-white hover:bg-lime-600"
                 >
-                  Create Package
+                  {isEditing ? "Update Package" : "Create Package"}
                 </button>
               )}
             </div>
