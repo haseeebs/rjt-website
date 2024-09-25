@@ -1,8 +1,9 @@
 import { useSelector } from 'react-redux';
 import Hero from '../components/Hero';
-import Packages from '../components/Packages';
-import WhyChooseUs from '../components/WhyChooseUs';
+import UniquePackages from '../components/UniquePackages';
 import HeroSkeleton from '../components/skeleton/HeroSkeleton';
+import ReelCarousel from './ReelCarousel';
+import CTA from '../components/CTA';
 
 const HomePage = () => {
     const isLoading = useSelector((state) => state.package.loading);
@@ -12,10 +13,11 @@ const HomePage = () => {
     }
 
     return (
-        <div>
+        <div className='-mt-20'>
             <Hero />
-            <Packages />
-            <WhyChooseUs />
+            <UniquePackages />
+            <ReelCarousel />
+            <CTA />
         </div>
     );
 };
