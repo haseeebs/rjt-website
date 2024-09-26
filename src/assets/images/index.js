@@ -1,4 +1,3 @@
-import MadinahImage from './Madinah-Photo.jpg';
-import Logo from './RJT Logo.png'
-
-export { MadinahImage, Logo };
+import Logo from './RJT-logo.png'
+import Icon from './Logo-icon.png'
+export { Logo, Icon };
