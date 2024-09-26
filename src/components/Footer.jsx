@@ -1,12 +1,12 @@
+import { useState } from 'react';
+import { XMarkIcon } from '@heroicons/react/20/solid';
 import { Logo } from "../assets/images"
 
 const navigation = {
     solutions: [
         { name: 'Home', href: '/' },
-        { name: 'Umrah Packages', href: '/umrah-packages' },
+        { name: 'Umrah Packages', href: '/packages' },
         { name: 'Customize Package', href: '/customize-package' },
-        { name: 'About Us', href: '/about' },
-        { name: 'Contact Us', href: '/contact' },
     ],
     services: [
         { name: 'Economy Umrah Package', href: '/packages/economy' },
@@ -47,75 +47,112 @@ const navigation = {
 }
 
 const Footer = () => {
+    const [selectedService, setSelectedService] = useState(null);
+
+    const handleServiceClick = (service) => {
+        // Prevent default navigation
+        event.preventDefault();
+        setSelectedService(service);
+    };
+
+    const handleCloseBanner = () => {
+        setSelectedService(null);
+    };
+
     return (
-        <footer aria-labelledby="footer-heading" className="bg-lime-500">
-            <h2 id="footer-heading" className="sr-only">
-                Footer
-            </h2>
-            <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:py-20">
-                <div className="xl:grid xl:grid-cols-2 xl:gap-8">
-                    {/* section one */}
-                    <div className="space-y-8 max-w-lg">
-                        <img
-                            alt="Company name"
-                            src={Logo}
-                            className="h-10 w-auto"
-                        />
-                        <p className="text-sm leading-6 text-white">
-                            Your trusted travel partner since 2014. Led by an Islamic scholar who speaks Arabic and English. We have helped 1000+ happy travelers plan their holy journeys. 10 years of making your sacred trips comfortable and worry-free.
-                        </p>
-                        <div className="space-y-3">
-                            <p className="text-sm leading-6 text-white hover:text-lime-900 transition-colors duration-300 cursor-default">
-                                <span className="font-bold text-white">Write to us:</span> Riyazuljannahtour@gmail.com
+        <>
+            <footer aria-labelledby="footer-heading" className="bg-lime-400">
+                <h2 id="footer-heading" className="sr-only">
+                    Footer
+                </h2>
+                <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:py-20">
+                    <div className="xl:grid xl:grid-cols-2 xl:gap-8">
+                        {/* section one */}
+                        <div className="space-y-8 max-w-lg">
+                            <img
+                                alt="Company name"
+                                src={Logo}
+                                className="h-10 w-auto"
+                            />
+                            <p className="text-sm leading-6 text-lime-800">
+                                Your trusted travel partner since 2014. Led by an Islamic scholar who speaks Arabic and English. We have helped 1000+ happy travelers plan their holy journeys. 10 years of making your sacred trips comfortable and worry-free.
                             </p>
-                            <p className="text-sm leading-6 text-white hover:text-lime-900 transition-colors duration-300 cursor-default">
-                                <span className="font-bold text-white">Call us:</span> +91 9179664894
-                            </p>
-                        </div>
-
-                        <div className="flex space-x-6">
-                            {navigation.social.map((item) => (
-                                <a key={item.name} href={item.href} target={item.target} className="text-white hover:text-lime-900 transition-colors duration-300">
-                                    <span className="sr-only">{item.name}</span>
-                                    <item.icon aria-hidden="true" className="h-6 w-6" />
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-
-
-                    {/* section two */}
-                    <div className="mt-16 xl:mt-0 grid grid-cols-1">
-                        <div className="md:grid md:grid-cols-2">
-                            <div>
-                                <h3 className="text-base font-bold leading-6 text-white">Quick Links</h3>
-                                <ul role="list" className="mt-6 space-y-4">
-                                    {navigation.solutions.map((item) => (
-                                        <li key={item.name}>
-                                            <a href={item.href} className="text-sm leading-6 text-white hover:text-lime-900 transition-colors duration-300">
-                                                {item.name}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
+                            <div className="space-y-3">
+                                <p className="text-sm leading-6 text-lime-800 hover:text-white transition-colors duration-300 cursor-default">
+                                    <span className="font-bold text-lime-800">Write to us:</span> Riyazuljannahtour@gmail.com
+                                </p>
+                                <p className="text-sm leading-6 text-lime-800 hover:text-white transition-colors duration-300 cursor-default">
+                                    <span className="font-bold text-lime-800">Call us:</span> +91 9179664894
+                                </p>
                             </div>
-                            <div className="mt-10 md:mt-0">
-                                <h3 className="text-base font-bold leading-6 text-white">Services</h3>
-                                <ul role="list" className="mt-6 space-y-4">
-                                    {navigation.services.map((item) => (
-                                        <li key={item.name}>
-                                            <a href={item.href} className="text-sm leading-6 text-white hover:text-lime-900 transition-colors duration-300">
-                                                {item.name}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
+
+                            <div className="flex space-x-6">
+                                {navigation.social.map((item) => (
+                                    <a key={item.name} href={item.href} target={item.target} className="text-lime-800 hover:text-white transition-colors duration-300">
+                                        <span className="sr-only">{item.name}</span>
+                                        <item.icon aria-hidden="true" className="h-6 w-6" />
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* section two */}
+                        <div className="mt-16 xl:mt-0 grid grid-cols-1">
+                            <div className="md:grid md:grid-cols-2">
+                                <div>
+                                    <h3 className="text-base font-bold leading-6 text-lime-800">Quick Links</h3>
+                                    <ul role="list" className="mt-6 space-y-4">
+                                        {navigation.solutions.map((item) => (
+                                            <li key={item.name}>
+                                                <a href={item.href} className="text-sm leading-6 text-lime-800 hover:text-white transition-colors duration-300">
+                                                    {item.name}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className="mt-10 md:mt-0">
+                                    <h3 className="text-base font-bold leading-6 text-lime-800">Services</h3>
+                                    <ul role="list" className="mt-6 space-y-4">
+                                        {navigation.services.map((item) => (
+                                            <li key={item.name}>
+                                                <a 
+                                                    href={item.href} 
+                                                    onClick={(event) => handleServiceClick(item)} 
+                                                    className="text-sm leading-6 text-lime-800 hover:text-white transition-colors duration-300"
+                                                >
+                                                    {item.name}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
+
+            {/* Service Banner */}
+            {selectedService && (
+                <div className="pointer-events-none fixed inset-x-0 bottom-0 sm:flex sm:justify-center sm:px-6 sm:pb-5 lg:px-8 z-50">
+                    <div className="pointer-events-auto flex items-center justify-between gap-x-6 bg-lime-600 px-6 py-2.5 sm:rounded-xl sm:py-3 sm:pl-4 sm:pr-3.5">
+                        <p className="text-sm leading-6 text-white">
+                            <strong className="font-semibold">{selectedService.name}</strong>
+                            <span className="ml-2">Detailed information about this package will be available soon.</span>
+                        </p>
+                        <button 
+                            type="button" 
+                            onClick={handleCloseBanner} 
+                            className="-m-1.5 flex-none p-1.5"
+                        >
+                            <span className="sr-only">Dismiss</span>
+                            <XMarkIcon aria-hidden="true" className="h-5 w-5 text-white" />
+                        </button>
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 
