@@ -15,28 +15,8 @@ class HotelServices {
     }
 
     // Add a new hotel
-    async addHotel({
-        name,
-        city,
-        category,
-        distance,
-        walkingTime,
-        hasShuttle,
-        transport,
-        images
-    }) {
+    async addHotel(hotelData) {
         try {
-            const hotelData = {
-                name,
-                city,
-                category,
-                distance,
-                walkingTime,
-                hasShuttle,
-                transport,
-                images: images || []
-            };
-
             const response = await this.databases.createDocument(
                 config.databaseId,
                 config.hotelCollectionId,
@@ -57,6 +37,18 @@ class HotelServices {
                 config.databaseId,
                 config.hotelCollectionId
             );
+            // return response.documents.map(hotel => ({
+            //     $id: hotel.$id,
+            //     name: hotel.name,
+            //     city: hotel.city,
+            //     category: hotel.category,
+            //     distance: hotel.distance,
+            //     walkingTime: hotel.walkingTime,
+            //     hasShuttle: hotel.hasShuttle === '1',
+            //     transport: hotel.transport,
+            //     images: hotel.images ?? []
+            // }));
+
             return response;
         } catch (error) {
             console.error("Error fetching hotels:", error);
@@ -109,7 +101,7 @@ class HotelServices {
             throw error;
         }
     }
-    
+
     // Get file preview URL
     getFilePreview(fileId) {
         try {
@@ -122,7 +114,7 @@ class HotelServices {
             throw error;
         }
     }
-    
+
     async deleteFile(fileId) {
         try {
             return await this.storage.deleteFile(
@@ -133,7 +125,7 @@ class HotelServices {
             console.error("Error deleting file:", error);
             throw error;
         }
-    }    
+    }
 }
 
 const hotelServices = new HotelServices();
