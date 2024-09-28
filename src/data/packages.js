@@ -1,11 +1,10 @@
+import { MadinahImage2, MadinahImage3, MadinahImage4 } from "../assets/images";
 
-// import { MadinahImage2, MadinahImage3, MadinahImage4 } from "../assets/images";
-
-// const packageImages = {
-//     Budget: MadinahImage4,
-//     Deluxe: MadinahImage2,
-//     "5-Star": MadinahImage3,
-// };
+const packageImages = {
+    Budget: MadinahImage4,
+    Deluxe: MadinahImage2,
+    "5-Star": MadinahImage3,
+};
 const packages = [
     {
         id: 1,
@@ -13,7 +12,7 @@ const packages = [
         makkahHotelId: 1,
         madinahHotelId: 6,
         date: "10th March 2024",
-        // image: packageImages.Budget,
+        image: packageImages.Budget,
         durations: {
             15: {
                 basePrice: 65000,
@@ -42,7 +41,7 @@ const packages = [
         makkahHotelId: 2,
         madinahHotelId: 7,
         // date: "10th March 2024",
-        // image: packageImages.Deluxe,
+        image: packageImages.Deluxe,
         durations: {
             15: {
                 basePrice: 75000,
@@ -73,7 +72,7 @@ const packages = [
         makkahHotelId: 3,
         madinahHotelId: 8,
         // date: "20th April 2024",
-        // image: packageImages["5-Star"],
+        image: packageImages["5-Star"],
         durations: {
             15: {
                 basePrice: 115000,

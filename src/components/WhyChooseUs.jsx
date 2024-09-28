@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { HeartIcon, UsersIcon, MapIcon, ShieldIcon, ChevronRightIcon } from 'lucide-react';
 
-const SpiritualTravelFeatures = () => {
+const WhyChooseUs = () => {
   const [activeFeature, setActiveFeature] = useState(0);
 
   const features = [
@@ -23,10 +23,10 @@ const SpiritualTravelFeatures = () => {
   ];
 
   return (
-    <section className="py-32 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
+    <section className="py-0 pt-12 lg:py-32 px-4 sm:px-6 lg:px-8 flex items-center">
       <div className="max-w-7xl mx-auto w-full">
         <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-lime-600 mb-4">
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-lime-600 mb-4">
             Why Choose Our Packages?
           </h2>
           <p className="text-xl text-lime-500 max-w-2xl mx-auto">
@@ -95,4 +95,4 @@ const SpiritualTravelFeatures = () => {
   );
 };
 
-export default SpiritualTravelFeatures;
+export default WhyChooseUs;

@@ -6,20 +6,36 @@ import { ChevronDown } from "lucide-react";
 const PackageComparison = () => {
   const navigate = useNavigate();
   const { packages, hotels } = useSelector((store) => store.package);
-
   const [selectedDays, setSelectedDays] = useState(15);
   const [selectedRoomType, setSelectedRoomType] = useState("quad");
   const [availableDurations, setAvailableDurations] = useState([]);
 
   const roomTypes = [
-    { value: "quad", label: "Quint/Quad Sharing" },
-    { value: "triple", label: "Triple Sharing" },
-    { value: "double", label: "Double Sharing" }
+    { value: "quad", label: "4-5 People Sharing" },
+    { value: "triple", label: "3 People Sharing" },
+    { value: "double", label: "2 People Sharing" }
   ];
 
   const handlePackageClick = (packageId) => {
     navigate(`/packages/${packageId}`);
   };
+
+  // Filter and sort packages based on selected duration and room type
+  const filteredAndSortedPackages = packages
+    ?.filter((pkg) =>
+      pkg.durations.some((duration) => duration.days === selectedDays)
+    )
+    .sort((a, b) => {
+      const getPriceForA = a.durations
+        .find((duration) => duration.days === selectedDays)
+        ?.sharedRoomPrices[selectedRoomType] || Infinity;
+
+      const getPriceForB = b.durations
+        .find((duration) => duration.days === selectedDays)
+        ?.sharedRoomPrices[selectedRoomType] || Infinity;
+
+      return getPriceForA - getPriceForB;
+    });
 
   useEffect(() => {
     const durations = [
@@ -130,7 +146,7 @@ const PackageComparison = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-lime-200">
-              {packages.map((pkg) => {
+              {filteredAndSortedPackages.map((pkg) => {
                 const matchingPackage = pkg.durations.find(
                   (duration) => duration.days === selectedDays
                 );
@@ -148,7 +164,7 @@ const PackageComparison = () => {
                       {pkg.type}
                     </td>
                     <td className="px-6 py-4 text-lg font-semibold text-lime-600">
-                      ₹{matchingPackage?.sharedRoomPrices[selectedRoomType] || "N/A"}
+                      ₹{matchingPackage?.sharedRoomPrices[selectedRoomType] || "N/A"} {/*Yahan par aaraha hai error */}
                     </td>
                     <td className="px-6 py-4">
                       <div className="space-y-1">

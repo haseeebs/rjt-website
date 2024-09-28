@@ -1,5 +1,6 @@
 import { X, Star, MapPin, Clock, Bus, ChevronRight, ChevronLeft } from "lucide-react";
 import { useState } from "react";
+import packageServices from "../services/packageService";
 
 const HotelCard = ({ hotel }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -42,7 +43,7 @@ const HotelCard = ({ hotel }) => {
                     onClick={() => openImageModal(hotel)}
                 >
                     <img
-                        src={hotel.images[0]}
+                        src={hotel.images && packageServices.getFilePreview(hotel.images[0])}
                         alt={hotel.name}
                         className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                     />
@@ -85,7 +86,7 @@ const HotelCard = ({ hotel }) => {
 
                         <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
                             <img
-                                src={selectedHotel.images[currentImageIndex]}
+                                src={packageServices.getFilePreview(selectedHotel.images[currentImageIndex])}
                                 alt={`${selectedHotel.name} - Image ${currentImageIndex + 1}`}
                                 className="w-full h-full object-contain"
                             />
