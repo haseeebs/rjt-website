@@ -3,26 +3,29 @@ import { createBrowserRouter } from 'react-router-dom';
 
 const HomePage = lazy(() => import('../pages/HomePage'));
 const PackageDetail = lazy(() => import('../pages/PackageDetail'));
-const CustomizePackage = lazy(() => import('../pages/CustomizePackage'));
-const ExtraDataFormPage = lazy(() => import('../pages/ExtraDataFormPage'));
 const UmrahPackage = lazy(() => import('../pages/Packages'));
-const PackageForm = lazy(() => import('../pages/PackageForm'));
-const HotelForm = lazy(() => import('../pages/HotelForm'));
-const LoginPage = lazy(() => import('../pages/LoginPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
-const HotelList = lazy(() => import('../pages/HotelList'));
-const ImageList = lazy(() => import('../pages/ImageList'));
+
+const ExtraDataFormPage = lazy(() => import('../pages/Admin/ExtraDataFormPage'));
+const PackageForm = lazy(() => import('../pages/Admin/PackageForm'));
+const HotelForm = lazy(() => import('../pages/Admin/HotelForm'));
+const LoginPage = lazy(() => import('../pages/Admin/LoginPage'));
+const HotelList = lazy(() => import('../pages/Admin/HotelList'));
+const ImageList = lazy(() => import('../pages/Admin/ImageList'));
+import AdminNotifications from '../pages/Admin/AdminNotifications';
 
 // Imports for core components
 import Layout from '../pages/Layout';
 import PrivateRoute from '../pages/PrivateRoute';
 import LazyWrapper from '../components/LoadingFallback';
+
 import UmrahPackageSkeleton from '../components/skeleton/UmrahPackageSkeleton';
 import HeroSkeleton from '../components/skeleton/HeroSkeleton';
 import UmrahPackageCustomizationSkeleton from '../components/skeleton/UmrahPackageCustomizationSkeleton';
 import HajjUmrahPackageSkeleton from '../components/skeleton/HajjUmrahPackageSkeleton';
-import CustomizePackageRequests from '../pages/CustomizePackageRequests';
-import AdminNotifications from '../pages/AdminNotifications';
+
+const CustomizePackage = lazy(() => import('../pages/Customize/CustomizePackage'));
+import CustomizePackageRequests from '../pages/Customize/CustomizePackageRequests';
 
 const router = createBrowserRouter([
     {

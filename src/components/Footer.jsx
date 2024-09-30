@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { XMarkIcon } from '@heroicons/react/20/solid';
+import { X } from 'lucide-react';
 import { Logo } from "../assets/images"
 
 const navigation = {
@@ -147,7 +147,7 @@ const Footer = () => {
                             className="-m-1.5 flex-none p-1.5"
                         >
                             <span className="sr-only">Dismiss</span>
-                            <XMarkIcon aria-hidden="true" className="h-5 w-5 text-white" />
+                            <X aria-hidden="true" className="h-5 w-5 text-white" />
                         </button>
                     </div>
                 </div>
