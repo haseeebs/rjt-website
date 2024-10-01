@@ -1,5 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 
 import "./index.css";
@@ -9,9 +9,8 @@ import store from "./store/store.js";
 import AuthWrapper from "./AuthWrapper";
 import { Toaster } from "react-hot-toast";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
     <Provider store={store}>
       <AuthWrapper>
         <RouterProvider router={router} />
@@ -21,5 +20,5 @@ root.render(
         />
       </AuthWrapper>
     </Provider>
-  </React.StrictMode>
-);
+  </StrictMode>,
+)

@@ -1,60 +1,68 @@
-import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-
-const HomePage = lazy(() => import('../pages/HomePage'));
-const PackageDetail = lazy(() => import('../pages/PackageDetail'));
-const UmrahPackage = lazy(() => import('../pages/Packages'));
-const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
-
-const ExtraDataFormPage = lazy(() => import('../pages/Admin/ExtraDataFormPage'));
-const PackageForm = lazy(() => import('../pages/Admin/PackageForm'));
-const HotelForm = lazy(() => import('../pages/Admin/HotelForm'));
-const LoginPage = lazy(() => import('../pages/Admin/LoginPage'));
-const HotelList = lazy(() => import('../pages/Admin/HotelList'));
-const ImageList = lazy(() => import('../pages/Admin/ImageList'));
-import AdminNotifications from '../pages/Admin/AdminNotifications';
-
-// Imports for core components
-import Layout from '../pages/Layout';
-import PrivateRoute from '../pages/PrivateRoute';
-import LazyWrapper from '../components/LoadingFallback';
-
-import UmrahPackageSkeleton from '../components/skeleton/UmrahPackageSkeleton';
+import { Suspense, lazy } from 'react';
 import HeroSkeleton from '../components/skeleton/HeroSkeleton';
+import UmrahPackageSkeleton from '../components/skeleton/UmrahPackageSkeleton';
 import UmrahPackageCustomizationSkeleton from '../components/skeleton/UmrahPackageCustomizationSkeleton';
 import HajjUmrahPackageSkeleton from '../components/skeleton/HajjUmrahPackageSkeleton';
+import NotFoundPage from '../pages/NotFoundPage';
+import LazyWrapper from '../components/LazyWrapper';
+import PrivateRoute from '../pages/PrivateRoute';
 
+// Lazy imports
+const Layout = lazy(() => import('../pages/Layout'));
+const HomePage = lazy(() => import('../pages/HomePage'));
+const Packages = lazy(() => import('../pages/Packages'));
 const CustomizePackage = lazy(() => import('../pages/Customize/CustomizePackage'));
-import CustomizePackageRequests from '../pages/Customize/CustomizePackageRequests';
+const PackageDetail = lazy(() => import('../pages/PackageDetail'));
+const LoginPage = lazy(() => import('../pages/Admin/LoginPage'));
+const PackageForm = lazy(() => import('../pages/Admin/PackageForm'));
+const HotelForm = lazy(() => import('../pages/Admin/HotelForm'));
+const HotelList = lazy(() => import('../pages/Admin/HotelList'));
+const ExtraDataFormPage = lazy(() => import('../pages/Admin/ExtraDataFormPage'));
+const ImageList = lazy(() => import('../pages/Admin/ImageList'));
+const AdminNotifications = lazy(() => import('../pages/Admin/AdminNotifications'));
+const CustomizePackageRequests = lazy(() => import('../pages/Customize/CustomizePackageRequests'));
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <Layout />,
+        element: (
+            <Suspense fallback={<HeroSkeleton />}>
+                <Layout />
+            </Suspense>
+        ),
         children: [
             {
                 index: true,
-                element: (<Suspense fallback={<HeroSkeleton />}>
-                    <HomePage />
-                </Suspense>)
+                element: (
+                    <Suspense fallback={<HeroSkeleton />}>
+                        <HomePage />
+                    </Suspense>
+                ),
             },
             {
                 path: 'packages',
-                element: (<Suspense fallback={<UmrahPackageSkeleton />}>
-                    <UmrahPackage />
-                </Suspense>)
+                element: (
+                    <Suspense fallback={<UmrahPackageSkeleton />}>
+                        <Packages />
+                    </Suspense>
+                ),
             },
             {
                 path: 'customize-package',
-                element: (<Suspense fallback={<UmrahPackageCustomizationSkeleton />}>
-                    <CustomizePackage />
-                </Suspense>)
+                element: (
+                    <Suspense fallback={<UmrahPackageCustomizationSkeleton />}>
+                        <CustomizePackage />
+                    </Suspense>
+                ),
             },
             {
                 path: 'packages/:id',
-                element: (<Suspense fallback={<HajjUmrahPackageSkeleton />}>
-                    <PackageDetail />
-                </Suspense>)
+                element: (
+                    <Suspense fallback={<HajjUmrahPackageSkeleton />}>
+                        <PackageDetail />
+                    </Suspense>
+                ),
             },
             {
                 path: 'login',
