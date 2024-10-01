@@ -4,6 +4,7 @@ import { setHotels } from "../../store/packageSlice";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
+import packageServices from "../../services/packageService";
 
 const HotelForm = () => {
     const { id } = useParams();
@@ -327,7 +328,7 @@ const HotelForm = () => {
                                         {imageId && (
                                             <div className="w-20 h-20">
                                                 <img
-                                                    src={hotelServices.getOptimizedFilePreview(imageId)}
+                                                    src={packageServices.getOptimizedFilePreview(imageId)}
                                                     alt={`Hotel image ${index + 1}`}
                                                     className="w-full h-full object-cover rounded-lg"
                                                 />
@@ -344,10 +345,21 @@ const HotelForm = () => {
                                 ))}
                                 <button
                                     type="button"
-                                    onClick={() => setHotelData(prev => ({
-                                        ...prev,
-                                        images: [...prev.images, ""]
-                                    }))}
+                                    onClick={() => {
+                                        // Only add a new image input if the last input is not empty
+                                        const prevImages = hotelData.images;
+                                        const lastImage = prevImages[prevImages.length - 1];
+
+                                        if (lastImage === undefined || lastImage.trim() !== '') {
+                                            setHotelData(prev => ({
+                                                ...prev,
+                                                images: [...prev.images, ""]
+                                            }));
+                                        } else {
+                                            // Optional: Show a toast or give user feedback
+                                            toast.error('Please select an image before adding another');
+                                        }
+                                    }}
                                     className="w-full rounded-xl border border-lime-400 text-lime-700 hover:bg-lime-50 py-2"
                                 >
                                     Add Image

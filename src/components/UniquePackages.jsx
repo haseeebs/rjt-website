@@ -72,12 +72,14 @@ const UniquePackages = () => {
                     <div className="grid md:grid-cols-2 gap-8">
                         <OfferCard
                             title="Flexible Budget to Luxury Packages"
-                            description="Hamare paas har budget ke liye options hain! Saste packages se lekar luxury 5-star packages tak, apni zarurat aur pasand ke mutabiq select karein."
+                            // description="Hamare paas har budget ke liye options hain! Saste packages se lekar luxury 5-star packages tak, apni zarurat aur pasand ke mutabiq select karein."
+                            description="We have options for every budget! From affordable packages to luxurious 5-star options, choose according to your needs and preferences."
                             icon={<Wallet className="w-6 h-6 text-lime-600" />}
                         />
                         <OfferCard
                             title="Customizable Land Packages"
-                            description="Apni specific zaruratein poori karein! Flight aur visa khud manage karein, aur hum aap ke liye hotel, stay aur khane ka intezam karenge."
+                            // description="Apni specific zaruratein poori karein! Flight aur visa khud manage karein, aur hum aap ke liye hotel, stay aur khane ka intezam karenge."
+                            description="Fulfill your specific needs! Manage your flight and visa on your own, and we’ll take care of hotel accommodations, stay, and meals for you."
                             icon={<Settings className="w-6 h-6 text-lime-600" />}
                         />
                     </div>

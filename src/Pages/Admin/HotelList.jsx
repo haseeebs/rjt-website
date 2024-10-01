@@ -18,8 +18,8 @@ const HotelList = () => {
         const isHotelInUse = packages.some(pkg => pkg.makkahHotelId === hotelId || pkg.madinahHotelId === hotelId);
 
         if (isHotelInUse) {
-          toast.error('Cannot delete hotel. It is associated with a package.');
-          return;
+            toast.error('Cannot delete hotel. It is associated with a package.');
+            return;
         }
         // Confirm user intent to delete the hotel
         if (window.confirm('Are you sure you want to delete this hotel?')) {
@@ -31,7 +31,10 @@ const HotelList = () => {
                     // Delete all associated images from storage, if any
                     if (hotel?.images?.length > 0) {
                         await Promise.all(
-                            hotel.images.map(imgId => hotelServices.deleteFile(imgId))
+                            // Filter out empty or invalid image IDs before deletion
+                            hotel.images
+                                .filter(imgId => imgId && imgId.trim() !== '')
+                                .map(imgId => hotelServices.deleteFile(imgId))
                         );
                     }
 

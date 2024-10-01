@@ -391,7 +391,7 @@ const PackageDetail = () => {
           </div>
           <button className="w-full sm:w-auto bg-lime-500 hover:bg-lime-600 text-white px-8 py-4 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg hover:shadow-xl">
             <Phone className="w-5 h-5 mr-2" />
-            <a href={getWhatsappUrl()} target="_blank" rel="noopener noreferrer">WhatsApp par Puchho</a>
+            <a href={getWhatsappUrl()} target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
           </button>
         </div>
       </div>
