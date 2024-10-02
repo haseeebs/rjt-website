@@ -1,5 +1,3 @@
-import React from 'react';
-
 const UmrahPackageCustomizationSkeleton = () => {
   return (
     <div className="min-h-screen bg-lime-50">

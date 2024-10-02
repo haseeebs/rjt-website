@@ -1,4 +1,4 @@
-const UmrahPackagesSkeleton = () => {
+const UmrahPackageSkeleton = () => {
   return (
     <div className="bg-lime-50">
       <div className="min-h-screen mx-auto max-w-7xl py-0 lg:py-10 bg-lime-50">
@@ -61,4 +61,4 @@ const UmrahPackagesSkeleton = () => {
   );
 };
 
-export default UmrahPackagesSkeleton;
+export default UmrahPackageSkeleton;
