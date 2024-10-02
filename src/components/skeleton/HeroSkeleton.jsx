@@ -1,6 +1,6 @@
 const HeroSkeleton = () => {
     return (
-        <div className="relative w-full h-screen -mt-20">
+        <div className="relative w-full h-screen">
             {/* Hero Background Skeleton */}
             <div className="absolute inset-0 z-0 bg-lime-200 animate-pulse" />
 

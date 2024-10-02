@@ -1,12 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import config from '../config/config';
 import useEmblaCarousel from 'embla-carousel-react';
-import {
-  PrevButton,
-  NextButton,
-  usePrevNextButtons
-} from '../components/EmblaCarouselArrowButtons';
+import { PrevButton, NextButton, usePrevNextButtons } from '../components/EmblaCarouselArrowButtons';
 import { Play, Image as ImageIcon, ZoomIn, CircleCheck } from 'lucide-react';
 import '../css/embla.css';
 import MediaZoomModal from '../components/MediaZoomModal';
@@ -21,40 +17,24 @@ const ReelCarousel = () => {
     pagination: null,
   });
 
-  // Modal State
   const [zoomModal, setZoomModal] = useState({
     isOpen: false,
     mediaType: null,
     mediaUrl: null,
-    caption: null
+    caption: null,
   });
 
-  const [videoEmblaRef, videoEmblaApi] = useEmblaCarousel({
-    loop: true,
-    slidesToScroll: 1,
-  });
-  const [imageEmblaRef, imageEmblaApi] = useEmblaCarousel({
-    loop: true,
-    slidesToScroll: 1,
-  });
+  const [videoEmblaRef, videoEmblaApi] = useEmblaCarousel({ loop: true, slidesToScroll: 1 });
+  const [imageEmblaRef, imageEmblaApi] = useEmblaCarousel({ loop: true, slidesToScroll: 1 });
 
-  const {
-    prevBtnDisabled: videoPrevDisabled,
-    nextBtnDisabled: videoNextDisabled,
-    onPrevButtonClick: onVideoPrevClick,
-    onNextButtonClick: onVideoNextClick
-  } = usePrevNextButtons(videoEmblaApi);
+  const { prevBtnDisabled: videoPrevDisabled, nextBtnDisabled: videoNextDisabled, onPrevButtonClick: onVideoPrevClick, onNextButtonClick: onVideoNextClick } =
+    usePrevNextButtons(videoEmblaApi);
 
-  const {
-    prevBtnDisabled: imagePrevDisabled,
-    nextBtnDisabled: imageNextDisabled,
-    onPrevButtonClick: onImagePrevClick,
-    onNextButtonClick: onImageNextClick
-  } = usePrevNextButtons(imageEmblaApi);
+  const { prevBtnDisabled: imagePrevDisabled, nextBtnDisabled: imageNextDisabled, onPrevButtonClick: onImagePrevClick, onNextButtonClick: onImageNextClick } =
+    usePrevNextButtons(imageEmblaApi);
 
   const fetchInstagramMedia = useCallback(async (nextCursor = null) => {
     setMedia((prev) => ({ ...prev, loading: true }));
-
     try {
       const params = {
         access_token: config.instagramAccessToken,
@@ -62,9 +42,7 @@ const ReelCarousel = () => {
         limit: 20,
       };
 
-      if (nextCursor) {
-        params.after = nextCursor;
-      }
+      if (nextCursor) params.after = nextCursor
 
       const response = await axios.get('https://graph.instagram.com/me/media', { params });
       const data = response.data.data;
@@ -74,21 +52,20 @@ const ReelCarousel = () => {
       const carouselAlbumData = data.filter((item) => item.media_type === 'CAROUSEL_ALBUM');
 
       setVideos((prev) => (nextCursor ? [...prev, ...videosData] : videosData));
-      setCarouselAlbum((prev) =>
-        nextCursor ? [...prev, ...carouselAlbumData] : carouselAlbumData
-      );
+      setCarouselAlbum((prev) => (nextCursor ? [...prev, ...carouselAlbumData] : carouselAlbumData));
 
       setMedia((prev) => ({
+        ...prev,
         items: nextCursor ? [...prev.items, ...data] : data,
         loading: false,
-        error: null,
         pagination: response.data.paging,
       }));
     } catch (error) {
+      console.error('Fetch Error:', error);
       setMedia((prev) => ({
         ...prev,
         loading: false,
-        error: error.message || 'Failed to fetch media.',
+        error: error.response?.data?.error?.message || 'Failed to fetch media',
       }));
     }
   }, []);
@@ -105,32 +82,16 @@ const ReelCarousel = () => {
   };
 
   const openZoomModal = (mediaType, mediaUrl, caption) => {
-    setZoomModal({
-      isOpen: true,
-      mediaType,
-      mediaUrl,
-      caption
-    });
+    setZoomModal({ isOpen: true, mediaType, mediaUrl, caption });
   };
 
   const closeZoomModal = () => {
-    setZoomModal({
-      isOpen: false,
-      mediaType: null,
-      mediaUrl: null,
-      caption: null
-    });
+    setZoomModal({ isOpen: false, mediaType: null, mediaUrl: null, caption: null });
   };
 
   return (
     <div className='pt-20 bg-lime-50'>
-      <MediaZoomModal
-        isOpen={zoomModal.isOpen}
-        onClose={closeZoomModal}
-        mediaType={zoomModal.mediaType}
-        mediaUrl={zoomModal.mediaUrl}
-        caption={zoomModal.caption}
-      />
+      <MediaZoomModal {...zoomModal} onClose={closeZoomModal} />
 
       <h1 className="text-3xl sm:text-5xl text-center font-extrabold text-lime-600 mb-10">
         What Our Travelers Say...

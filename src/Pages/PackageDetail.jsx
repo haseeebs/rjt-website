@@ -64,7 +64,6 @@ const PackageDetail = () => {
         dispatch(setFoodImages(response.files));
       } catch (error) {
         console.error(`Food images fetch error: ${error}`);
-        toast.error('Unable to load food images');
         setFoodImagesError('Failed to load food images');
       }
     };

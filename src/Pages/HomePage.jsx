@@ -6,14 +6,14 @@ import ReelCarousel from './ReelCarousel';
 import CTA from '../components/CTA';
 
 const HomePage = () => {
-    const isLoading = useSelector((state) => state.package.loading);
+    const { isLoading } = useSelector(store => store.package)
 
     if (isLoading) {
         return <HeroSkeleton />;
     }
 
     return (
-        <div className='-mt-20'>
+        <div>
             <Hero />
             <UniquePackages />
             <ReelCarousel />

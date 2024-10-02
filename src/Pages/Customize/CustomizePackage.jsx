@@ -36,7 +36,6 @@ const CustomizePackage = () => {
   });
 
   const [inclusions, setInclusions] = useState([]);
-  console.log(inclusions); // [ "67590fa100139e005bf9" ]
   const tabs = ["Basic Info", "Travel & Stay", "Contact Details"];
 
   const updateState = (field, value) => {
