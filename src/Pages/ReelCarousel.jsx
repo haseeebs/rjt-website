@@ -93,7 +93,7 @@ const ReelCarousel = () => {
     <div className='pt-20 bg-lime-50'>
       <MediaZoomModal {...zoomModal} onClose={closeZoomModal} />
 
-      <h1 className="text-3xl sm:text-5xl text-center font-extrabold text-lime-600 mb-10">
+      <h1 className="text-3xl sm:text-5xl text-center font-extrabold text-lime-600 mb-10 tracking-tight">
         What Our Travelers Say...
       </h1>
 

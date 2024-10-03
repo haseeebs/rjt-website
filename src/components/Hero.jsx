@@ -10,16 +10,15 @@ const Hero = () => {
     return (
         <div>
             {/* Hero Section */}
-            <div className="relative w-full -mt-20">
+            <div className={`relative w-full`}>
                 {/* Hero Background */}
                 <div className="absolute inset-0 z-0">
                     {!isImageLoaded && (
                         <div className="w-full h-full bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 animate-gradient-x"></div>
                     )}
                     <img
-                        className={`w-full h-full object-cover bg-center transition-opacity duration-700 ${
-                            isImageLoaded ? 'opacity-100' : 'opacity-0'
-                        }`}
+                        className={`w-full h-full object-cover bg-center transition-opacity duration-700 ${isImageLoaded ? 'opacity-100' : 'opacity-0'
+                            }`}
                         src={packageServices.getFilePreview('67532310001c18214f1d')}
                         onLoad={() => setIsImageLoaded(true)}
                         alt="Umrah Journey"

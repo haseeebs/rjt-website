@@ -153,8 +153,8 @@ const CustomizePackage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-lime-50">
-      <div className="mx-auto max-w-7xl p-6">
+    <div className="min-h-screen bg-lime-50 pt-28">
+      <div className="mx-auto max-w-7xl pb-14">
         <form
           onSubmit={() => handleSubmit}
           className="bg-white rounded-3xl shadow-xl overflow-hidden"
